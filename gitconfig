@@ -1,0 +1,13 @@
+[user]
+	name = spockwangs
+	email = wbbtiger@gmail.com
+[credential]
+	helper = cache --timeout=3600
+[core]
+	editor = emacsclient
+[alias]
+    st = status
+    co = checkout
+    ci = commit
+    br = branch
+    

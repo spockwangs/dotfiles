@@ -1,0 +1,29 @@
+# .screenrc -- Config files for screen
+
+defescape ^tt
+escape ^tt
+
+# hardstatus line
+hardstatus alwayslastline
+hardstatus string '%{= kw}[%w] %h' 
+
+# Screen automatically quits after all processes terminate.
+autodetach on
+
+altscreen on
+
+startup_message off 
+
+# Turn off visual bell. 
+vbell off
+
+# scrollback buffer
+defscrollback 1000
+
+# key bindings
+bind 'e' screen -t editor vim 
+bind 'h' screen -t htop htop
+
+screen
+screen
+select 0

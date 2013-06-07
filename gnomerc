@@ -1,0 +1,4 @@
+# gnomerc config file
+
+export G_FILENAME_ENCODING=@locale
+

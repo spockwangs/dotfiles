@@ -1,0 +1,38 @@
+# ~/.inputrc -  inputrc for libreadline
+# See readline(3readline) and `info rluserman' for more information.
+
+# Set bell style.
+# May be audible, visible or none.
+set bell-style none
+
+# If set to On, readline performs filename matching and completion in 
+# a case-insensitive fashion.
+set completion-ignore-case On
+
+# Controls whether readline begins with a set of key bindings similar 
+# to emacs or vi.  editing-mode can be set to either emacs or vi.
+set editing-mode emacs
+
+# If set to On, completed directory names have a slash appended.
+set mark-directories On
+
+# This alters the default behavior of the completion functions.  If 
+# set to on, words which have more than one possible completion cause 
+# the matches to be listed immediately instead of ringing the bell.
+set show-all-if-ambiguous Off
+
+set input-meta On
+set output-meta On
+
+"\M-t": transpose-words
+"\M-u": upcase-word
+"\M-l": downcase-word
+"\M-c": capitalize-word
+"\M-d": kill-word
+"\e\b": backward-kill-word
+"\C-w": unix-word-rubout
+"\M-y": yank-pop
+"\M-?": possible-completions
+"\M-*": insert-completions
+"\C-u": undo
+

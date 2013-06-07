@@ -1,0 +1,37 @@
+# personal bash_completion
+
+type tex2pdf &>/dev/null && complete -f -X '!*.tex' tex2pdf
+type xdvi &>/dev/null && complete -f -X '!*.@(dvi|DVI)' xdvi
+type evince &>/dev/null && complete -f -o plusdirs -X '!*.@(pdf|PDF|ps|dvi|djvu)' evince
+
+type service &> /dev/null &&
+_wbbservice()
+{
+        local i each cur prev
+        i=0
+        cur=${COMP_WORDS[COMP_CWORD]}
+        prev=${COMP_WORDS[COMP_CWORD-1]}
+        for each in /etc/init.d/* ; do
+                if [ -x $each ]; then
+                        COMPREPLY[$i]=${each##*/}
+                        i=$((i+1))
+                fi
+        done
+        for (( i = 0; i < ${#COMPREPLY[@]}-1; i++ )); do
+                if [[ $prev == ${COMPREPLY[i]} ]]; then
+                        COMPREPLY=( $(compgen -W 'start restart stop reload force-reload' $cur) )
+                        return 0
+                fi
+        done
+        COMPREPLY=( $(compgen -W '${COMPREPLY[@]}' $cur) )
+} &&
+complete -F _wbbservice -o filenames service
+
+type mystar &> /dev/null &&
+_mystar()
+{
+	local cur 
+	cur=${COMP_WORDS[COMP_CWORD]}
+	COMPREPLY=($(compgen -W 'hust' $cur))
+} &&
+complete -F _mystar mystar
