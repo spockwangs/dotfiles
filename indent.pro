@@ -1,0 +1,3 @@
+-bad -bap -bbb -bl -bbo -nbc -br -brs -c33 -cd33 -ncdb -ce -ci4 -cli0 -cp33 
+-cs -d0 -di8 -nfc1 -nfca -hnl -i8 -ip0 -l75 -lc80 -lp -npcs -nprs -npsl -ppi3
+-saf -sai -saw -nsc -nsob -nss
