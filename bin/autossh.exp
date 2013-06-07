@@ -1,4 +1,4 @@
-#! expect -f
+#! /usr/bin/expect -f
 #
 # @brief Auto ssh to a remote maching without typing the username and password.
 #
@@ -16,11 +16,23 @@ if ([string match "*@*" "$argv" ]) {
     spawn /usr/local/bin/ssh "mqq@$argv"
 }
 expect {
-    "*sername: " { send "mqq\r" }
-    "*password: " { send "mqq2005\r" }
-    "Authentication successful" {}
-    "(yes/no)?" { send "yes\r" }
-    default { exit 1 }
+    "*sername: " {
+        send "mqq\r"
+        exp_continue
+    }
+    "*password: " {
+       send "mqq2005\r"
+       exp_continue
+    }
+    "*(yes/no)?" {
+       send "yes\r"
+       exp_continue
+    }
+    -re "(#|\\$) $" {
+    } 
+    default {
+       exit 1
+    }
 }
 
 interact
