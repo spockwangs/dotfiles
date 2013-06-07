@@ -1,0 +1,26 @@
+#! expect -f
+#
+# @brief Auto ssh to a remote maching without typing the username and password.
+#
+# Usage:
+#     autossh.exp username@hostname
+#       - log in with the specified username
+#     autossh.exp hostname
+#       - log in with the default username
+#       
+
+set timeout 5
+if ([string match "*@*" "$argv" ]) {
+    spawn /usr/local/bin/ssh "$argv"
+} else {
+    spawn /usr/local/bin/ssh "mqq@$argv"
+}
+expect {
+    "*sername: " { send "mqq\r" }
+    "*password: " { send "mqq2005\r" }
+    "Authentication successful" {}
+    "(yes/no)?" { send "yes\r" }
+    default { exit 1 }
+}
+
+interact
