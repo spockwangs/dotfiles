@@ -1,0 +1,24 @@
+#! /usr/bin/expect -f
+#
+# @brief Auto scp a file between machines.
+#
+# Usage: autoscp src dest
+#
+# Examples:
+#     autoscp file.txt username@a.b.c.d:/tmp/
+#     autoscp username@a.b.c.d:~/file.txt .
+
+set password "mqq2005"          # set your password
+set timeout 5
+spawn scp [lindex $argv 0] [lindex $argv 1]
+expect {
+    password: {
+        send "$password\r"
+        exp_continue
+    }
+    "100%" {
+    }
+    default {
+        exit 1
+    }
+}
