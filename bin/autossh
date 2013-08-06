@@ -9,19 +9,17 @@
 #       - log in with the default username
 #       
 
+set username "mqq";             # set your username
+set password "mqq2005";         # set your password
 set timeout 5
 if ([string match "*@*" "$argv" ]) {
     spawn /usr/local/bin/ssh "$argv"
 } else {
-    spawn /usr/local/bin/ssh "mqq@$argv"
+    spawn /usr/local/bin/ssh "$username@$argv"
 }
 expect {
-    "*sername: " {
-        send "mqq\r"
-        exp_continue
-    }
     "*password: " {
-       send "mqq2005\r"
+       send "$password\r"
        exp_continue
     }
     "*(yes/no)?" {
