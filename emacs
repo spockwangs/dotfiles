@@ -34,6 +34,7 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c/")
 
+;; Load features and libraries.
 (require 'sams-lib)
 (require 'redo)
 (require 'pager)
@@ -52,6 +53,10 @@
 (yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets/")
 (yas/global-mode)
 
+;; Problematic when init cedet.
+;(load-file "~/.emacs.d/cedet-1.1/common/cedet.el")
+;(global-ede-mode 1)
+;(semantic-load-enable-code-helpers)
 
 ;; Associate yasnippet with auto-insert.
 ;; Copied from http://www.emacswiki.org/emacs/AutoInsertMode.
@@ -60,10 +65,10 @@
   (yas/expand-snippet (buffer-string) (point-min) (point-max)))
 
 ;; Set environment for printing.
-;(setenv "GS_LIB" "d:/gs/gs9.05/lib")
-;(setq ps-lpr-command "d:/gs/gs9.05/bin/gswin32c.exe")
-;(setq ps-lpr-switches '("-q" "-dNOPAUSE" "-dBATCH" "-sDEVICE=mswinpr2"))
-;(setq ps-printer-name t)
+(setenv "GS_LIB" "d:/gs/gs9.05/lib")
+(setq ps-lpr-command "d:/gs/gs9.05/bin/gswin32c.exe")
+(setq ps-lpr-switches '("-q" "-dNOPAUSE" "-dBATCH" "-sDEVICE=mswinpr2"))
+(setq ps-printer-name t)
 
 ;; Auto-load `jce-mode'.
 (autoload
@@ -123,17 +128,15 @@
 ;; Set default frame font
 ;; To check current font, run `M-x describe-font'.
 ;(set-frame-font "-misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1" 1)
-(set-frame-font "-microsoft-Consolas-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
 ;(set-frame-font "-bitstream-Courier 10 Pitch-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-;(set-frame-font "-unknown-Ubuntu Mono-normal-normal-normal-*-18-*-*-*-m-0-iso10646-1")
-;; Used in Windows.
 ;(set-frame-font "-outline-Courier New-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1")
+;(set-frame-font "-outline-Bitstream Vera Sans Mono-normal-normal-normal-mono-16-*-*-*-c-*-iso10646-1")
+;(set-frame-font "-outline-Consolas-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
+(set-frame-font
+ "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 
 ;; Hide tool bar.
 (tool-bar-mode 0)
-
-;; Hide menu bar.
-(menu-bar-mode 0)
 
 ;; Show line number at the mode line.
 (line-number-mode t)
@@ -145,6 +148,12 @@
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)
 (display-time)
+
+;; Show system name and full path of buffer at the title bar.
+(setq frame-title-format
+      (list (format "%s %%S: %%j " (system-name))
+                    '(buffer-file-name "%f" (dired-directory
+                                             dired-directory "%b"))))
 
 ;; Do not highlight current line.
 (global-hl-line-mode -1)
@@ -255,29 +264,6 @@
 ;; C/C++ mode
 ;;;;;;;;;;;;;;;;;;;;
 
-(defun insert-dot-and-complete ()
-  "Inserts the indicated character and runs semantic completion menu."
-  (interactive)
-  (insert ".")
-  (if (not (or (face-equal (face-at-point) "font-lock-comment-face")
-               (face-equal (face-at-point) "font-lock-string-face")))
-      (progn (semantic-ia-complete-symbol-menu (point)))
-    )
-  )
-
-(defun insert-ptr-and-complete ()
-  "Inserts the indicated character and runs semantic completion menu."
-  (interactive)
-  (insert ">")
-  (if (not (or (face-equal (face-at-point) "font-lock-comment-face")
-               (face-equal (face-at-point) "font-lock-string-face")))
-      (progn (if (not (eq (char-after (- (point) 1)) 45))
-                 (semantic-ia-complete-symbol-menu (point))
-               (message "Not a ptr")
-               )
-             )
-    )
-  )
 
 (add-hook
  'c-mode-common-hook
@@ -287,26 +273,20 @@
     (turn-on-auto-fill)
     (c-toggle-auto-newline -1)
     (define-key c-mode-base-map [(return)] 'newline-and-indent)
-    (define-key c-mode-base-map (kbd "M-q") 'c-fill-paragraph)
-    (local-set-key "." 'insert-dot-and-complete)
-    (local-set-key ">" 'insert-ptr-and-complete)
-    (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
-    (local-set-key "\C-c,s" 'semantic-ia-fast-jump)
-    (local-set-key "\C-xB" 'semantic-mrub-switch-tag)
-    (local-set-key "\C-c,d" 'semantic-analyze-proto-impl-toggle)
-    (local-set-key "\C-c,v" 'semantic-ia-show-summary)
-    (local-set-key "\C-c,c" 'semantic-ia-describe-class)))
+    (define-key c-mode-base-map (kbd "M-q") 'c-fill-paragraph)))
 
 (require 'spock-c-style)
 (add-hook 'c-mode-common-hook 'spock-set-c-style)
 
-;; Define auto-insert skeletons for C++ header files.
-(add-to-list 'auto-insert-alist
-             '(("\\.\\([Hh]\\|hh\\|hpp\\)\\'" . "C/C++ header skeleton")
-               . ["template.h" c++-mode my/autoinsert-yas-expand]))
-(add-to-list 'auto-insert-alist
-             '(("\\.\\(c\\|cc\\|cpp\\)\\'" . "C/C++ source skeleton")
-               . ["template.cc" c++-mode my/autoinsert-yas-expand]))
+;; Define auto insert skeletons for C++ header and source files.
+(add-to-list
+ 'auto-insert-alist
+ '(("\\.\\([Hh]\\|hh\\|hpp\\)\\'" . "C/C++ header skeleton")
+   . ["template.h" c++-mode my/autoinsert-yas-expand]))
+(add-to-list
+ 'auto-insert-alist
+ '(("\\.\\(cc\\|cpp\\)\\'" . "C/C++ source skeleton")
+   . ["template.cc" c++-mode my/autoinsert-yas-expand]))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Java
@@ -335,10 +315,15 @@
 (add-hook
  'js-mode-hook
  '(lambda ()
-    (setq fill-column 80)
-    (turn-on-auto-fill)
     (subword-mode 1)
+    (setq fill-column 120)
+    (turn-on-auto-fill)
     (define-key js-mode-map [(return)] 'newline-and-indent)))
+
+(add-to-list
+ 'auto-insert-alist
+ '(("\\.\\(js\\)\\'" . "Javascript source skeleton")
+   . ["template.js" js-mode my/autoinsert-yas-expand]))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; AWK
@@ -391,6 +376,12 @@
  '(lambda ()
     (define-key perl-mode-map [(return)] 'newline-and-indent)))
 
+;; Define auto-insert skeletons for perl source code.
+(add-to-list
+ 'auto-insert-alist
+ '(("\\.\\(pl\\)\\'" . "Perl source skeleton")
+   . ["template.pl" perl-mode my/autoinsert-yas-expand]))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; XML and HTML
 ;;;;;;;;;;;;;;;;;;;;
@@ -417,17 +408,6 @@
     (turn-on-auto-fill)))
 
 ;;;;;;;;;;;;;;;;;;;;
-;; Smalltalk
-;;;;;;;;;;;;;;;;;;;;
-
-(autoload
-  'smalltalk-mode
-  "smalltalk-mode"
-  "Major mode for the Smalltalk programming language."
-  t)
-(add-to-list 'auto-mode-alist '("\\.st\\'" . smalltalk-mode))
-
-;;;;;;;;;;;;;;;;;;;;
 ;; Calendar
 ;;;;;;;;;;;;;;;;;;;;
 
@@ -449,7 +429,7 @@
 (add-hook
  'eshell-mode-hook
  '(lambda ()
-    (setq comint-prompt-regexp "^[^#$%>\n]*[#$%>] *")))
+    (setq comint-prompt-regexp "^[^#$%>\n]*[#$] ")))
 
 ;;;;;;;;;;;;;;;;;;;
 ;; Shell mode
@@ -461,6 +441,17 @@
     (setq comint-use-prompt-regexp 1)
     (setq comint-prompt-regexp "^[^#$%>\n]*[#$] ")))
 
+;;;;;;;;;;;;;;;;;;;
+;; Php mode
+;;;;;;;;;;;;;;;;;;;
+
+(autoload
+  'php-mode
+  "php-mode"
+  "Major mode for PHP."
+  t)
+(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous
@@ -470,3 +461,7 @@
 ;; Often this function does not work well on my laptop (Ubuntu 10.04-LTS),
 ;; and I don't know why.
 ;(emacs-maximize)
+
+;; Local Variables:
+;; coding: utf-8-unix
+;; End:
