@@ -10,4 +10,5 @@
     co = checkout
     ci = commit
     br = branch
-    
+[include]
+    path = .gitconfig.local
