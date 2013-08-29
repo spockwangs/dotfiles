@@ -20,6 +20,7 @@
 ;;   - Java
 ;;   - AWK
 ;;   - Verilog
+;;   - Haskell
 ;; * Miscellaneous
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -345,6 +346,19 @@
   (setq verilog-case-indent 4)
   (setq verilog-auto-indent-on-newline t))
 (add-hook 'verilog-mode-hook 'my-verilog-mode-hook)
+
+;;;;;;;;;;;;;;;;;;;;
+;; Haskell mode
+;;;;;;;;;;;;;;;;;;;;
+
+(autoload
+  'haskell-mode
+  "haskell-mode"
+  "Major mode for the Haskell programming language."
+  t)
+
+;; Use haskell-mode for .hs files.
+(add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Text mode
