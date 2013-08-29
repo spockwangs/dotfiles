@@ -360,6 +360,12 @@
 ;; Use haskell-mode for .hs files.
 (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 
+(add-hook 
+ 'haskell-mode
+ '(lambda ()
+    (turn-on-haskell-indent)
+    (turn-on-haskell-doc-mode)))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; Text mode
 ;;;;;;;;;;;;;;;;;;;;
