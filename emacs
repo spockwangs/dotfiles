@@ -54,22 +54,18 @@
 (yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets/")
 (yas/global-mode)
 
-;; Problematic when init cedet.
-;(load-file "~/.emacs.d/cedet-1.1/common/cedet.el")
-;(global-ede-mode 1)
-;(semantic-load-enable-code-helpers)
+;; Get a visual, instead of audio, feedback of an exception.
+(setq visible-bell 1)
+
+;; Enable `auto-insert-mode'.
+(auto-insert-mode)
+(custom-set-variables '(auto-insert-directory "~/.emacs.d/auto-insert/"))
 
 ;; Associate yasnippet with auto-insert.
 ;; Copied from http://www.emacswiki.org/emacs/AutoInsertMode.
 (defun my/autoinsert-yas-expand()
   "Replace text in yasnippet template."
   (yas/expand-snippet (buffer-string) (point-min) (point-max)))
-
-;; Set environment for printing.
-(setenv "GS_LIB" "d:/gs/gs9.05/lib")
-(setq ps-lpr-command "d:/gs/gs9.05/bin/gswin32c.exe")
-(setq ps-lpr-switches '("-q" "-dNOPAUSE" "-dBATCH" "-sDEVICE=mswinpr2"))
-(setq ps-printer-name t)
 
 ;; Auto-load `jce-mode'.
 (autoload
@@ -117,10 +113,6 @@
 
 ;; Use `ibuffer' instead of `list-buffers'.
 (defalias 'list-buffers 'ibuffer)
-
-;; Enable `auto-insert-mode'.
-(auto-insert-mode)
-(custom-set-variables '(auto-insert-directory "~/.emacs.d/auto-insert/"))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel
