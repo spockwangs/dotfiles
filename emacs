@@ -353,7 +353,7 @@
 (add-to-list 'auto-mode-alist '("\\.hs\\'" . haskell-mode))
 
 (add-hook 
- 'haskell-mode
+ 'haskell-mode-hook
  '(lambda ()
     (turn-on-haskell-indent)
     (turn-on-haskell-doc-mode)))
