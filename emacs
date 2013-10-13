@@ -364,7 +364,8 @@
  'haskell-mode-hook
  '(lambda ()
     (turn-on-haskell-indent)
-    (turn-on-haskell-doc-mode)))
+    (turn-on-haskell-doc-mode)
+    (subword-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Text mode
