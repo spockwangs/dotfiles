@@ -14,6 +14,6 @@ for name in *; do
     if [ "$extension" != "md" -a "$extension" != "sh" ]; then
         echo "Creating \`$target'"
         rm -rf "$target"
-        cp -r "${PWD}/${name}" "$target"
+        cp -r "$name" "$target"
     fi
 done
