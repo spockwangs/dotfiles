@@ -8,7 +8,7 @@
 #     autoscp file.txt username@a.b.c.d:/tmp/
 #     autoscp username@a.b.c.d:~/file.txt .
 
-set password "mqq2005"          # set your password
+set password "YOUR PASSWORD"          # set your password
 set timeout 5
 spawn scp [lindex $argv 0] [lindex $argv 1]
 expect {
