@@ -60,6 +60,10 @@ if [ -f ~/.bashrc.local ]; then
 fi
 
 # Automatic completion.
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
+[ -f /etc/bash_completion ] && source /etc/bash_completion
+
+# Install z.sh.
+[ -f ~/bin/z.sh ] && source ~/bin/z.sh
+
+# Local config
+[ -f ~/.bashrc.local ] && source ~/.bashrc.local

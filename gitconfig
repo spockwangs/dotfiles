@@ -1,16 +1,19 @@
-[user]
-	name = spockwangs
-	email = wbbtiger@gmail.com
-[credential]
-	helper = cache --timeout=3600
 [core]
-	editor = vi
+  editor = vi
+  excludesfile = ~/.gitignore
+[color]
+  ui = auto
+[credential]
+  helper = cache --timeout=3600
 [alias]
-    st = status
-    co = checkout
-    ci = commit
-    br = branch
+  st = status
+  co = checkout
+  ci = commit
+  br = branch
 [push]
-    default = simple
+  default = simple
 [include]
-    path = .gitconfig.local
+  path = .gitconfig.local
+[user]
+	email = wbbtiger@gmail.com
+	name = spockwangs

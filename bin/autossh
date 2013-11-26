@@ -9,8 +9,8 @@
 #       - log in with the default username
 #       
 
-set username "mqq";             # set your username
-set password "mqq2005";         # set your password
+set username "YOUR NAME";             # set your username
+set password "YOUR PASSWORD";         # set your password
 set timeout 5
 if ([string match "*@*" "$argv" ]) {
     spawn /usr/local/bin/ssh "$argv"
