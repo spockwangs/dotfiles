@@ -386,7 +386,8 @@
 (add-hook
  'perl-mode-hook
  '(lambda ()
-    (define-key perl-mode-map [(return)] 'newline-and-indent)))
+    (define-key perl-mode-map [(return)] 'newline-and-indent)
+    (subword-mode 1)))
 
 ;; Define auto-insert skeletons for perl source code.
 (add-to-list

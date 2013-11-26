@@ -54,6 +54,11 @@ alias c99='gcc -W -Wall -std=c99 -pedantic'
 # allow core dump
 ulimit -c unlimited
 
+# Include local config.
+if [ -f ~/.bashrc.local ]; then
+    . ~/.bashrc.local
+fi
+
 # Automatic completion.
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
