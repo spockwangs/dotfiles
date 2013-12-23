@@ -44,7 +44,7 @@
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
-     (color-theme-robin-hood)))
+     (color-theme-solarized-dark)))
 (require 'xcscope)
 (load-library "simplefun")
 (load-library "yic-buffer")
@@ -75,9 +75,6 @@
   "Major mode for TAF specification language."
   t)
 (add-to-list 'auto-mode-alist '("\\.jce\\'" . jce-mode))
-
-;; Override the default setting to use C++-mode for .h files.
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; Use HTML mode for .wsp files.
 (add-to-list 'auto-mode-alist '("\\.wsp\\'" . html-mode))
@@ -138,6 +135,9 @@
 ;; Show column number at the mode line.
 (column-number-mode t)
 
+;; Show line numbers in the left margin.
+(global-linum-mode)
+
 ;; Display time and date at the mode line.
 (setq display-time-24hr-format t)
 (setq display-time-day-and-date t)
@@ -149,8 +149,8 @@
                     '(buffer-file-name "%f" (dired-directory
                                              dired-directory "%b"))))
 
-;; Do not highlight current line.
-(global-hl-line-mode -1)
+;; Highlight current line.
+(global-hl-line-mode 1)
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil)
@@ -271,6 +271,9 @@
 
 (require 'spock-c-style)
 (add-hook 'c-mode-common-hook 'spock-set-c-style)
+
+;; Override the default setting to use C++-mode for .h files.
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
 ;; Define auto insert skeletons for C++ header and source files.
 (add-to-list
