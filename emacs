@@ -3,7 +3,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2013-12-30 19:32:57 spockwang>
+;; Time-stamp: <2013-12-30 19:37:15 spockwang>
 ;; 
 ;; Contents
 ;; --------
@@ -463,5 +463,5 @@
 (emacs-maximize)
 
 ;; Load local customizations.
-;; `.emacs.local' is supposed to be located in the directory `~/.emacs.d'.
-(load-library ".emacs.local")
+;; `emacs.local' is supposed to be located in the directory `~/.emacs.d'.
+(load-library "emacs.local")
