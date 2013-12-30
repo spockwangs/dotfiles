@@ -1,27 +1,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; -*- mode: Emacs-Lisp -*-
-;;
-;; Copyright (c) 2010 wbb.
+;; Copyright (c) 2010 wbbtiger@gmail.com
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; who: 王兵兵 (wbbtiger@gmail.com)
-;; when: 2010-10-01 17:17:59
+;; Time-stamp: <2013-12-30 19:32:57 spockwang>
 ;; 
 ;; Contents
 ;; --------
 ;; * General
-;;   - Look and feel
+;; * Look and feel
 ;; * Enable default disabled key bindings
 ;; * Global key bindings
-;; * Misc Mode Setting
-;;   - Text mode
-;;   - C/C++
-;;   - Java
-;;   - AWK
-;;   - Verilog
-;;   - Haskell
-;;   - Erlang
+;; * Language Settings
 ;; * Miscellaneous
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -46,14 +36,14 @@
      (color-theme-initialize)
      (color-theme-solarized-dark)))
 (require 'xcscope)
-(load-library "simplefun")
-(load-library "yic-buffer")
-(iswitchb-mode 1)
-(ido-mode 1)
 (require 'yasnippet)
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets/")
 (yas/global-mode)
+(load-library "simplefun")
+(load-library "yic-buffer")
+(iswitchb-mode 1)
+(ido-mode 1)
 
 ;; Get a visual, instead of audio, feedback of an exception.
 (setq visible-bell 1)
@@ -67,17 +57,6 @@
 (defun my/autoinsert-yas-expand()
   "Replace text in yasnippet template."
   (yas/expand-snippet (buffer-string) (point-min) (point-max)))
-
-;; Auto-load `jce-mode'.
-(autoload
-  'jce-mode
-  "jce-mode"
-  "Major mode for TAF specification language."
-  t)
-(add-to-list 'auto-mode-alist '("\\.jce\\'" . jce-mode))
-
-;; Use HTML mode for .wsp files.
-(add-to-list 'auto-mode-alist '("\\.wsp\\'" . html-mode))
 
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
@@ -96,7 +75,7 @@
 (setq default-major-mode 'text-mode)
 
 ;; Set default fill column.
-(setq-default fill-column 75)
+(setq-default fill-column 100)
 (turn-on-auto-fill)
 
 ;; Update time stamp string in the buffer before saving.
@@ -112,19 +91,14 @@
 ;; Use `ibuffer' instead of `list-buffers'.
 (defalias 'list-buffers 'ibuffer)
 
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel
-;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Set default frame font
 ;; To check current font, run `M-x describe-font'.
-;(set-frame-font "-misc-fixed-medium-r-normal--15-140-75-75-c-90-iso8859-1" 1)
-;(set-frame-font "-bitstream-Courier 10 Pitch-normal-normal-normal-*-16-*-*-*-m-0-iso10646-1")
-;(set-frame-font "-outline-Courier New-normal-normal-normal-mono-16-*-*-*-c-*-iso8859-1")
-;(set-frame-font "-outline-Bitstream Vera Sans Mono-normal-normal-normal-mono-16-*-*-*-c-*-iso10646-1")
 ;(set-frame-font "-outline-Consolas-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
-(set-frame-font
- "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
+(set-frame-font "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 
 ;; Hide tool bar.
 (tool-bar-mode 0)
@@ -247,17 +221,28 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Misc mode settings
+;; Language Settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq c-default-style
       '((java-mode . "java")
         (awk-mode . "awk")))
 
+;; Auto-load `jce-mode'.
+(autoload
+  'jce-mode
+  "jce-mode"
+  "Major mode for TAF specification language."
+  t)
+(add-to-list 'auto-mode-alist '("\\.jce\\'" . jce-mode))
+
+;; Use HTML mode for .wsp files.
+(add-to-list 'auto-mode-alist '("\\.wsp\\'" . html-mode))
+
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; C/C++ mode
 ;;;;;;;;;;;;;;;;;;;;
-
 
 (add-hook
  'c-mode-common-hook
@@ -360,19 +345,7 @@
  'haskell-mode-hook
  '(lambda ()
     (turn-on-haskell-indent)
-    (turn-on-haskell-doc-mode)
-    (subword-mode 1)))
-
-;;;;;;;;;;;;;;;;;;;;
-;; Erlang mode
-;;;;;;;;;;;;;;;;;;;;
-
-(setq load-path
-      (cons "/usr/local/lib/erlang/lib/tools-2.6.12/emacs/"
-            load-path))
-(setq erlang-root-dir "/usr/local/lib/erlang")
-(setq exec-path (cons "/usr/local/lib/erlang/bin" exec-path))
-(require 'erlang-start)
+    (turn-on-haskell-doc-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Text mode
@@ -402,8 +375,7 @@
 (add-hook
  'perl-mode-hook
  '(lambda ()
-    (define-key perl-mode-map [(return)] 'newline-and-indent)
-    (subword-mode 1)))
+    (define-key perl-mode-map [(return)] 'newline-and-indent)))
 
 ;; Define auto-insert skeletons for perl source code.
 (add-to-list
@@ -481,7 +453,6 @@
   t)
 (add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -489,8 +460,8 @@
 ;; Note: this line must be put at the end of this file.
 ;; Often this function does not work well on my laptop (Ubuntu 10.04-LTS),
 ;; and I don't know why.
-;(emacs-maximize)
+(emacs-maximize)
 
-;; Local Variables:
-;; coding: utf-8-unix
-;; End:
+;; Load local customizations.
+;; `.emacs.local' is supposed to be located in the directory `~/.emacs.d'.
+(load-library ".emacs.local")

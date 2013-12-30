@@ -4,7 +4,7 @@
 // Author: wbbtiger@gmail.com
 //
 
-#ifndef ${1:__`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H__}
+#ifndef ${1:`(upcase (file-name-nondirectory (file-name-sans-extension (buffer-file-name))))`_H}
 #define $1
 
 $0
