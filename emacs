@@ -4,7 +4,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-01-01 20:07:40 wbb>
+;; Time-stamp: <2014-01-01 20:33:30 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -21,13 +21,16 @@
 ;; General
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(require 'cl)
 (server-start)
 
 ;; Set load-path variable.
 (add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c/")
 
-;; Set up package manager path.
+;; Set up package managers.
+(load "package")
+(package-initialize)
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
@@ -35,7 +38,7 @@
 
 ;; Install default packages if necessary.
 (defvar default-packages
-  '(haskell-mode)
+  '(haskell-mode color-theme color-theme-solarized markdown-mode)
   "A list of default packages to be installed at launch.")
 
 (defun default-packages-installed-p ()
@@ -52,15 +55,17 @@
     (when (not (package-installed-p p))
       (package-install p))))
 
-;; Load features and libraries.
-(require 'sams-lib)
-(require 'redo)
-(require 'pager)
+;; Set up color theme.
 (require 'color-theme)
 (eval-after-load "color-theme"
   '(progn
      (color-theme-initialize)
      (color-theme-solarized-dark)))
+
+;; Load features and libraries.
+(require 'sams-lib)
+(require 'redo)
+(require 'pager)
 (require 'xcscope)
 (require 'yasnippet)
 (yas/initialize)
@@ -482,11 +487,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; Note: this line must be put at the end of this file.
-;; Often this function does not work well on my laptop (Ubuntu 10.04-LTS),
-;; and I don't know why.
-(emacs-maximize)
 
 ;; Load local customizations.
 ;; `.emacs.local' is supposed to be located in the home directory.
