@@ -1,9 +1,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Copyright (c) 2010 wbbtiger@gmail.com
+;; Copyright (c) 2010 wbb
+;;     All rights reserved.
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-01-01 19:28:24 wbb>
+;; Time-stamp: <2014-01-01 20:07:40 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -26,6 +27,31 @@
 (add-to-list 'load-path "~/.emacs.d/")
 (add-to-list 'load-path "~/.emacs.d/yasnippet-0.6.1c/")
 
+;; Set up package manager path.
+(add-to-list 'package-archives
+             '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+
+;; Install default packages if necessary.
+(defvar default-packages
+  '(haskell-mode)
+  "A list of default packages to be installed at launch.")
+
+(defun default-packages-installed-p ()
+  (loop for p in default-packages
+        when (not (package-installed-p p)) do (return nil)
+        finally (return t)))
+
+(unless (default-packages-installed-p)
+  (message "%s" "Emacs is now refreshing its package database...")
+  (package-refresh-contents)
+  (message "%s" " done.")
+  ;; install the missing packages
+  (dolist (p default-packages)
+    (when (not (package-installed-p p))
+      (package-install p))))
+
 ;; Load features and libraries.
 (require 'sams-lib)
 (require 'redo)
@@ -40,13 +66,13 @@
 (yas/initialize)
 (yas/load-directory "~/.emacs.d/yasnippet-0.6.1c/snippets/")
 (yas/global-mode)
-(load-library "simplefun")
-(load-library "yic-buffer")
+(load "base")
+(load "yic-buffer")
 (iswitchb-mode 1)
 (ido-mode 1)
 
 ;; Get a visual, instead of audio, feedback of an exception.
-(setq visible-bell 1)
+(setq visible-bell nil)
 
 ;; Enable `auto-insert-mode'.
 (auto-insert-mode)
@@ -170,10 +196,10 @@
 (global-set-key (kbd "M-<kp-8>") 'pager-row-up)
 (global-set-key (kbd "M-<down>") 'pager-row-down)
 (global-set-key (kbd "M-<kp-2>") 'pager-row-down)
-(global-set-key (kbd "C-<") 'shift-left)
-(global-set-key (kbd "C->") 'shift-right)
-(global-set-key (kbd "C-x y") 'copy-line)
-(global-set-key (kbd "C-x d") 'kill-current-word)
+(global-set-key (kbd "C-<") 'base/shift-left)
+(global-set-key (kbd "C->") 'base/shift-right)
+(global-set-key (kbd "C-x y") 'base/copy-line)
+(global-set-key (kbd "C-x d") 'base/kill-current-word)
 
 ;; Cycle through buffer list.  Require "yic-buffer.el".
 (global-set-key "\C-x\C-p" 'bury-buffer)
@@ -464,4 +490,4 @@
 
 ;; Load local customizations.
 ;; `.emacs.local' is supposed to be located in the home directory.
-(load-file "~/.emacs.local")
+(load "~/.emacs.local" t)

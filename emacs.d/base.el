@@ -1,14 +1,11 @@
-;; -*- Emacs-Lisp -*-
-;;
 ;; Copyright 2010. wbb
+;;     All rights reserved.
 ;;
-;; simplefun.el -- Simple functions used in dot.emacs
+;; base.el -- Common functions used in .emacs
 ;;
-;; when: 2012-10-03 21:34:01
-;; who: 王兵兵 (wbbtiger@gmail.com)
+;; Time-stamp: <2014-01-01 19:54:49 wbb>
 
-;; Shift a region left or right.
-(defun shift-region (distance)
+(defun base/shift-region (distance)
   "Shift the selected region right if distance is postive, left if
 negative"
   (let ((mark (mark)))
@@ -19,24 +16,24 @@ negative"
       ;; for transient mark mode
       (setq deactivate-mark nil))))
 
-(defun shift-left ()
+(defun base/shift-left ()
   "Shift the region left by tab-width."
   (interactive)
   (shift-region (- tab-width)))
 
-(defun shift-right ()
+(defun base/shift-right ()
   "Shift the region right by tab-width."
   (interactive)
   (shift-region tab-width))
 
-(defun copy-line (&optional arg)
+(defun base/copy-line (&optional arg)
   "Copy current line to kill-ring without marking the line."
   (interactive "P")
   (let ((beg (line-beginning-position))
         (end (line-end-position arg)))
     (copy-region-as-kill beg end)))
 
-(defun emacs-maximize ()
+(defun base/emacs-maximize ()
  "Maximize Emacs."
  (interactive)
  (if (win32-p)                    ; in Windows
@@ -52,17 +49,17 @@ negative"
          '(1 "_NET_WM_STATE_MAXIMIZED_VERT" 0)))
      nil)))
 
-(defun insert-current-date ()
+(defun base/insert-current-date ()
   "Insert current date at current point."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 
-(defun insert-current-time ()
+(defun base/insert-current-time ()
   "Insert current time at current point."
   (interactive)
   (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
 
-(defun kill-current-word ()
+(defun base/kill-current-word ()
   "Kill current word."
   (interactive)
   (backward-word)
