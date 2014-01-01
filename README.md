@@ -19,4 +19,4 @@ Put your customizations in dotfiles appended with `.local`:
 * `~/.bashrc.local`
 * `~/.gitconfig.local`
 * `~/.tmux.conf.local`
-* `~/.emacs.d/emacs.local`
+* `~/.emacs.local`
