@@ -1,11 +1,10 @@
+# -*- mode: shell-script-mode; -*-
 # ~/.bashrc 
 # Read by interactive non-login bash.
 
 # User specific environment variables
 export EDITOR=emacs
 export SVN_EDITOR=vim
-export MAILPATH='/var/spool/mail/wbb?You have new mail!:\
-		/var/spool/mail/root?root has new mail!'
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:"$HOME/bin"
 fi
@@ -56,14 +55,20 @@ ulimit -c unlimited
 
 # Include local config.
 if [ -f ~/.bashrc.local ]; then
-    . ~/.bashrc.local
+    source ~/.bashrc.local
 fi
 
 # Automatic completion.
-[ -f /etc/bash_completion ] && source /etc/bash_completion
+if [ -f /etc/bash_completion ]; then
+    source /etc/bash_completion
+fi
 
 # Install z.sh.
-[ -f ~/bin/z.sh ] && source ~/bin/z.sh
+if [ -f ~/bin/z.sh ]; then
+    source ~/bin/z.sh
+fi
 
 # Local config
-[ -f ~/.bashrc.local ] && source ~/.bashrc.local
+if [ -f ~/.bashrc.local ]; then
+    source ~/.bashrc.local
+fi
