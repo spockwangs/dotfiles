@@ -1,5 +1,5 @@
 [core]
-  editor = vi
+  editor = emacs
   excludesfile = ~/.gitignore
 [color]
   ui = auto
@@ -15,5 +15,5 @@
 [include]
   path = .gitconfig.local
 [user]
-	email = wbbtiger@gmail.com
-	name = spockwangs
+  email = wbbtiger@gmail.com
+  name = spockwangs
