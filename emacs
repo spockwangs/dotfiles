@@ -1,10 +1,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Copyright (c) 2010 wbb
+;; Copyright (c) 2010-2014 wbb
 ;;     All rights reserved.
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-01-01 20:33:30 wbb>
+;; Time-stamp: <2014-01-17 00:02:31 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -38,7 +38,10 @@
 
 ;; Install default packages if necessary.
 (defvar default-packages
-  '(haskell-mode color-theme color-theme-solarized markdown-mode)
+  '(haskell-mode
+    color-theme
+    color-theme-solarized
+    markdown-mode)
   "A list of default packages to be installed at launch.")
 
 (defun default-packages-installed-p ()
@@ -279,7 +282,6 @@
  'c-mode-common-hook
  '(lambda ()
     (subword-mode 1)
-    (setq fill-column 90)
     (turn-on-auto-fill)
     (c-toggle-auto-newline -1)
     (define-key c-mode-base-map [(return)] 'newline-and-indent)
@@ -308,7 +310,8 @@
 (add-hook
  'java-mode-hook
  '(lambda ()
-    (c-set-style "java")))
+    (c-set-style "java")
+    (subword-mode 1)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; CSS
@@ -317,7 +320,6 @@
 (add-hook
  'css-mode-hook
  '(lambda ()
-    (setq fill-column 80)
     (turn-on-auto-fill)
     (define-key css-mode-map [(return)] 'newline-and-indent)))
 
@@ -329,7 +331,6 @@
  'js-mode-hook
  '(lambda ()
     (subword-mode 1)
-    (setq fill-column 120)
     (turn-on-auto-fill)
     (define-key js-mode-map [(return)] 'newline-and-indent)))
 
@@ -382,11 +383,12 @@
 ;; Text mode
 ;;;;;;;;;;;;;;;;;;;;
 
-(defun my-text-mode-hook ()
-  (setq fill-column 75)
-  (turn-on-auto-fill)
-  (setq tab-width 4))
-(add-hook 'text-mode-hook 'my-text-mode-hook)
+(add-hook
+ 'text-mode-hook
+ '(lambda ()
+    (subword-mode 1)
+    (turn-on-auto-fill)
+    (setq tab-width 4)))
 
 ;;;;;;;;;;;;;;;;;;;;
 ;; Emacs Lisp
