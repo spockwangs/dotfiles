@@ -4,7 +4,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-01-17 00:02:31 wbb>
+;; Time-stamp: <2014-02-14 23:57:22 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -136,6 +136,9 @@
 
 ;; Hide tool bar.
 (tool-bar-mode 0)
+
+;; Hide right scroll bar.
+(scroll-bar-mode 0)
 
 ;; Show line number at the mode line.
 (line-number-mode t)
