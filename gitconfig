@@ -11,7 +11,7 @@
   ci = commit
   br = branch
 [push]
-  default = simple
+  default = nothing
 [include]
   path = .gitconfig.local
 [user]
