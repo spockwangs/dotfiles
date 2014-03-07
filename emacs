@@ -100,6 +100,7 @@
 ;; `set-buffer-process-coding-system', `set-terminal-coding-system',
 ;; `set-selection-coding-system' and `set-input-method'.
 (set-language-environment 'UTF-8)
+(prefer-coding-system 'gbk-dos)
 (prefer-coding-system 'utf-8-unix)
 
 ;; Set the default directory when finding a file.
