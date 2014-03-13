@@ -13,7 +13,6 @@ for name in *; do
     extension="${name##*.}"
     if [ "$extension" != "md" -a "$extension" != "sh" ]; then
         echo "Creating \`$target'"
-        rm -rf "$target"
         cp -r "$name" "$target"
     fi
 done
