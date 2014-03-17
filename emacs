@@ -4,7 +4,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-02-14 23:57:22 wbb>
+;; Time-stamp: <2014-03-13 22:36:37 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -489,6 +489,16 @@
   "Major mode for PHP."
   t)
 (add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
+
+;;;;;;;;;;;;;;;;;;;
+;; Python mode
+;;;;;;;;;;;;;;;;;;;
+
+(add-hook
+  'python-mode-hook
+  '(lambda ()
+     (subword-mode 1)
+     (define-key python-mode-map [(return)] 'newline-and-indent)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Miscellaneous
