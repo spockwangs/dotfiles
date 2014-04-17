@@ -4,7 +4,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-03-13 22:36:37 wbb>
+;; Time-stamp: <2014-04-17 22:33:38 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -137,6 +137,9 @@
 
 ;; Hide tool bar.
 (tool-bar-mode 0)
+
+;; Hide menu bar.
+(menu-bar-mode 0)
 
 ;; Hide right scroll bar.
 (scroll-bar-mode 0)
