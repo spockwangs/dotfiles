@@ -135,6 +135,13 @@
 ;(set-frame-font "-outline-Consolas-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 (set-frame-font "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 
+;; Set font for chinese characters.
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font
+   (frame-parameter nil 'font)
+   charset
+   (font-spec :family "华文楷体" :size 22)))
+   
 ;; Hide tool bar.
 (tool-bar-mode 0)
 
