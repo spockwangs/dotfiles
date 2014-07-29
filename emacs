@@ -1,4 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -*- coding: utf-8-unix -*-
 ;; Copyright (c) 2010-2014 wbb
 ;;     All rights reserved.
 ;;
@@ -133,7 +133,7 @@
 ;; Set default frame font
 ;; To check current font, run `M-x describe-font'.
 ;(set-frame-font "-outline-Consolas-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
-(set-frame-font "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
+(set-face-font 'default "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 
 ;; Set font for chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
