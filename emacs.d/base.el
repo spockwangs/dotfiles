@@ -19,12 +19,12 @@ negative"
 (defun base/shift-left ()
   "Shift the region left by tab-width."
   (interactive)
-  (shift-region (- tab-width)))
+  (base/shift-region (- tab-width)))
 
 (defun base/shift-right ()
   "Shift the region right by tab-width."
   (interactive)
-  (shift-region tab-width))
+  (base/shift-region tab-width))
 
 (defun base/copy-line (&optional arg)
   "Copy current line to kill-ring without marking the line."
