@@ -4,7 +4,7 @@
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-04-17 22:33:38 wbb>
+;; Time-stamp: <2014-09-01 22:15:05 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -23,6 +23,10 @@
 
 (require 'cl)
 (server-start)
+
+;; Auto save session.
+(desktop-save-mode 1)
+(setq desktop-path '("~/.emacs.d/"))
 
 ;; Set load-path variable.
 (add-to-list 'load-path "~/.emacs.d/")
