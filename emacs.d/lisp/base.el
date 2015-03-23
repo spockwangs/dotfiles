@@ -3,7 +3,7 @@
 ;;
 ;; base.el -- Common functions used in .emacs
 ;;
-;; Time-stamp: <2014-08-07 14:23:34 spockwang>
+;; Time-stamp: <2015-03-23 15:10:48 spockwang>
 
 (defun base/shift-region (distance)
   "Shift the selected region right if distance is postive, left if
@@ -65,3 +65,20 @@ negative"
   (interactive)
   (backward-word)
   (kill-word 1))
+
+(defun yic-next-buffer ()
+  "Switch to previous buffer in current window."
+  (interactive)
+  (switch-to-buffer (car (reverse (buffer-list)))))
+
+(defun yic-other-buffer ()
+  "Switch to the other buffer (2nd in list-buffer) in current window."
+  (interactive)
+  (switch-to-buffer (other-buffer)))
+
+(defun yic-kill-current-buffer ()
+  "Kill current buffer."
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(provide 'base)
