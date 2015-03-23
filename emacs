@@ -1,10 +1,10 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; -*- coding: utf-8-unix -*-
 ;; Copyright (c) 2010-2014 wbb
 ;;     All rights reserved.
 ;;
 ;; ~/.emacs -- Emacs config file.
 ;;
-;; Time-stamp: <2014-03-13 22:36:37 wbb>
+;; Time-stamp: <2014-09-01 22:15:05 wbb>
 ;; 
 ;; Contents
 ;; --------
@@ -23,6 +23,10 @@
 
 (require 'cl)
 (server-start)
+
+;; Auto save session.
+(desktop-save-mode 1)
+(setq desktop-path '("~/.emacs.d/"))
 
 ;; Set load-path variable.
 (add-to-list 'load-path "~/.emacs.d/")
@@ -133,10 +137,20 @@
 ;; Set default frame font
 ;; To check current font, run `M-x describe-font'.
 ;(set-frame-font "-outline-Consolas-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
-(set-frame-font "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
+(set-face-font 'default "-outline-Monaco-normal-normal-normal-mono-18-*-*-*-c-*-iso10646-1")
 
+;; Set font for chinese characters.
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font
+   (frame-parameter nil 'font)
+   charset
+   (font-spec :family "华文楷体" :size 22)))
+   
 ;; Hide tool bar.
 (tool-bar-mode 0)
+
+;; Hide menu bar.
+(menu-bar-mode 0)
 
 ;; Hide right scroll bar.
 (scroll-bar-mode 0)
