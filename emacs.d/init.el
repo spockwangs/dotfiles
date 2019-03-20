@@ -45,6 +45,7 @@
 (require 'init-ace-window)
 (require 'init-make-mode)
 (require 'init-protobuf-mode)
+(require 'init-vc)
 (require 'init-desktop)
 
 ;; Load local customizations.
