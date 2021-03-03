@@ -19,6 +19,17 @@ export LESS_TERMCAP_so=$'\E[0;30m\E[47m'
 export LESS_TERMCAP_ue=$'\E[0m'
 export LESS_TERMCAP_us=$'\E[0;32m'
 
+# Returns the git branch name.
+function git_branch {
+    branch="`git branch 2>/dev/null | grep "^\*" | sed -e "s/^\*\ //"`"
+    if [ "${branch}" != "" ];then
+        if [ "${branch}" = "(no branch)" ];then
+            branch="`git rev-parse --short HEAD`..."
+        fi
+        echo "($branch)"
+    fi
+}
+
 # Set my console prompt
 if [ $TERM = linux ]; then
     # The terminator
