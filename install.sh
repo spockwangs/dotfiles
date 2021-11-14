@@ -2,27 +2,17 @@
 #
 # Install scripts for Linux.
 
-for name in *; do
-    # Skip '*~' files.
-    if [ "${name: -1}" == '~' ]; then
-        continue
-    fi
-    if [ "$name" == "bin" ]; then
-        target="${HOME}"
+set -e
+
+for name in dotfiles/*; do
+    filename=$(basename "$name")
+    echo "Copying \`$filename' to \`${HOME}/.${filename}'"
+    if [ -d "$name" ]; then
+        cp -R "$name/" "${HOME}/.${filename}"
     else
-        target="${HOME}/.${name}"
-    fi
-    extension="${name##*.}"
-    if [ "$extension" != "md" -a "$extension" != "sh" ]; then
-        echo "Copying \`$name' to \`$target'"
-        if [ -d "$name" ]; then
-            if [ -d "$target" ]; then
-                cp -r "$name"/* "$target"
-            else
-                cp -r "$name" "$target"
-            fi
-        else
-            cp "$name" "$target"
-        fi
+        cp "$name" "${HOME}/.${filename}"
     fi
 done
+
+echo "Copying \`bin' to \`${HOME}/bin'"
+cp -R bin "${HOME}"
