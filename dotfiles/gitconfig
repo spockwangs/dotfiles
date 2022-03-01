@@ -1,0 +1,15 @@
+[core]
+  editor = emacsclient
+  excludesfile = ~/.gitignore
+[color]
+  ui = auto
+[alias]
+  st = status
+  co = checkout
+  ci = commit
+  br = branch
+[push]
+  default = tracking
+[include]
+  path = .gitconfig.local
+  
