@@ -68,6 +68,8 @@
                     '(buffer-file-name "%f" (dired-directory
                                              dired-directory "%b"))))
 
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+
 ;; Highlight current line.
 (global-hl-line-mode 1)
 
