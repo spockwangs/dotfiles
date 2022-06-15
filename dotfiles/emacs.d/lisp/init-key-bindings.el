@@ -66,7 +66,6 @@
 (define-key global-map (kbd "<f2>") 'set-mark-command)
 (define-key global-map (kbd "<f3>") 'revert-buffer)
 (define-key global-map (kbd "<f5>") 'undo)
-(require-package 'redo+)
 (require 'redo+)
 (define-key global-map (kbd "S-<f5>") 'redo)
 (define-key global-map (kbd "<f6>") 'pop-to-mark-command)
