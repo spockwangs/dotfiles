@@ -39,7 +39,7 @@ elif [ $TERM = dumb -o $TERM = emacs ]; then
     export PS1="\u@\h:\W[$?]\$ "
 else
     # The terminator emulator
-    export PS1='\[\e]0;\u@\h:\w\007\]\[\e[32m\]\u:\w[$?]\n\$\[\e[0m\] '
+    export PS1='\[\e]0;\u@\h:\w\007\]\[\e[32m\]\u:\w $(git_branch)[$?]\n\$\[\e[0m\] '
 fi
 
 export LANG=en_US.UTF-8
@@ -58,24 +58,19 @@ fi
 alias ll='ls -lh'
 alias less='less -R'
 alias grep='grep --color=auto'
-alias matlab='matlab -nosplash'
-alias bindkey='bind'
-alias ansic='cc -W -Wall -ansi -pedantic'
-alias c99='gcc -W -Wall -std=c99 -pedantic'
 # Use the right emacsclient binary on MacOS.
 alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
 
 # allow core dump
 ulimit -c unlimited
 
-# Include local config.
-if [ -f ~/.bashrc.local ]; then
-    source ~/.bashrc.local
-fi
-
 # Automatic completion.
 if [ -f /etc/bash_completion ]; then
     source /etc/bash_completion
+fi
+
+if [ -f ~/.dir_colors ]; then
+    eval "$(dircolors -b ~/.dir_colors)"
 fi
 
 # Install z.sh.
