@@ -32,6 +32,9 @@
 (setq split-height-threshold 20)
 (setq split-width-threshold nil)
 
+;; Always keep the file with a final newline.
+(setq require-final-newline t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
