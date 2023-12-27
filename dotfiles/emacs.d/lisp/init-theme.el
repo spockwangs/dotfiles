@@ -1,8 +1,4 @@
-;; Set up color theme.
-(require-package 'color-theme)
-(require-package 'color-theme-solarized)
-(add-hook 'after-init-hook
-          (lambda ()
-            (color-theme-initialize)
-            (color-theme-solarized)))
+(use-package solarized-theme
+  :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
+
 (provide 'init-theme)

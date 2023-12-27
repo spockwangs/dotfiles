@@ -1,6 +1,5 @@
-(add-hook
- 'perl-mode-hook
- '(lambda ()
-    (define-key perl-mode-map [(return)] 'newline-and-indent)))
+(use-package perl-mode
+  :bind (:map perl-mode-map
+              ([(return)] . newline-and-indent)))
 
 (provide 'init-perl)

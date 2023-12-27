@@ -1,7 +1,5 @@
-// Copyright (c) `(format-time-string "%Y")` spockwang.
+// Copyright (c) `(format-time-string "%Y")` Tencent
 //     All rights reserved.
-//
-// Author: wbbtiger@gmail.com
 //
 
 #pragma once

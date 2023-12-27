@@ -9,6 +9,6 @@
   (set-fontset-font
    (frame-parameter nil 'font)
    charset
-   (font-spec :family "华文楷体" :size 22)))
+   (font-spec :family "华文楷体" :size 42)))
 
 (provide 'init-font)
