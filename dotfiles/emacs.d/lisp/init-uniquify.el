@@ -1,5 +1,8 @@
 ;; Make buffer names unique.
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+(use-package uniquify
+  :ensure nil
+  :defer t
+  :config
+  (setq uniquify-buffer-name-style 'forward))
 
 (provide 'init-uniquify)
