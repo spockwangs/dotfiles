@@ -1,8 +1,8 @@
-(add-hook
- 'js-mode-hook
- '(lambda ()
-    (subword-mode 1)
-    (turn-on-auto-fill)
-    (define-key js-mode-map [(return)] 'newline-and-indent)))
+(use-package js
+  :hook (js-mode . (lambda ()
+                     (subword-mode 1)
+                     (turn-on-auto-fill)))
+  :bind (:map js-mode-map
+              ([(return)] . newline-and-indent)))
 
 (provide 'init-javascript)

@@ -1,6 +1,6 @@
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.emacs-china.org/gnu/")
-			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq package-archives '(("gnu" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+			 ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
 
 (defun require-package (package &optional min-version no-refresh)
@@ -14,5 +14,12 @@ re-downloaded in order to locate PACKAGE."
       (progn
         (package-refresh-contents)
         (require-package package min-version t)))))
+
+;; (eval-when-compile
+;;   (require-package 'use-package)
+;;   (require 'use-package))
+
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
 (provide 'init-package)

@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2018-04-10 00:09:48 spockwang>
+;; Time-stamp: <2023-12-27 20:33:35 spockwang>
 ;;
 
 (require 'server)
@@ -11,6 +11,13 @@
 
 ;; Set load-path variable.
 (add-to-list 'load-path "~/.emacs.d/lisp")
+
+;; For troubleshooting, start Emacs with command line flag `--debug-init'.
+(when init-file-debug
+  (setq use-package-verbose t
+        use-package-expand-minimally nil
+        use-package-compute-statistics t
+        debug-on-error t))
 
 (require 'init-package)
 (require 'init-benchmarking)
@@ -21,8 +28,9 @@
 (require 'init-ibuffer)
 (require 'init-fci)
 (require 'init-auto-insert)
+(require 'init-treemacs)
 (require 'init-cc-mode)
-(require 'init-jce)
+(require 'init-go-mode)
 (require 'init-eshell)
 (require 'init-html)
 (require 'init-java)

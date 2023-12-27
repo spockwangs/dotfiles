@@ -35,7 +35,7 @@
 ;; Set file local variable `coding' to utf-8-unix.
 (global-set-key
  "\C-xc"
- (lambda ()               
+ (lambda ()
    "Set file local variable `coding' to utf-8-unix at the first line."
    (interactive)
    (save-excursion (add-file-local-variable-prop-line 'coding 'utf-8-unix))))
@@ -43,7 +43,7 @@
 (global-set-key (kbd "M-q") 'util/fill)
 
 (global-set-key (kbd "M-/") 'hippie-expand)
-(setq hippie-expand-try-functions-list 
+(setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
         try-expand-dabbrev-visible
         try-expand-dabbrev-all-buffers
@@ -71,7 +71,7 @@
 (define-key global-map (kbd "<f6>") 'pop-to-mark-command)
 (define-key global-map (kbd "S-<f6>") (lambda () (interactive) (push-mark)))
 (define-key global-map (kbd "<f7>") 'ispell)
-(define-key global-map (kbd "<f8>") 'dired)
+;(define-key global-map (kbd "<f8>") 'dired)
 (define-key global-map (kbd "<f9>") 'goto-line)
 (define-key global-map (kbd "S-<f9>") 'goto-char)
 

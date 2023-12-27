@@ -1,6 +1,6 @@
-; Requires: cscope
+(use-package xcscope
+  :defer t
+  :config
+  (cscope-setup))
 
-(require-package 'xcscope)
-(require 'xcscope)
-(cscope-setup)
 (provide 'init-xcscope)

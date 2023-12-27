@@ -20,20 +20,23 @@
 (setq-default fill-column 100)
 (add-hook
  'fundamental-mode-hook
- '(lambda () (turn-on-auto-fill)))
-
-;; Update time stamp string in the buffer before saving.
-(add-hook 'before-save-hook 'time-stamp)
+ #'(lambda () (turn-on-auto-fill)))
 
 ;; Save bookmark automatically.
 (setq bookmark-save-flag 1)
 
 ;; Split always vertically.
-(setq split-height-threshold 20)
+(setq split-height-threshold 50)
 (setq split-width-threshold nil)
 
-;; Always keep the file with a final newline.
-(setq require-final-newline t)
+;; Update time stamp string in the buffer before saving.
+(add-hook 'before-save-hook 'time-stamp)
+
+;; Delete trailing whitespaces before saving.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Require newline at the end.
+(setq-default require-final-newline t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Look and feel
@@ -58,7 +61,7 @@
 (column-number-mode t)
 
 ;; Show line numbers in the left margin.
-(global-linum-mode)
+(global-display-line-numbers-mode)
 
 ;; Display time and date at the mode line.
 (setq display-time-24hr-format t)
@@ -78,6 +81,7 @@
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; Set transient-mark-mode.
 (setq transient-mark-mode t)

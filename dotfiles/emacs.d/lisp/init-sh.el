@@ -1,6 +1,6 @@
-(add-hook
- 'sh-mode-hook
- '(lambda ()
-    (define-key sh-mode-map [(return)] 'newline-and-indent)))
+(use-package sh-mode
+  :ensure nil
+  :bind (:map sh-mode-map
+              ([(return)] . newline-and-indent)))
 
 (provide 'init-sh)

@@ -60,7 +60,7 @@ Works with: arglist-intro, arglist-cont, arglist-cont-nonempt.
 
 (defconst spock-c-style
   `((c-recognize-knr-p . nil)
-    (c-basic-offset . 4)
+    (c-basic-offset . 2)
     (c-comment-only-line-offset . 0)
     (c-hanging-braces-alist . ((defun-open after)
                                (defun-close before after)
@@ -119,7 +119,7 @@ Works with: arglist-intro, arglist-cont, arglist-cont-nonempt.
                         (statement-case-open . +)
                         (statement-case-intro . +) ; case w/o {
                         (access-label . -)  ; line up 'public: ' etc with 'class'
-                        (innamespace . +)
+                        (innamespace . 0)
                         (stream-op . c-lineup-streamop)))
     ; Customize the behaviour of `comment-dwim'.
     (c-indent-comment-alist . ((empty-line align . nil)

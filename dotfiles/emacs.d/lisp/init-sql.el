@@ -1,7 +1,7 @@
-(add-hook
- 'sql-mode-hook
- '(lambda ()
-    (turn-on-auto-fill)
-    (define-key sql-mode-map (kbd "C-c C-c") 'comment-region)))
+(use-package sql-mode
+  :ensure nil
+  :hook (sql-mode . turn-on-auto-fill)
+  :bind (:map sql-mode-map
+               ("C-c C-c" . comment-region)))
 
 (provide 'init-sql)

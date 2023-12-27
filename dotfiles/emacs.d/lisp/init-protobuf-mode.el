@@ -1,5 +1,4 @@
-(require-package 'protobuf-mode)
-
-(add-to-list 'auto-mode-alist '("\\.proto\\'" . protobuf-mode))
+(use-package protobuf-mode
+  :mode ("\\.proto\\'" . protobuf-mode))
 
 (provide 'init-protobuf-mode)
