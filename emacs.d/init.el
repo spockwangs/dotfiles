@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2023-12-27 20:33:35 spockwang>
+;; Time-stamp: <2024-01-08 14:12:54 spockwang>
 ;;
 
 (require 'server)
@@ -58,3 +58,17 @@
 
 ;; Load local customizations.
 (require 'init-local nil t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(auto-insert-directory "~/.emacs.d/auto-insert/")
+ '(package-selected-packages
+   '(protobuf-mode web-mode smex xcscope solarized-theme php-mode go-mode treemacs-nerd-icons treemacs yasnippet fill-column-indicator doom-modeline)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
