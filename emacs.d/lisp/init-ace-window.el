@@ -1,4 +1,4 @@
 (use-package ace-window
-  :bind ("M-p" . ace-window))
+  :bind ("M-o" . ace-window))
 
 (provide 'init-ace-window)
