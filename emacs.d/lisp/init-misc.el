@@ -54,19 +54,24 @@
 ;; Hide the menu bar.
 (menu-bar-mode 0)
 
-;; Show line number at the mode line.
-(line-number-mode t)
-
-;; Show column number at the mode line.
-(column-number-mode t)
-
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
 
-;; Display time and date at the mode line.
-(setq display-time-24hr-format t)
-(setq display-time-day-and-date t)
-(display-time)
+(use-package doom-modeline
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-vcs-max-length 60))
+
+;; ;; Show line number at the mode line.
+;; (line-number-mode t)
+
+;; ;; Show column number at the mode line.
+;; (column-number-mode t)
+
+;; ;; Display time and date at the mode line.
+;; (setq display-time-24hr-format t)
+;; (setq display-time-day-and-date t)
+;; ;(display-time)
 
 ;; Show system name and full path of buffer at the title bar.
 (setq frame-title-format
@@ -93,10 +98,10 @@
 (show-paren-mode t)
 
 ;; Automatic backup but no version control.
-(setq make-backup-files t)
-(setq version-control t)
-(setq delete-old-versions t
-      kept-new-versions 3
+(setq make-backup-files t
+      version-control t
+      delete-old-versions t
+      kept-new-versions 5
       kept-old-versions 0)
 
 (provide 'init-misc)

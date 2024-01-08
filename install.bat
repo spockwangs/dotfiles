@@ -1,12 +1,14 @@
-rem Install scripts for Windows.
+rem Install scripts for Windows. It must be run as administrater.
 
 set DOTFILES_DIR=%~dp0%
 
-rem Install config directory.
-xcopy %DOTFILES_DIR%\emacs.d %HOME%\.emacs.d /E /Y
+for %%G in (emacs.d, bin) DO (
+    rmdir %HOME%\.%%G
+    mklink /D %HOME%\.%%G %DOTFILES_DIR%\%%G
+)
 
-rem Install config files.
-for %%G in (bashrc, dir_colors, fonts.conf, gitignore, indent.pro, vimrc,
+for %%G in (bash_profile, bashrc, dir_colors, fonts.conf, gitignore, indent.pro, vimrc,
             gitconfig, screenrc, inputrc) DO (
-    xcopy %DOTFILES_DIR%\%%G %HOME%\.%%G
+    del %HOME%\.%%G
+    mklink %HOME%\.%%G %DOTFILES_DIR%\%%G
 )
