@@ -50,6 +50,24 @@
 (use-package solarized-theme
   :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
 
+;; Set fonts.
+(set-frame-font "Monaco 14" nil t)
+
+;; Set fonts for Chinese characters.
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font
+   (frame-parameter nil 'font)
+   charset
+   (font-spec :family "华文楷体" :size 42)))
+
+;; Set language environment and coding system.
+;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
+;; `set-buffer-process-coding-system', `set-terminal-coding-system',
+;; `set-selection-coding-system' and `set-input-method'.
+(set-language-environment 'UTF-8)
+(prefer-coding-system 'gbk-dos)
+(prefer-coding-system 'utf-8-unix)
+
 ;; Find buffer or file.
 (ido-mode t)
 (setq-default ido-create-new-buffer 'always)
@@ -101,5 +119,9 @@
       delete-old-versions t
       kept-new-versions 5
       kept-old-versions 0)
+
+(use-package ctrlf
+  :config
+  (ctrlf-mode t))
 
 (provide 'init-basics)
