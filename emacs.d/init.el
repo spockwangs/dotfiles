@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-01-08 17:39:18 spockwang>
+;; Time-stamp: <2024-01-08 18:41:04 spockwang>
 ;;
 
 (require 'server)
@@ -23,6 +23,7 @@
 (require 'init-benchmarking)
 (require 'init-basics)
 (require 'init-key-bindings)
+(require 'init-company-mode)
 (require 'init-uniquify)
 (require 'init-ibuffer)
 (require 'init-fci)
@@ -42,8 +43,6 @@
 (require 'init-emacs-lisp)
 (require 'init-javascript)
 (require 'init-yasnippet)
-(require 'init-locale)
-(require 'init-font)
 (require 'init-xcscope)
 (require 'init-smex)
 (require 'init-web-mode)
@@ -62,7 +61,7 @@
  ;; If there is more than one, they won't work right.
  '(auto-insert-directory "~/.emacs.d/auto-insert/")
  '(package-selected-packages
-   '(protobuf-mode web-mode smex xcscope solarized-theme php-mode go-mode treemacs-nerd-icons treemacs yasnippet fill-column-indicator doom-modeline)))
+   '(ctrlf company lsp-ui lsp-mode protobuf-mode web-mode smex xcscope solarized-theme php-mode go-mode treemacs-nerd-icons treemacs yasnippet fill-column-indicator doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
