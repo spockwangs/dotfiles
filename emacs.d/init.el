@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-01-08 14:12:54 spockwang>
+;; Time-stamp: <2024-01-08 17:39:18 spockwang>
 ;;
 
 (require 'server)
@@ -21,8 +21,7 @@
 
 (require 'init-package)
 (require 'init-benchmarking)
-(require 'init-preload-local nil t)
-(require 'init-misc)
+(require 'init-basics)
 (require 'init-key-bindings)
 (require 'init-uniquify)
 (require 'init-ibuffer)
@@ -45,7 +44,6 @@
 (require 'init-yasnippet)
 (require 'init-locale)
 (require 'init-font)
-(require 'init-theme)
 (require 'init-xcscope)
 (require 'init-smex)
 (require 'init-web-mode)
@@ -57,7 +55,6 @@
 (require 'init-desktop)
 
 ;; Load local customizations.
-(require 'init-local nil t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
