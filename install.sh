@@ -3,16 +3,9 @@
 # Install scripts for Linux.
 
 set -e
+CWD=$(pwd)
 
-for name in dotfiles/*; do
-    filename=$(basename "$name")
-    echo "Copying \`$filename' to \`${HOME}/.${filename}'"
-    if [ -d "$name" ]; then
-        cp -R "$name/" "${HOME}/.${filename}"
-    else
-        cp "$name" "${HOME}/.${filename}"
-    fi
+for name in (bash_profile, bashrc, bin, dir_colors, emacs.d, fonts.conf, gitconfig, gitignore, gnomerc, indent.pro, inputrc, screenrc); do
+    unlink "${HOME}/.${name}"
+    ln "${CWD}/$name" "${HOME}/.${name}"
 done
-
-echo "Copying \`bin' to \`${HOME}/bin'"
-cp -R bin "${HOME}"
