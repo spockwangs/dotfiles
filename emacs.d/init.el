@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-01-08 18:41:04 spockwang>
+;; Time-stamp: <2024-01-10 15:46:04 spockwang>
 ;;
 
 (require 'server)
@@ -23,7 +23,6 @@
 (require 'init-benchmarking)
 (require 'init-basics)
 (require 'init-key-bindings)
-(require 'init-company-mode)
 (require 'init-uniquify)
 (require 'init-ibuffer)
 (require 'init-fci)
@@ -52,19 +51,3 @@
 (require 'init-protobuf-mode)
 (require 'init-vc)
 (require 'init-desktop)
-
-;; Load local customizations.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auto-insert-directory "~/.emacs.d/auto-insert/")
- '(package-selected-packages
-   '(ctrlf company lsp-ui lsp-mode protobuf-mode web-mode smex xcscope solarized-theme php-mode go-mode treemacs-nerd-icons treemacs yasnippet fill-column-indicator doom-modeline)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

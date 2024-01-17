@@ -1,3 +1,4 @@
+(use-package clang-format)
 (use-package cc-mode
   :defer t
   :ensure nil
@@ -10,6 +11,7 @@
   :mode ("\\.h\\'" . c++-mode)
   :bind (:map c-mode-base-map
               ("<return>" . newline-and-indent)
-              ("M-q" . c-fill-paragraph)))
+              ("M-q" . c-fill-paragraph)
+              ("C-M-\\" . clang-format-buffer)))
 
 (provide 'init-cc-mode)
