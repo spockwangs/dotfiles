@@ -13,3 +13,6 @@
 [include]
   path = .gitconfig.local
   
+[user]
+	email = wbbtiger@gmail.com
+	name = spockwang
