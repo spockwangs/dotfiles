@@ -51,14 +51,14 @@
   :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
 
 ;; Set fonts.
-(set-frame-font "Monaco 14" nil t)
+(set-frame-font "Monaco 16" nil t)
 
 ;; Set fonts for Chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font
    (frame-parameter nil 'font)
    charset
-   (font-spec :family "华文楷体" :size 42)))
+   (font-spec :family "华文楷体" :size 20)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
