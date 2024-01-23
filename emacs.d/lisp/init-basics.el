@@ -24,6 +24,9 @@
 ;; Hide the menu bar.
 (menu-bar-mode 0)
 
+;; Disable tabs.
+(tab-bar-mode 0)
+
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
 
