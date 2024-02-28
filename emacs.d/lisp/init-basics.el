@@ -36,11 +36,11 @@
   :config
   (setq doom-modeline-vcs-max-length 60))
 
-;; ;; Show line number at the mode line.
-;; (line-number-mode t)
+;; Show line number at the mode line.
+(line-number-mode t)
 
-;; ;; Show column number at the mode line.
-;; (column-number-mode t)
+;; Show column number at the mode line.
+(column-number-mode t)
 
 ;; ;; Display time and date at the mode line.
 ;; (setq display-time-24hr-format t)
