@@ -123,8 +123,4 @@
       kept-new-versions 5
       kept-old-versions 0)
 
-(use-package ctrlf
-  :config
-  (ctrlf-mode t))
-
 (provide 'init-basics)
