@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-04-30 15:58:50 spockwang>
+;; Time-stamp: <2024-04-30 22:24:36 spock>
 ;;
 
 (require 'server)
@@ -51,7 +51,7 @@
 (require 'init-protobuf-mode)
 (require 'init-vc)
 (require 'init-desktop)
-(require 'init-epilog)
+(require 'init-epilog nil t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
