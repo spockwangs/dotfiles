@@ -32,6 +32,14 @@ negative"
     (copy-region-as-kill beg end))
   (message "Copied a line."))
 
+(defun util/copy-symbol ()
+  "Copy a symbol under current cursor."
+  (interactive)
+  (let ((str (thing-at-point 'symbol)))
+    (if str
+        (progn (kill-new str) (message "Copied `%s'." str))
+      (message "No symbols under current cursor."))))
+
 (defun util/insert-current-date ()
   "Insert current date at current point."
   (interactive)

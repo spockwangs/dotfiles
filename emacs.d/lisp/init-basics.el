@@ -74,7 +74,7 @@
 ;; Find buffer or file.
 (ido-mode t)
 (setq-default ido-create-new-buffer 'always)
-(ido-enable-regexp t)
+(setq ido-enable-regexp t)
 
 ;; Set the default directory when finding a file.
 (setq default-directory "~/")
