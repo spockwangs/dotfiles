@@ -15,18 +15,28 @@
 ;; Global Key bindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Shift a region left or right.
+;; Scroll pages.
 (global-set-key (kbd "C-v") 'pager-page-down)
 (global-set-key (kbd "<next>") 'pager-page-down)
 (global-set-key (kbd "M-v") 'pager-page-up)
 (global-set-key (kbd "<prior>") 'pager-page-up)
 (global-set-key (kbd "M-<up>") 'pager-row-up)
+
+;; Scroll lines.
 (global-set-key (kbd "M-<kp-8>") 'pager-row-up)
 (global-set-key (kbd "M-<down>") 'pager-row-down)
 (global-set-key (kbd "M-<kp-2>") 'pager-row-down)
+
+;; Shift regions.
 (global-set-key (kbd "C-<") 'util/shift-left)
 (global-set-key (kbd "C->") 'util/shift-right)
+
+;; Copy shortcuts.
 (global-set-key (kbd "C-x y") 'util/copy-line)
+(global-set-key (kbd "C-x w") 'util/copy-symbol)
+(global-set-key (kbd "C-x M-w f") 'util/copy-current-file-name)
+(global-set-key (kbd "C-x M-w d") 'util/copy-current-directory)
+(global-set-key (kbd "C-x M-w p") 'util/copy-current-path)
 
 ;; Cycle through buffer list.  Require "yic-buffer.el".
 (global-set-key "\C-x\C-p" 'bury-buffer)
@@ -58,9 +68,6 @@
 
 (global-set-key (kbd "C-x M-d") 'insert-current-date)
 (global-set-key (kbd "C-x M-t") 'insert-current-time)
-(global-set-key (kbd "C-x M-w f") 'util/copy-current-file-name)
-(global-set-key (kbd "C-x M-w d") 'util/copy-current-directory)
-(global-set-key (kbd "C-x M-w p") 'util/copy-current-path)
 
 ;; Bind function keys
 (define-key global-map (kbd "<f2>") 'set-mark-command)
