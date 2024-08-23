@@ -21,5 +21,6 @@ re-downloaded in order to locate PACKAGE."
 
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
+(setq use-package-always-defer t)
 
 (provide 'init-package)
