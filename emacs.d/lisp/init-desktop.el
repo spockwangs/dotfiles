@@ -11,8 +11,10 @@
   (add-to-list 'desktop-modes-not-to-save 'dired-mode)
   (add-to-list 'desktop-modes-not-to-save 'Info-mode)
   (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
+  ;; Save all open files including remote files.
   (setq desktop-files-not-to-save "^$"))
 
+;; Make desktop mode work even if emacs is running as a daemon.
 (if (not (daemonp))
     (desktop-save-mode 1)
   (defun restore-desktop (frame)
