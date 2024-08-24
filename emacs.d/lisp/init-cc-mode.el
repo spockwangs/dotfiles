@@ -1,15 +1,17 @@
 (use-package clang-format)
 
 (use-package cc-mode
-  :defer t
   :ensure nil
+  :after (spock-c-style clang-format)
   :hook ((c-mode-common . (lambda ()
                            (subword-mode 1)
                            (turn-on-auto-fill)
                            (c-toggle-auto-newline -1)
-                           (require 'spock-c-style)
                            (spock-set-c-style))))
-  :mode ("\\.h\\'" . c++-mode)
+  :mode (("\\.h\\'" . c++-mode)
+         ("\\.c\\'" . c-mode)
+         ("\\.cpp\\'" . c++-mode)
+         ("\\.cc\\'" . c++-mode))
   :bind (:map c-mode-base-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
