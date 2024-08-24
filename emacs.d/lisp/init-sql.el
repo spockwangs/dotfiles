@@ -1,6 +1,7 @@
 (use-package reformatter)
 
 (use-package sql-mode
+  :ensure nil
   :config
   (require 'sqlformat)
   (setq sqlformat-command 'sqlformat)

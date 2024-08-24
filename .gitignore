@@ -8,3 +8,4 @@ emacs.d/smex-items
 emacs.d/.emacs.desktop*
 emacs.d/.cache
 emacs.d/lisp/init-epilog.el
+emacs.d/tramp
