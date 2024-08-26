@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-08-24 16:27:01 spock>
+;; Time-stamp: <2024-08-26 20:54:32 spockwang>
 ;;
 
 (require 'server)
@@ -50,6 +50,7 @@
 (require 'init-make-mode)
 (require 'init-protobuf-mode)
 (require 'init-vc)
+(require 'init-tramp)
 (require 'init-desktop)
 (require 'init-epilog nil t)
 (custom-set-variables
