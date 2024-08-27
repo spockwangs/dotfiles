@@ -5,7 +5,8 @@
 set -e
 CWD=$(pwd)
 
-for name in bin; do
+mkdir -p "${HOME}/bin"
+for name in bin/*; do
     ln -f -s "${CWD}/${name}" "${HOME}/${name}"
 done
 
