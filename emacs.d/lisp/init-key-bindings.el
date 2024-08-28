@@ -38,10 +38,6 @@
 (global-set-key (kbd "C-x M-w d") 'util/copy-current-directory)
 (global-set-key (kbd "C-x M-w p") 'util/copy-current-path)
 
-;; Cycle through buffer list.  Require "yic-buffer.el".
-(global-set-key "\C-x\C-p" 'bury-buffer)
-(global-set-key "\C-x\C-n" 'yic-next-buffer)
-
 ;; Set file local variable `coding' to utf-8-unix.
 (global-set-key
  "\C-xc"
@@ -78,7 +74,6 @@
 (define-key global-map (kbd "<f6>") 'pop-to-mark-command)
 (define-key global-map (kbd "S-<f6>") (lambda () (interactive) (push-mark)))
 (define-key global-map (kbd "<f7>") 'ispell)
-;(define-key global-map (kbd "<f8>") 'dired)
 (define-key global-map (kbd "<f9>") 'goto-line)
 (define-key global-map (kbd "S-<f9>") 'goto-char)
 
