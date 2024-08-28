@@ -38,6 +38,9 @@
 (global-set-key (kbd "C-x M-w d") 'util/copy-current-directory)
 (global-set-key (kbd "C-x M-w p") 'util/copy-current-path)
 
+;; Delete current buffer and file.
+(global-set-key (kbd "C-x C-d") 'util/delete-file-and-buffer)
+
 ;; Set file local variable `coding' to utf-8-unix.
 (global-set-key
  "\C-xc"
