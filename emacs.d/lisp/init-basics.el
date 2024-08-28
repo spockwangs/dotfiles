@@ -95,14 +95,6 @@
 (setq split-height-threshold 50)
 (setq split-width-threshold nil)
 
-;; Update time stamp string in the buffer before saving.
-(add-hook 'before-save-hook 'time-stamp)
-
-;; Delete trailing whitespaces before saving.
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Require newline at the end.
-(setq-default require-final-newline t)
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil)
@@ -123,5 +115,14 @@
       delete-old-versions t
       kept-new-versions 5
       kept-old-versions 0)
+
+;; Update time stamp string in the buffer before saving.
+(add-hook 'before-save-hook 'time-stamp)
+
+;; Delete trailing whitespaces before saving.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Require newline at the end.
+(setq-default require-final-newline t)
 
 (provide 'init-basics)
