@@ -1,4 +1,6 @@
 (use-package treemacs
+  :config
+  (setq treemacs-width 70)
   :bind (("<f8>" . treemacs)
          ("M-0" . treemacs-select-window)))
 
