@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-08-28 23:22:51 spock>
+;; Time-stamp: <2024-08-29 16:08:27 spockwang>
 ;;
 
 (require 'server)
@@ -24,7 +24,6 @@
 (require 'init-basics)
 (require 'init-key-bindings)
 (require 'init-helm)
-(require 'init-uniquify)
 (require 'init-ibuffer)
 (require 'init-fci)
 (require 'init-auto-insert)
@@ -33,7 +32,6 @@
 (require 'init-go-mode)
 (require 'init-eshell)
 (require 'init-html)
-(require 'init-java)
 (require 'init-perl)
 (require 'init-php)
 (require 'init-python)
@@ -58,7 +56,7 @@
  ;; If there is more than one, they won't work right.
  '(auto-insert-directory "~/.emacs.d/auto-insert/")
  '(package-selected-packages
-   '(magit helm python-black reformatter haskell-mode yaml-mode protobuf-mode web-mode smex xcscope php-mode go-mode clang-format treemacs-nerd-icons treemacs yasnippet fill-column-indicator ctrlf solarized-theme doom-modeline)))
+   '(sqlformat magit helm python-black reformatter haskell-mode yaml-mode protobuf-mode web-mode smex xcscope php-mode go-mode clang-format treemacs-nerd-icons treemacs yasnippet fill-column-indicator ctrlf solarized-theme doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
