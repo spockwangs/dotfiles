@@ -70,6 +70,7 @@
 (set-language-environment 'UTF-8)
 (prefer-coding-system 'gbk-dos)
 (prefer-coding-system 'utf-8-unix)
+(set-locale-environment "en_US.UTF-8")
 
 ;; Find buffer or file.
 (ido-mode t)
@@ -96,7 +97,6 @@
 ;; Split always vertically.
 (setq split-height-threshold 50)
 (setq split-width-threshold nil)
-
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil)
@@ -126,5 +126,61 @@
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)
+
+(require 'util)
+
+(bind-key "<f2>" #'set-mark-command)
+(bind-key "<f3>" #'revert-buffer)
+(bind-key "<f5>" #'undo)
+(require 'redo+)
+(bind-key "S-<f5>" #'redo)
+(bind-key "<f6>" #'pop-to-mark-command)
+(bind-key "S-<f6>" #'(lambda () (interactive) (push-mark)))
+(bind-key "<f7>" #'ispell)
+(bind-key "<f9>" #'goto-line)
+(bind-key "S-<f9>" #'goto-char)
+
+;; Scroll pages and lines.
+(use-package pager
+  :bind (("C-v" . pager-page-down)
+         ("<next>" . pager-page-down)
+         ("M-v" . pager-page-up)
+         ("<prior>" . pager-page-up)
+         ("M-<up>" . pager-row-up)
+         ("M-<kp-8>" . pager-row-up)
+         ("M-<down>" . pager-row-down)
+         ("M-<kp-2>" . pager-row-down)))
+
+;; Scroll regions.
+(bind-key "C-<" #'util/shift-left)
+(bind-key "C->" #'util/shift-right)
+
+;; Copy shortcuts.
+(bind-key "C-c y" #'util/copy-line)
+(bind-key "C-c w" #'util/copy-symbol)
+(bind-key "C-c c f" #'util/copy-current-file-name)
+(bind-key "C-c c d" #'util/copy-current-directory)
+(bind-key "C-c c p" #'util/copy-current-path)
+
+;; Delete current buffer and file.
+(bind-key "C-x C-k" #'util/delete-file-and-buffer)
+
+(bind-key "M-/" #'hippie-expand)
+(setq hippie-expand-try-functions-list
+      '(try-expand-dabbrev
+        try-expand-dabbrev-visible
+        try-expand-dabbrev-all-buffers
+        try-expand-dabbrev-from-kill
+        try-complete-file-name-partially
+        try-complete-file-name
+        try-expand-all-abbrevs
+        try-expand-list
+        try-expand-line
+        try-complete-lisp-symbol-partially
+        try-complete-lisp-symbol))
+
+(bind-key "C-c i d" #'util/insert-current-date)
+(bind-key "C-c i t" #'util/insert-current-time)
+
 
 (provide 'init-basics)
