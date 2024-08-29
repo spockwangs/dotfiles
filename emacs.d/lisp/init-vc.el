@@ -1,6 +1,5 @@
 (use-package vc
-  :defer t
-  :config
+  :init
   (defun my-vc-dir (dir)
     (interactive
      (list (file-truename (read-directory-name "VC status for directory:"
