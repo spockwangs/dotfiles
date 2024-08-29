@@ -1,6 +1,5 @@
 (use-package auto-complete-config)
 (use-package auto-complete
-  :defer t
   :config
   (setq-default ac-auto-start 3)
   (set-default 'ac-sources
