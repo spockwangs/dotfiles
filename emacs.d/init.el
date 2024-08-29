@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-08-28 14:56:21 spockwang>
+;; Time-stamp: <2024-08-28 23:22:51 spock>
 ;;
 
 (require 'server)
@@ -42,7 +42,7 @@
 (require 'init-sql)
 (require 'init-emacs-lisp)
 (require 'init-javascript)
-(require 'init-smex)
+;(require 'init-smex)
 (require 'init-web-mode)
 (require 'init-ace-window)
 (require 'init-make-mode)
