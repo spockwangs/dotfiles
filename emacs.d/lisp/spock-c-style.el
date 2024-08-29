@@ -131,7 +131,7 @@ Works with: arglist-intro, arglist-cont, arglist-cont-nonempt.
 ;;;###autoload
 (defun spock-set-c-style ()
   "Set the current buffer's c-style to Spock C/C++ Programming
-  Style. Meant to be added to `c-mode-common-hook'."
+Style. Meant to be added to `c-mode-common-hook'."
   (interactive)
   (make-local-variable 'c-tab-always-indent)
   (setq c-tab-always-indent t)
