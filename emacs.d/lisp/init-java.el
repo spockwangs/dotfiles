@@ -1,7 +1,7 @@
 (use-package cc-mode
-  :ensure nil
-  :hook (java-mode . (lambda ()
-                       (c-set-style "java")
-                       (subword-mode 1))))
+  :mode (("\\.java\\'" . java-mode))
+  :hook (java-mode . (lambda () (c-set-style "java")))
+  :config
+  (c-set-style "java"))
 
 (provide 'init-java)

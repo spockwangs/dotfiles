@@ -1,5 +1,4 @@
 (use-package desktop
-  :ensure nil
   :config
   (setq desktop-path '("~/.emacs.d/"))
   ;; Auto save a session.

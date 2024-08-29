@@ -88,6 +88,8 @@
  'fundamental-mode-hook
  #'(lambda () (turn-on-auto-fill)))
 
+(setq uniquify-buffer-name-style 'forward)
+
 ;; Save bookmark automatically.
 (setq bookmark-save-flag 1)
 
