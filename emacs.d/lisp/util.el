@@ -72,11 +72,11 @@ negative"
   (kill-buffer (current-buffer)))
 
 (defun util/copy-current-path ()
-  "Copy current file path to kill-ring."
+  "Copy current file path to kill-ring. If the path is remote, only copy the local components."
   (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode)
-                      default-directory
-                    (buffer-file-name))))
+  (let ((filename (tramp-file-local-name (if (equal major-mode 'dired-mode)
+                                             default-directory
+                                           (buffer-file-name)))))
     (if filename
         (progn (kill-new filename)
                (message "Copied path '%s'." filename))
@@ -94,11 +94,12 @@ negative"
       (message "No filename associated with current buffer."))))
 
 (defun util/copy-current-directory ()
-  "Copy current directory to kill-ring."
+  "Copy current directory to kill-ring. If the directory is remote, only copy the local name components."
   (interactive)
   (if default-directory
-      (progn (kill-new default-directory)
-             (message "Copied directory '%s'." default-directory))
+      (let ((local-dir (tramp-file-local-name default-directory)))
+        (progn (kill-new local-dir)
+               (message "Copied directory '%s'." local-dir)))
     (message "No directory associated with current buffer.")))
 
 (defun util/search-all-buffers (regexp)
