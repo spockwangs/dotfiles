@@ -126,4 +126,15 @@ negative"
               (kill-buffer)))
       (message "No visited file!"))))
 
+(defun util/process-region (start end program &optional delete buffer display &rest args)
+  "Similar to `call-process-region', but supports remote files"
+  (if (file-remote-p default-directory)
+      (let ((temp-file (make-nearby-temp-file "util-process-region")))
+        (unwind-protect
+            (progn
+              (write-region start end temp-file)
+              (apply #'process-file program temp-file buffer display args))
+          (when temp-file (delete-file temp-file))))
+    (apply #'call-process-region start end program delete buffer display args)))
+
 (provide 'util)

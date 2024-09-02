@@ -1,12 +1,4 @@
-(use-package clang-format)
-
 (use-package cc-mode
-  :init
-  (defun clang-format ()
-    (interactive)
-    (if (use-region-p)
-        (clang-format-region (region-beginning) (region-end))
-      (clang-format-buffer)))
   :mode (("\\.h\\'" . c++-mode)
          ("\\.c\\'" . c-mode)
          ("\\.cpp\\'" . c++-mode)
@@ -18,6 +10,7 @@
               ("C-M-\\" . clang-format))
   :hook ((java-mode . (lambda () (c-set-style "java"))))
   :config
+  (require 'clang-format)
   (require 'spock-c-style)
   (subword-mode 1)
   (turn-on-auto-fill)
