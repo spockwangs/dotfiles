@@ -1,5 +1,6 @@
 (use-package sqlformat
   :config
+  (setenv "PYTHONIOENCODING" "utf-8")
   (setq sqlformat-command 'sqlformat)
   (setq sqlformat-args '("-k" "upper" "-r" "-s" "--strip-comments" "--indent_columns" "--encoding" "utf-8")))
 
