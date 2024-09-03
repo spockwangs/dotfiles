@@ -1,3 +1,8 @@
+;; Set environment variables.
+(require 'util)
+(when (eq system-type 'windows-nt)
+  (util/add-exec-path "C:/Windows/System32/OpenSSH"))
+
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 

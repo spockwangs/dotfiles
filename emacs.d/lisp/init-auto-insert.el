@@ -17,7 +17,7 @@
   (yas-expand-snippet (buffer-string) (point-min) (point-max)))
 
 (use-package yasnippet
-  :init
-  (yas-global-mode 1))
+  :hook
+  (after-init . (lambda () (yas-global-mode 1))))
 
 (provide 'init-auto-insert)

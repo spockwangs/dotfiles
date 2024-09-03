@@ -127,7 +127,8 @@ negative"
       (message "No visited file!"))))
 
 (defun util/process-region (start end program &optional delete buffer display &rest args)
-  "Similar to `call-process-region', but supports remote files"
+  "Similar to `call-process-region', but supports running remote
+ commands if current directory is remote."
   (if (file-remote-p default-directory)
       (let ((temp-file (make-nearby-temp-file "util-process-region")))
         (unwind-protect
@@ -136,5 +137,19 @@ negative"
               (apply #'process-file program temp-file buffer display args))
           (when temp-file (delete-file temp-file))))
     (apply #'call-process-region start end program delete buffer display args)))
+
+(defun util/add-exec-path (path &optional append)
+  "Emacs does set `exec-path' from the value of `PATH' on startup,
+ but will not look at it again later. But if you run a command,
+ it will inherit `PATH', not `exec-path', so subprocesses can
+ find different commands than Emacs does. So to make a path be
+ effective immediately we should add a path to both variables."
+  (add-to-list 'exec-path path append)
+  (let ((sep (if (eq system-type 'windows-nt)
+                 ";"
+               ":")))
+    (if append
+        (setenv "PATH" (concat (getenv "PATH") sep path))
+      (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
 (provide 'util)
