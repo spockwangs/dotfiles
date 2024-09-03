@@ -8,13 +8,15 @@
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format))
-  :hook ((java-mode . (lambda () (c-set-style "java"))))
+  :hook ((c-mode-common . (lambda ()
+                            (subword-mode 1)
+                            (turn-on-auto-fill)
+                            (c-toggle-auto-newline -1)))
+         (java-mode . (lambda ()
+                        (c-set-style "java"))))
   :config
   (require 'clang-format)
-  (require 'spock-c-style)
-  (subword-mode 1)
-  (turn-on-auto-fill)
-  (c-toggle-auto-newline -1))
+  (require 'spock-c-style))
 
 (use-package spock-c-style
   :ensure nil

@@ -1,9 +1,9 @@
 (use-package python
   :mode (("[/]BUILD\\'" . python-mode)
          ("\\.py\\'" . python-mode))
-  :config
-  (subword-mode 1)
-  (setq python-indent-offset 4)
+  :hook ((python-mode . (lambda () (subword-mode 1))))
+  :custom
+  (python-indent-offset 4)
   :bind (:map python-mode-map
               ("<return>" . newline-and-indent)))
 
