@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-09-03 18:34:19 spockwang>
+;; Time-stamp: <2024-09-03 19:31:20 spockwang>
 ;;
 
 (require 'server)
@@ -24,7 +24,7 @@
 (require 'init-basics)
 (require 'init-helm)
 (require 'init-ibuffer)
-(require 'init-fci)
+(require 'init-magit)
 (require 'init-auto-insert)
 (require 'init-treemacs)
 (require 'init-cc-mode)
