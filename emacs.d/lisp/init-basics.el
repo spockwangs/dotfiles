@@ -11,9 +11,9 @@
 
 ;; Configure frame title bar.
 (setq frame-title-format
-      (list (format "%s %%S: %%j " (system-name))
-                    '(buffer-file-name "%f" (dired-directory
-                                             dired-directory "%b"))))
+      (list (format "%s: " (system-name))
+            '(buffer-file-name "%f" (dired-directory
+                                     dired-directory "%b"))))
 
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
@@ -59,14 +59,14 @@
   :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
 
 ;; Set fonts.
-(set-frame-font "Monaco 16" nil t)
+(set-frame-font (font-spec :family "Monaco" :size 16) nil t)
 
 ;; Set fonts for Chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
   (set-fontset-font
    (frame-parameter nil 'font)
    charset
-   (font-spec :family "华文楷体" :size 20)))
+   (font-spec :family "STKaiti" :size 20)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -92,7 +92,7 @@
 (setq-default fill-column 100)
 (add-hook
  'fundamental-mode-hook
- #'(lambda () (turn-on-auto-fill)))
+ 'turn-on-auto-fill)
 
 (setq uniquify-buffer-name-style 'forward)
 
