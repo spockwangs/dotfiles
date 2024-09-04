@@ -1,6 +1,7 @@
 (use-package ace-isearch
-  :config
-  (global-ace-isearch-mode +1)
-  (setq ace-isearch-input-length 10))
+  :hook
+  (after-init . (lambda () (global-ace-isearch-mode 1)))
+  :custom
+  (ace-isearch-input-length 10 "Min length of input string to invoke helm search"))
 
 (provide 'init-ace-isearch)
