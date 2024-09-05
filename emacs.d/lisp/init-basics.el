@@ -66,7 +66,7 @@
   (set-fontset-font
    (frame-parameter nil 'font)
    charset
-   (font-spec :family "STKaiti"
+   (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
               :size 16.0)))
 
 ;; Set language environment and coding system.
