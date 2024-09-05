@@ -59,7 +59,7 @@
   :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
 
 ;; Set fonts.
-(set-frame-font (font-spec :family "Monaco" :size 14.0) nil t)
+(set-frame-font (font-spec :family "Monaco" :size 16.0) nil t)
 
 ;; Set fonts for Chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -67,7 +67,7 @@
    (frame-parameter nil 'font)
    charset
    (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size 16.0)))
+              :size 21.0)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',

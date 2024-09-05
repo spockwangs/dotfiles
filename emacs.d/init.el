@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2015 wbb
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-09-05 00:20:16 spock>
+;; Time-stamp: <2024-09-05 23:20:06 spock>
 ;;
 
 (require 'server)
@@ -27,6 +27,8 @@
 (require 'init-magit)
 (require 'init-auto-insert)
 (require 'init-company-mode)
+(require 'init-ace-isearch)
+(require 'init-ace-window)
 (require 'init-treemacs)
 (require 'init-cc-mode)
 (require 'init-go-mode)
@@ -42,7 +44,6 @@
 (require 'init-javascript)
 ;(require 'init-smex)
 (require 'init-web-mode)
-(require 'init-ace-window)
 (require 'init-make-mode)
 (require 'init-protobuf-mode)
 (require 'init-vc)
