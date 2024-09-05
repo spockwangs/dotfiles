@@ -7,7 +7,8 @@
 
 (use-package sql
   :mode (("\\.sql\\'" . sql-mode))
-  :hook ((sql-mode . 'turn-on-auto-fill))
+  :config
+  (add-hook 'sql-mode-hook #'turn-on-auto-fill)
   :bind (:map sql-mode-map
               ("C-c C-c" . comment-region)
               ("C-M-\\" . sqlformat)))
