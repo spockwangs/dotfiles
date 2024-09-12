@@ -8,6 +8,7 @@
 ;         ("C-x C-f" . helm-find-files)
 ;         ("C-x b" . helm-mini))
          ("C-c h g" . helm-google-suggest)
+         ("M-y" . helm-show-kill-ring)
          ))
 
 (provide 'init-helm)
