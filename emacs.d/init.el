@@ -1,15 +1,15 @@
 ;; -*- coding: utf-8-unix -*-
-;; Copyright (c) 2010-2015 wbb
+;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-09-05 23:20:06 spock>
+;; Time-stamp: <2024-09-13 20:09:15 spockwang>
 ;;
 
 (require 'server)
 (unless (server-running-p)
   (server-start))
 
-;; Set load-path variable.
+;; Add a load-path.
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;; For troubleshooting, start Emacs with command line flag `--debug-init'.
@@ -19,8 +19,10 @@
         use-package-compute-statistics t
         debug-on-error t))
 
-(require 'init-package)
+(custom-set-variables '(user-mail-address "wbbtiger@gmail.com"))
+
 (require 'init-benchmarking)
+(require 'init-package)
 (require 'init-basics)
 (require 'init-helm)
 (require 'init-ibuffer)
@@ -48,6 +50,7 @@
 (require 'init-protobuf-mode)
 (require 'init-vc)
 (require 'init-tramp)
+(require 'init-markdown)
 (require 'init-desktop)
 (require 'init-epilog nil t)
 (custom-set-variables
@@ -56,11 +59,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(auto-insert-directory "~/.emacs.d/auto-insert/")
+ '(company-show-quick-access t nil nil "显示编号（然后可以用 M-数字 快速选定某一项）")
  '(package-selected-packages
-   '(haskell-cabal company ace-isearch sqlformat magit helm python-black reformatter haskell-mode yaml-mode protobuf-mode web-mode smex xcscope php-mode go-mode clang-format treemacs-nerd-icons treemacs yasnippet fill-column-indicator ctrlf solarized-theme doom-modeline)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+   '(markdown-mode haskell-cabal company ace-isearch sqlformat magit helm python-black reformatter haskell-mode yaml-mode protobuf-mode web-mode smex xcscope php-mode go-mode clang-format treemacs-nerd-icons treemacs yasnippet fill-column-indicator ctrlf solarized-theme doom-modeline)))
