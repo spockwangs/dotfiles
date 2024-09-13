@@ -3,6 +3,35 @@
 (when (eq system-type 'windows-nt)
   (util/add-exec-path "C:/Windows/System32/OpenSSH"))
 
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
+
+(use-package solarized-theme
+  :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
+
+;; Set fonts.
+;(set-frame-font (font-spec :family "Monaco" :size 15.0) nil t)
+
+(custom-set-faces
+ '(default ((t (:family "Monaco" :height 140))))
+ '(fixed-pitch ((t (:family "Courier New")))))
+
+;; Set fonts for Chinese characters.
+(dolist (charset '(kana han symbol cjk-misc bopomofo))
+  (set-fontset-font
+   (frame-parameter nil 'font)
+   charset
+   (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
+              :size 16.0)))
+
+;; Set language environment and coding system.
+;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
+;; `set-buffer-process-coding-system', `set-terminal-coding-system',
+;; `set-selection-coding-system' and `set-input-method'.
+(set-language-environment 'UTF-8)
+(prefer-coding-system 'gbk-dos)
+(prefer-coding-system 'utf-8-unix)
+(set-locale-environment "en_US.UTF-8")
+
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 
@@ -14,8 +43,6 @@
       (list (format "%s: " (system-name))
             '(buffer-file-name "%f" (dired-directory
                                      dired-directory "%b"))))
-
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Hide tool bar.
 (tool-bar-mode 0)
@@ -38,8 +65,8 @@
 ;; Configure mode line.
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
-  :config
-  (setq doom-modeline-vcs-max-length 60))
+  :custom
+  (doom-modeline-vcs-max-length 60))
 
 ;; Show line number at the mode line.
 (line-number-mode t)
@@ -47,36 +74,8 @@
 ;; Show column number at the mode line.
 (column-number-mode t)
 
-;; ;; Display time and date at the mode line.
-;; (setq display-time-24hr-format t)
-;; (setq display-time-day-and-date t)
-;; ;(display-time)
-
 ;; Highlight current line.
 (global-hl-line-mode 1)
-
-(use-package solarized-theme
-  :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
-
-;; Set fonts.
-(set-frame-font (font-spec :family "Monaco" :size 16.0) nil t)
-
-;; Set fonts for Chinese characters.
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font
-   (frame-parameter nil 'font)
-   charset
-   (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size 21.0)))
-
-;; Set language environment and coding system.
-;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
-;; `set-buffer-process-coding-system', `set-terminal-coding-system',
-;; `set-selection-coding-system' and `set-input-method'.
-(set-language-environment 'UTF-8)
-(prefer-coding-system 'gbk-dos)
-(prefer-coding-system 'utf-8-unix)
-(set-locale-environment "en_US.UTF-8")
 
 ;; Find buffer or file.
 (ido-mode t)
@@ -133,8 +132,6 @@
 ;; Require newline at the end.
 (setq-default require-final-newline t)
 
-(require 'util)
-
 (bind-key "<f2>" #'set-mark-command)
 (bind-key "<f3>" #'revert-buffer)
 (bind-key "<f5>" #'undo)
@@ -187,6 +184,5 @@
 
 (bind-key "C-c i d" #'util/insert-current-date)
 (bind-key "C-c i t" #'util/insert-current-time)
-
 
 (provide 'init-basics)
