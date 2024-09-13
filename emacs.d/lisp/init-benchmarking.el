@@ -1,7 +1,6 @@
 (defun my/time-subtract-millis (b a)
   (* 1000.0 (float-time (time-subtract b a))))
 
-
 (defvar my/require-times nil
   "A list of (FEATURE . LOAD-DURATION).
 LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
@@ -19,6 +18,5 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
                            (my/time-subtract-millis (current-time)
                                                     require-start-time))
                      t)))))
-
 
 (provide 'init-benchmarking)

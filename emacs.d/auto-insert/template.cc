@@ -1,4 +1,4 @@
-// Copyright (c) `(format-time-string "%Y")` Tencent
+// Copyright (c) `(format-time-string "%Y")` `(getenv "ORGANIZATION")`
 //     All rights reserved.
 //
 
