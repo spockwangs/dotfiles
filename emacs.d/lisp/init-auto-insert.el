@@ -1,6 +1,9 @@
 ;; Enable `auto-insert-mode'.
 (use-package autoinsert
   :after (yasnippet)
+  ;; `:after' is not a deferring keyword. This package is not scheduled to load after `yasnippet' is
+  ;; loaded, unless `:demand' is specified.
+  :demand
   :preface
   (defun autoinsert-yas-expand()
     "Replace text in yasnippet template."

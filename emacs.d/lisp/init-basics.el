@@ -8,11 +8,9 @@
 (use-package solarized-theme
   :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
 
-;; Set fonts.
-;(set-frame-font (font-spec :family "Monaco" :size 15.0) nil t)
-
+;; Set standard faces.
 (custom-set-faces
- '(default ((t (:family "Monaco" :height 140))))
+ '(default ((t (:family "Monaco" :height 150))))
  '(fixed-pitch ((t (:family "Courier New")))))
 
 ;; Set fonts for Chinese characters.
@@ -21,7 +19,7 @@
    (frame-parameter nil 'font)
    charset
    (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size 16.0)))
+              :size 18.0)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -31,6 +29,9 @@
 (prefer-coding-system 'gbk-dos)
 (prefer-coding-system 'utf-8-unix)
 (set-locale-environment "en_US.UTF-8")
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
@@ -132,16 +133,17 @@
 ;; Require newline at the end.
 (setq-default require-final-newline t)
 
-(bind-key "<f2>" #'set-mark-command)
-(bind-key "<f3>" #'revert-buffer)
-(bind-key "<f5>" #'undo)
+;; Bind keys.
 (require 'redo+)
-(bind-key "S-<f5>" #'redo)
-(bind-key "<f6>" #'pop-to-mark-command)
-(bind-key "S-<f6>" #'(lambda () (interactive) (push-mark)))
-(bind-key "<f7>" #'ispell)
-(bind-key "<f9>" #'goto-line)
-(bind-key "S-<f9>" #'goto-char)
+(bind-keys ("<f2>" . set-mark-command)
+           ("<f3>" . revert-buffer)
+           ("<f5>" . undo)
+           ("S-<f5>" . redo)
+           ("<f6>" . pop-to-mark-command)
+           ("S-<f6>" . (lambda () (interactive) (push-mark)))
+           ("<f7>" . ispell)
+           ("<f9>" . goto-line)
+           ("S-<f9>" . goto-char))
 
 ;; Scroll pages and lines.
 (use-package pager
@@ -155,15 +157,15 @@
          ("M-<kp-2>" . pager-row-down)))
 
 ;; Scroll regions.
-(bind-key "C-<" #'util/shift-left)
-(bind-key "C->" #'util/shift-right)
+(bind-keys ("C-<" . util/shift-left)
+           ("C->" . util/shift-right))
 
 ;; Copy shortcuts.
-(bind-key "C-c y" #'util/copy-line)
-(bind-key "C-c w" #'util/copy-symbol)
-(bind-key "C-c c f" #'util/copy-current-file-name)
-(bind-key "C-c c d" #'util/copy-current-directory)
-(bind-key "C-c c p" #'util/copy-current-path)
+(bind-keys ("C-c y" . util/copy-line)
+           ("C-c w" . util/copy-symbol)
+           ("C-c c f" . util/copy-current-file-name)
+           ("C-c c d" . util/copy-current-directory)
+           ("C-c c p" . util/copy-current-path))
 
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
