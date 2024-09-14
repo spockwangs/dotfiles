@@ -4,7 +4,9 @@
 (package-initialize)
 
 (require 'use-package-ensure)
+;; Make sure the package is installed.
 (setq use-package-always-ensure t)
+;; Always defer loading a package unless :demand is specified.
 (setq use-package-always-defer t)
 
 (provide 'init-package)
