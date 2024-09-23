@@ -5,8 +5,29 @@
 
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
-(use-package solarized-theme
-  :hook (after-init . (lambda () (load-theme 'solarized-dark t))))
+(use-package modus-themes
+  :demand
+  :config
+  (setq modus-themes-common-palette-overrides
+        '((border-mode-line-active unspecified)
+          (border-mode-line-inactive unspecified)))
+  (load-theme 'modus-operandi-tinted :no-confirm :no-enable)
+  (load-theme 'modus-vivendi-tinted :no-confirm :no-enable))
+
+(use-package solar
+  :ensure nil
+  :demand
+  :config
+  (setq calendar-latitude 22.53
+        calendar-longitude 113.93))
+
+(use-package circadian
+  :after (solar modus-themes)
+  :demand
+  :config
+  (setq circadian-themes '((:sunrise . modus-operandi-tinted)
+                           (:sunset  . modus-vivendi-tinted)))
+  (circadian-setup))
 
 ;; Set standard faces.
 (custom-set-faces
@@ -31,7 +52,8 @@
 (set-locale-environment "en_US.UTF-8")
 
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(when (file-exists-p custom-file)
+  (load custom-file))
 
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
