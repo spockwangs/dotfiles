@@ -10,9 +10,7 @@
   :config
   (setq modus-themes-common-palette-overrides
         '((border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified)))
-  (load-theme 'modus-operandi-tinted :no-confirm :no-enable)
-  (load-theme 'modus-vivendi-tinted :no-confirm :no-enable))
+          (border-mode-line-inactive unspecified))))
 
 (use-package solar
   :ensure nil
@@ -26,7 +24,7 @@
   :demand
   :config
   (setq circadian-themes '((:sunrise . modus-operandi-tinted)
-                           (:sunset  . modus-vivendi-tinted)))
+                           (:sunset  . modus-vivendi)))
   (circadian-setup))
 
 ;; Set standard faces.
