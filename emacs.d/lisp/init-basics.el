@@ -5,12 +5,14 @@
 
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
+;; Set color themes.
 (use-package modus-themes
-  :demand
-  :config
-  (setq modus-themes-common-palette-overrides
-        '((border-mode-line-active unspecified)
-          (border-mode-line-inactive unspecified))))
+  :custom
+  (modus-themes-common-palette-overrides
+   '((border-mode-line-active unspecified)
+     (border-mode-line-inactive unspecified))))
+
+(use-package solarized-theme)
 
 (use-package solar
   :ensure nil
@@ -20,11 +22,11 @@
         calendar-longitude 113.93))
 
 (use-package circadian
-  :after (solar modus-themes)
+  :after solar
   :demand
   :config
-  (setq circadian-themes '((:sunrise . modus-operandi-tinted)
-                           (:sunset  . modus-vivendi)))
+  (setq circadian-themes '((:sunrise . solarized-wombat-dark)
+                           (:sunset  . solarized-wombat-dark)))
   (circadian-setup))
 
 ;; Set standard faces.

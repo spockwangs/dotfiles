@@ -9,4 +9,7 @@
 ;; Always defer loading a package unless :demand is specified.
 (setq use-package-always-defer t)
 
+(require 'use-package-core)
+(setq use-package-compute-statistics t)
+
 (provide 'init-package)
