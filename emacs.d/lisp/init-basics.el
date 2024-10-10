@@ -12,6 +12,7 @@
    '((border-mode-line-active unspecified)
      (border-mode-line-inactive unspecified))))
 
+(use-package doom-themes)
 (use-package solarized-theme)
 
 (use-package solar
@@ -25,8 +26,8 @@
   :after solar
   :demand
   :config
-  (setq circadian-themes '((:sunrise . solarized-wombat-dark)
-                           (:sunset  . solarized-wombat-dark)))
+  (setq circadian-themes '((:sunrise . (doom-one-light solarized-gruvbox-light solarized-zenburn doom-zenburn spacemacs-light))
+                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox))))
   (circadian-setup))
 
 ;; Set standard faces.
