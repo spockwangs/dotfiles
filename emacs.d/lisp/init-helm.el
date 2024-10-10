@@ -11,4 +11,6 @@
          ("M-y" . helm-show-kill-ring)
          ))
 
+(use-package helm-themes)
+
 (provide 'init-helm)
