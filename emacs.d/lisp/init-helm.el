@@ -9,8 +9,6 @@
 ;         ("C-x b" . helm-mini))
          ("C-c h g" . helm-google-suggest)
          ("M-y" . helm-show-kill-ring)
-         (:map isearch-mode-map
-               ("C-o" . helm-occur-from-isearch))
          ))
 
 (use-package helm-themes)
