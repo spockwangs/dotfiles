@@ -1,4 +1,6 @@
-(use-package avy)
+(use-package avy
+  :bind (("C-'" . avy-goto-char)
+         ("C-\"" . avy-goto-char-2)))
 
 (use-package ace-isearch
   :hook
@@ -7,6 +9,7 @@
   (ace-isearch-function 'avy-goto-word-1)
   (ace-isearch-input-length 100 "Min length of input string to invoke helm search")
   :bind (:map isearch-mode-map
-              ("C-'" . avy-isearch)))
+              ("M-'" . avy-isearch)
+              ("M-o" . helm-occur-from-isearch)))
 
-(provide 'init-ace-isearch)
+(provide 'init-isearch)
