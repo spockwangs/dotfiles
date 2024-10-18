@@ -1,7 +1,8 @@
 ;; Set environment variables.
 (require 'util)
 (when (eq system-type 'windows-nt)
-  (util/add-exec-path "C:/Windows/System32/OpenSSH"))
+  (util/add-exec-path "C:/Windows/System32/OpenSSH")
+  (util/add-exec-path "~/scoop/shims"))
 
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
@@ -193,6 +194,9 @@
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
 
+;; Rename current visited file.
+(bind-key "C-c r f" #'rename-visited-file)
+
 (bind-key "M-/" #'hippie-expand)
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
@@ -209,5 +213,8 @@
 
 (bind-key "C-c i d" #'util/insert-current-date)
 (bind-key "C-c i t" #'util/insert-current-time)
+
+(bind-key "C-c l" #'dictionary-search)
+(setq dictionary-server "dict.org")
 
 (provide 'init-basics)
