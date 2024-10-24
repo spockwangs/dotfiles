@@ -214,7 +214,8 @@
 (bind-key "C-c i d" #'util/insert-current-date)
 (bind-key "C-c i t" #'util/insert-current-time)
 
-(bind-key "C-c l" #'dictionary-search)
+(bind-key "C-c d" #'dictionary-search)
 (setq dictionary-server "dict.org")
 
+(bind-key "C-c q" #'browse-url)
 (provide 'init-basics)
