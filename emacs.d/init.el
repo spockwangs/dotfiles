@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-10-18 10:37:46 spockwang>
+;; Time-stamp: <2024-10-24 19:59:58 spockwang>
 ;;
 
 (require 'server)
@@ -24,6 +24,7 @@
 (require 'init-basics)
 (require 'init-helm)
 (require 'init-ibuffer)
+(require 'init-org)
 (require 'init-magit)
 (require 'init-auto-insert)
 (require 'init-company-mode)
@@ -42,7 +43,6 @@
 (require 'init-sql)
 (require 'init-emacs-lisp)
 (require 'init-javascript)
-;(require 'init-smex)
 (require 'init-web-mode)
 (require 'init-make-mode)
 (require 'init-protobuf-mode)
