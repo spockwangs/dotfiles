@@ -1,3 +1,5 @@
+(setq debug-on-error t)
+
 ;; Set environment variables.
 (require 'util)
 (when (eq system-type 'windows-nt)
@@ -32,9 +34,7 @@
   (circadian-setup))
 
 ;; Set standard faces.
-(custom-set-faces
- '(default ((t (:family "Monaco" :height 150))))
- '(fixed-pitch ((t (:family "Courier New")))))
+(set-face-font 'default (font-spec :family "Monaco" :size 18.0))
 
 ;; Set fonts for Chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -42,7 +42,7 @@
    (frame-parameter nil 'font)
    charset
    (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size 18.0)))
+              :size 20.0)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
