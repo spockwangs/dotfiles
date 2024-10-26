@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-10-24 19:59:58 spockwang>
+;; Time-stamp: <2024-10-26 14:48:21 spock>
 ;;
 
 (require 'server)
@@ -51,3 +51,6 @@
 (require 'init-markdown)
 (require 'init-desktop)
 (require 'init-epilog nil t)
+(setq custom-file "~/.emacs.d/custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
