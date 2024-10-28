@@ -1,9 +1,3 @@
-;; Set environment variables.
-(require 'util)
-(when (eq system-type 'windows-nt)
-  (util/add-exec-path "C:/Windows/System32/OpenSSH")
-  (util/add-exec-path "~/scoop/shims"))
-
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Set color themes.
@@ -175,6 +169,7 @@
          ("M-<kp-2>" . pager-row-down)))
 
 ;; Scroll regions.
+(require 'util)
 (bind-keys ("C-<" . util/shift-left)
            ("C->" . util/shift-right))
 
