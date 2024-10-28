@@ -1,3 +1,14 @@
+<<<<<<< HEAD
+=======
+(setq debug-on-error t)
+
+;; Set environment variables.
+(require 'util)
+(when (eq system-type 'windows-nt)
+  (util/add-exec-path "C:/Windows/System32/OpenSSH")
+  (util/add-exec-path "~/scoop/shims"))
+
+>>>>>>> a1928da72dbb01d23f98a7030da7525d5bb91562
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Set color themes.
@@ -9,6 +20,7 @@
 
 (use-package doom-themes)
 (use-package solarized-theme)
+(use-package spacemacs-theme)
 
 (use-package solar
   :ensure nil
@@ -18,17 +30,14 @@
         calendar-longitude 113.93))
 
 (use-package circadian
-  :after solar
+  :hook (after-init . circadian-setup)
   :demand
   :config
-  (setq circadian-themes '((:sunrise . (doom-one-light solarized-gruvbox-light solarized-zenburn doom-zenburn spacemacs-light))
-                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox))))
-  (circadian-setup))
+  (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light))
+                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox)))))
 
 ;; Set standard faces.
-(custom-set-faces
- '(default ((t (:family "Monaco" :height 150))))
- '(fixed-pitch ((t (:family "Courier New")))))
+(set-face-font 'default (font-spec :family "Monaco" :size 17.0))
 
 ;; Set fonts for Chinese characters.
 (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -36,7 +45,7 @@
    (frame-parameter nil 'font)
    charset
    (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size 18.0)))
+              :size 20.0)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -46,10 +55,6 @@
 (prefer-coding-system 'gbk-dos)
 (prefer-coding-system 'utf-8-unix)
 (set-locale-environment "en_US.UTF-8")
-
-(setq custom-file "~/.emacs.d/custom.el")
-(when (file-exists-p custom-file)
-  (load custom-file))
 
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
