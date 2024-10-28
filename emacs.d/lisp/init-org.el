@@ -14,14 +14,15 @@
   (org-capture-templates
    `(("i" "Inbox" entry (file "GTD/inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
      ("r" "Reading" entry (file+olp "GTD/tasks.org" "Reading") "* TODO %^{title} [%<%F %R>]")
-     ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task} [%<%F %R>]")
+     ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task} [%<%F %R>]%?")
      ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}\nSCHEDULED: %^{Date}t")))
   :config
   ;; The program `latex' should be installed.
   (add-to-list 'org-preview-latex-process-alist
                '(dvipng . (:programs
                            ("latex" "dvipng")
-                           :description "dvi > png" :message "you need to install the programs: latex and dvipng." :image-input-type "dvi" :image-output-type "png" :image-size-adjust
+                           :description "dvi > png" :message "you need to install the programs: latex and dvipng."
+                           :image-input-type "dvi" :image-output-type "png" :image-size-adjust
                            (1.0 . 1.0)
                            :latex-compiler
                            ("latex -interaction nonstopmode -output-directory %o %F")
