@@ -96,11 +96,12 @@ negative"
 (defun util/copy-current-directory ()
   "Copy current directory to kill-ring. If the directory is remote, only copy the local name components."
   (interactive)
-  (if default-directory
-      (let ((local-dir (tramp-file-local-name default-directory)))
-        (progn (kill-new local-dir)
-               (message "Copied directory '%s'." local-dir)))
-    (message "No directory associated with current buffer.")))
+  (let* ((filename (tramp-file-local-name (buffer-file-name)))
+         (dir (file-name-directory filename)))
+    (if dir
+        (progn (kill-new dir)
+               (message "Copied directory `%s'." dir))
+      (message "No directory associated with current buffer."))))
 
 (defun util/search-all-buffers (regexp)
   "Search all lines matching REGEXP in all open buffers."
