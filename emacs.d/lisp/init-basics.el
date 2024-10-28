@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 (setq debug-on-error t)
 
 ;; Set environment variables.
@@ -8,7 +6,6 @@
   (util/add-exec-path "C:/Windows/System32/OpenSSH")
   (util/add-exec-path "~/scoop/shims"))
 
->>>>>>> a1928da72dbb01d23f98a7030da7525d5bb91562
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Set color themes.
