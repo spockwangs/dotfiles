@@ -2,11 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-<<<<<<< HEAD
-;; Time-stamp: <2024-10-25 13:52:53 spockwang>
-=======
 ;; Time-stamp: <2024-10-26 14:48:21 spock>
->>>>>>> a1928da72dbb01d23f98a7030da7525d5bb91562
 ;;
 
 (require 'server)
