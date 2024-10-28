@@ -1,9 +1,3 @@
-;; Set environment variables.
-(require 'util)
-(when (eq system-type 'windows-nt)
-  (util/add-exec-path "C:/Windows/System32/OpenSSH")
-  (util/add-exec-path "~/scoop/shims"))
-
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
 ;; Set color themes.

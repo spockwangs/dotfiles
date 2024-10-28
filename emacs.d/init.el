@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-10-24 19:59:58 spockwang>
+;; Time-stamp: <2024-10-25 13:52:53 spockwang>
 ;;
 
 (require 'server)
@@ -19,6 +19,7 @@
         use-package-compute-statistics t
         debug-on-error t))
 
+(require 'init-env)
 (require 'init-benchmarking)
 (require 'init-package)
 (require 'init-basics)

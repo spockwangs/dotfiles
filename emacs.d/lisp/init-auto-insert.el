@@ -17,8 +17,7 @@
   (define-auto-insert "\\.js\\'" ["template.js" js-mode autoinsert-yas-expand])
   (define-auto-insert "\\.scala\\'" ["template.scala" scala-mode autoinsert-yas-expand])
   (define-auto-insert "\\.py\\'" ["template.py" python-mode autoinsert-yas-expand])
-  (auto-insert-mode)
-  (setenv "ORGANIZATION" "Tencent"))
+  (auto-insert-mode))
 
 (use-package yasnippet
   :hook
