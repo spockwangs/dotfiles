@@ -96,7 +96,9 @@ negative"
 (defun util/copy-current-directory ()
   "Copy current directory to kill-ring. If the directory is remote, only copy the local name components."
   (interactive)
-  (let* ((filename (tramp-file-local-name (buffer-file-name)))
+  (let* ((filename (tramp-file-local-name (if (equal major-mode 'dired-mode)
+                                              default-directory
+                                            (buffer-file-name))))
          (dir (file-name-directory filename)))
     (if dir
         (progn (kill-new dir)
