@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-10-26 14:48:21 spock>
+;; Time-stamp: <2024-10-28 10:16:00 spockwang>
 ;;
 
 (require 'server)
@@ -13,11 +13,10 @@
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 ;; For troubleshooting, start Emacs with command line flag `--debug-init'.
-(when init-file-debug
-  (setq use-package-verbose t
-        use-package-expand-minimally nil
-        use-package-compute-statistics t
-        debug-on-error t))
+(setq use-package-verbose t
+      use-package-expand-minimally nil
+      use-package-compute-statistics t
+      debug-on-error t)
 
 (require 'init-env)
 (require 'init-benchmarking)
