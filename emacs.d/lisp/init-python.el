@@ -19,4 +19,10 @@
       (python-black-region (region-beginning) (region-end))
     (python-black-buffer)))
 
+(use-package pylint
+  :after python
+  :hook ((python-mode . pylint-add-key-bindings))
+  :custom
+  (pylint-options '("--reports=n" "--output-format=parseable" "--errors-only")))
+
 (provide 'init-python)
