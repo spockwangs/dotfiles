@@ -1,6 +1,6 @@
 (use-package treemacs
-  :custom
-   (treemacs-width (* 0.2 (frame-width)) "Set the treemacs window width")
+  :config
+  (treemacs-set-width (* 0.3 (frame-width)))
   :bind (("<f8>" . treemacs)
          ("M-0" . treemacs-select-window)))
 
