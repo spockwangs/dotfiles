@@ -10,6 +10,7 @@
 ;; You should install the python package "black".
 (use-package python-black
   :after python
+  :demand
   :bind (:map python-mode-map
               ("C-M-\\" . python-format)))
 
@@ -21,6 +22,7 @@
 
 (use-package pylint
   :after python
+  :demand
   :hook ((python-mode . pylint-add-key-bindings))
   :custom
   (pylint-options '("--reports=n" "--output-format=parseable" "--errors-only")))
