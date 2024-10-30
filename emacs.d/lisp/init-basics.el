@@ -173,18 +173,12 @@
 (bind-keys ("C-<" . util/shift-left)
            ("C->" . util/shift-right))
 
-;; Copy shortcuts.
+;; Copy.
 (bind-keys ("C-c y" . util/copy-line)
            ("C-c w" . util/copy-symbol)
-           ("C-c c f" . util/copy-current-file-name)
-           ("C-c c d" . util/copy-current-directory)
-           ("C-c c p" . util/copy-current-path))
-
-;; Delete current buffer and file.
-(bind-key "C-x C-k" #'util/delete-file-and-buffer)
-
-;; Rename current visited file.
-(bind-key "C-c r f" #'rename-visited-file)
+           ("C-c M-f" . util/copy-current-file-name)
+           ("C-c M-d" . util/copy-current-directory)
+           ("C-c M-p" . util/copy-current-path))
 
 (bind-key "M-/" #'hippie-expand)
 (setq hippie-expand-try-functions-list
@@ -206,5 +200,20 @@
 (bind-key "C-c d" #'dictionary-search)
 (setq dictionary-server "dict.org")
 
-(bind-key "C-c q" #'browse-url)
+(bind-key "C-c l" #'browse-url)
+(define-key search-map "b" 'multi-occur-in-matching-buffers)
+
+;; Delete current buffer and file.
+(bind-key "C-x C-k" #'util/delete-file-and-buffer)
+
+;; Rename current visited file.
+(bind-key "C-c r" #'rename-visited-file)
+
+(use-package google-translate
+  :bind
+  (("C-c g t" . google-translate-query-translate))
+  :custom
+  (google-translate-default-source-language "en")
+  (google-translate-default-target-language "zh-CN"))
+
 (provide 'init-basics)
