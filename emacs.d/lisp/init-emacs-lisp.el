@@ -7,7 +7,6 @@
         (indent-region (region-beginning) (region-end))
       (indent-region (point-min) (point-max))))
   :bind (:map emacs-lisp-mode-map
-              ("C-c C-c" . comment-region)
               ([(return)] . newline-and-indent)
               ("C-M-\\" . elisp-format))
   :config
