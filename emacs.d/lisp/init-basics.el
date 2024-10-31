@@ -202,7 +202,7 @@
 (setq dictionary-server "dict.org")
 
 (bind-key "C-c l" #'browse-url)
-(define-key search-map "\S-o" 'multi-occur-in-matching-buffers)
+(define-key search-map "O" 'multi-occur-in-matching-buffers)
 
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
@@ -212,7 +212,8 @@
 
 (use-package google-translate
   :bind
-  (("C-c t" . google-translate-query-translate))
+  (("C-c t" . google-translate-query-translate)
+   ("C-c T" . google-translate-query-translate-reverse))
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
