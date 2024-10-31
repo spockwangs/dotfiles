@@ -37,7 +37,8 @@
 
 ;; Set the icloud path.
 (defvar env/icloud-path
-  (cond ((eq system-type 'windows-nt) "~/iCloudDrive/"))
+  (cond ((eq system-type 'windows-nt) "~/iCloudDrive/")
+        ((eq system-type 'darwin) "~/Library/Mobile Documents/com~apple~CloudDocs/"))
   "The iCloud path")
 
 (provide 'init-env)
