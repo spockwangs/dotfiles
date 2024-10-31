@@ -15,7 +15,8 @@
    `(("i" "Inbox" entry (file "GTD/inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
      ("r" "Reading" entry (file+olp "GTD/tasks.org" "Reading") "* TODO %^{title} [%<%F %R>]")
      ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task} [%<%F %R>]%?")
-     ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}\nSCHEDULED: %^{Date}t")))
+     ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}\nSCHEDULED: %^{Date}t")
+     ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task} [%<%F %R>]%?")))
   :config
   ;; The program `latex' should be installed.
   (add-to-list 'org-preview-latex-process-alist
