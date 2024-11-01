@@ -17,6 +17,13 @@
      ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task} [%<%F %R>]%?")
      ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}\nSCHEDULED: %^{Date}t")
      ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task} [%<%F %R>]%?")))
+  (org-agenda-custom-commands
+   '(("w" tags-todo "+work"
+      ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %17SCHEDULED %17DEADLINE")
+       (org-agenda-sorting-strategy '(priority-down))))
+     ("t" tags-todo "-work"
+      ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %17SCHEDULED %17DEADLINE")
+       (org-agenda-sorting-strategy '(priority-down))))))
   :config
   ;; The program `latex' should be installed.
   (add-to-list 'org-preview-latex-process-alist
