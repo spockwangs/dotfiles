@@ -3,8 +3,6 @@
   :hook ((haskell-mode . turn-on-haskell-indent)
          (haskell-mode . turn-on-haskell-doc-mode))
   :bind (:map haskell-mode-map
-              ("C-c h" . haskell-hoogle)
-              :map haskell-cabal-mode-map
-              ("C-c C-c" . comment-region)))
+              ("C-c h" . haskell-hoogle)))
 
 (provide 'init-haskell)

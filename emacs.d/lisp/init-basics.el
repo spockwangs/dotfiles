@@ -158,6 +158,10 @@
            ("<f9>" . goto-line)
            ("S-<f9>" . goto-char))
 
+;; Move points.
+(bind-keys ("C-M-f" . forward-symbol)
+           ("C-M-b" . (lambda() (interactive) (forward-symbol -1))))
+
 ;; Scroll pages and lines.
 (use-package pager
   :bind (("C-v" . pager-page-down)
