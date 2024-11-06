@@ -1,7 +1,8 @@
 (use-package python
   :mode (("[/]BUILD\\'" . python-mode)
-         ("\\.py\\'" . python-mode))
-  :hook ((python-mode . (lambda () (subword-mode 1))))
+         ("\\.py\\'" . python-mode)
+         ("\\.bzl\\'" . python-mode))
+:hook ((python-mode . (lambda () (subword-mode 1))))
   :custom
   (python-indent-offset 4)
   :bind (:map python-mode-map
