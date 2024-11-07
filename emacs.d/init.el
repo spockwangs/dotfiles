@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-10-28 10:16:00 spockwang>
+;; Time-stamp: <2024-11-07 17:14:29 spockwang>
 ;;
 
 (require 'server)
@@ -49,6 +49,7 @@
 (require 'init-vc)
 (require 'init-tramp)
 (require 'init-markdown)
+(require 'init-bazel)
 (require 'init-desktop)
 (require 'init-epilog nil t)
 (setq custom-file "~/.emacs.d/custom.el")
