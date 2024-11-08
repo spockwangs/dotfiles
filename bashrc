@@ -1,5 +1,5 @@
 # -*- mode: shell-script; -*-
-# ~/.bashrc 
+# ~/.bashrc
 # Read by interactive non-login bash.
 
 # User specific environment variables
@@ -36,7 +36,7 @@ if [ $TERM = linux ]; then
     export PS1="\[\e[32;1m\]\u@\h:\w[$?]\$\[\e[0m\] "
 elif [ $TERM = dumb -o $TERM = emacs ]; then
     # Emacs shell
-    export PS1="\u@\h:\W[$?]\$ "
+    export PS1="\u@\h:\w[$?]\n\$ "
 else
     # The terminator emulator
     export PS1='\[\e]0;\u@\h:\w\007\]\[\e[32m\]\u:\w $(git_branch)[$?]\n\$\[\e[0m\] '
@@ -44,7 +44,7 @@ fi
 
 export LANG=en_US.UTF-8
 
-# User specific aliases 
+# User specific aliases
 alias rm='rm -i'
 alias cp='cp -i -v'
 alias mv='mv -i -v'
