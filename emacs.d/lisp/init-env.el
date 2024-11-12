@@ -41,5 +41,15 @@
         ((eq system-type 'darwin) "~/Library/Mobile Documents/com~apple~CloudDocs/"))
   "The iCloud path")
 
+(connection-local-set-profile-variables
+ 'remote-bash
+ '((explicit-shell-file-name . "/bin/bash")
+   (explicit-bash-args . ("-i"))
+   (shell-file-name . "/bin/bash")))
+
+(connection-local-set-profiles
+ '(:application tramp :protocol "ssh" :machine "devcloud2")
+ 'remote-bash)
+
 (provide 'init-env)
 ;;; init-env.el ends here
