@@ -11,7 +11,7 @@
    '((explicit-shell-file-name . "/bin/bash")
      (explicit-bash-args . ("-i"))))
   (connection-local-set-profiles
-   '(:application tramp :protocol "ssh")
+   '(:application tramp :protocol "ssh" :machine "devcloud2")
    'remote-bash))
 
 (provide 'init-shell)
