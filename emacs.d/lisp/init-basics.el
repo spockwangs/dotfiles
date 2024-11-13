@@ -50,7 +50,7 @@
 (setq inhibit-startup-message t)
 
 ;; Get a visual, instead of audio, feedback of an exception.
-(setq visible-bell nil)
+(setq visible-bell 0)
 
 ;; Configure frame title bar.
 (setq frame-title-format
@@ -221,5 +221,15 @@
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
+
+(connection-local-set-profile-variables
+ 'remote-bash
+ '((explicit-shell-file-name . "/bin/bash")
+   (explicit-bash-args . ("-i"))
+   (shell-file-name . "/bin/bash")))
+
+(connection-local-set-profiles
+ '(:application tramp :protocol "ssh" :machine "devcloud2")
+ 'remote-bash)
 
 (provide 'init-basics)
