@@ -41,10 +41,10 @@
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
 ;; `set-buffer-process-coding-system', `set-terminal-coding-system',
 ;; `set-selection-coding-system' and `set-input-method'.
-(set-language-environment 'UTF-8)
-(prefer-coding-system 'gbk-dos)
-(prefer-coding-system 'utf-8-unix)
 (set-locale-environment "en_US.UTF-8")
+(prefer-coding-system 'gbk)
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8-unix)
 
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
@@ -146,7 +146,7 @@
 ;; Require newline at the end.
 (setq-default require-final-newline t)
 
-;; Bind keys.
+;; Bind functional keys.
 (require 'redo+)
 (bind-keys ("<f2>" . set-mark-command)
            ("<f3>" . revert-buffer)
@@ -157,6 +157,9 @@
            ("<f7>" . ispell)
            ("<f9>" . goto-line)
            ("S-<f9>" . goto-char))
+
+;; Find the file at point.
+(bind-keys ("C-c f" . find-file-at-point))
 
 ;; Move points.
 (bind-keys ("C-M-f" . forward-symbol)
@@ -205,7 +208,6 @@
 (bind-key "C-c d" #'dictionary-search)
 (setq dictionary-server "dict.org")
 
-(bind-key "C-c l" #'browse-url)
 (define-key search-map "O" 'multi-occur-in-matching-buffers)
 
 ;; Delete current buffer and file.
@@ -221,15 +223,5 @@
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
-
-(connection-local-set-profile-variables
- 'remote-bash
- '((explicit-shell-file-name . "/bin/bash")
-   (explicit-bash-args . ("-i"))
-   (shell-file-name . "/bin/bash")))
-
-(connection-local-set-profiles
- '(:application tramp :protocol "ssh" :machine "devcloud2")
- 'remote-bash)
 
 (provide 'init-basics)
