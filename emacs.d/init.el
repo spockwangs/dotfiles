@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-11-15 14:35:30 spockwang>
+;; Time-stamp: <2024-11-18 19:00:30 spockwang>
 ;;
 
 (require 'server)
@@ -15,8 +15,7 @@
 ;; For troubleshooting, start Emacs with command line flag `--debug-init'.
 (setq use-package-verbose t
       use-package-expand-minimally nil
-      use-package-compute-statistics t
-      debug-on-error t)
+      use-package-compute-statistics t)
 
 (require 'init-env)
 (require 'init-benchmarking)
