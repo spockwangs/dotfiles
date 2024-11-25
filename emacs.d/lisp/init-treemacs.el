@@ -1,4 +1,6 @@
 (use-package treemacs
+  :custom
+  (treemacs-persist-file (concat env/icloud-path "Notes/treemacs-persist"))
   :config
   (treemacs-set-width (* 0.3 (frame-width)))
   :bind (("<f8>" . treemacs)
