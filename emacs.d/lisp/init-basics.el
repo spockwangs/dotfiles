@@ -22,8 +22,8 @@
   :hook (after-init . circadian-setup)
   :demand
   :config
-  (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light))
-                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox)))))
+  (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light))
+                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord)))))
 
 ;; Set standard faces.
 (set-face-font 'default (font-spec :family "Monaco"
