@@ -27,10 +27,7 @@
 (use-package bazel
   :bind
   (:map bazel-mode-map
-        ("C-M-\\" . bazel-buildifier))
-  :hook (before-save . (lambda ()
-                         (when (derived-mode-p 'bazel-mode)
-                           (bazel-buildifier)))))
+        ("C-M-\\" . bazel-buildifier)))
 
 (provide 'init-bazel)
 ;;; init-bazel.el ends here
