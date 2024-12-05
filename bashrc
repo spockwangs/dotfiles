@@ -59,7 +59,7 @@ alias ll='ls -lh'
 alias less='less -R'
 alias grep='grep --color=auto'
 # Use the right emacsclient binary on MacOS.
-alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+alias em='emacsclient -n -a ""'
 
 # allow core dump
 ulimit -c unlimited

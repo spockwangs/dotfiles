@@ -25,17 +25,25 @@
   (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light))
                            (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord)))))
 
-;; Set standard faces.
-(set-face-font 'default (font-spec :family "Monaco"
-                                   :size (if (eq system-type 'windows-nt) 14.0 18.0)))
+;; Set font only when running from non-terminal.
+(defun set-font ()
+  (if window-system
+      (progn
+        ;; Set standard faces.
+        (set-face-font 'default (font-spec :family "Monaco"
+                                           :size (if (eq system-type 'windows-nt) 14.0 18.0)))
 
-;; Set fonts for Chinese characters.
-(dolist (charset '(kana han symbol cjk-misc bopomofo))
-  (set-fontset-font
-   (frame-parameter nil 'font)
-   charset
-   (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-              :size (if (eq system-type 'windows-nt) 16.0 21.0))))
+        ;; Set fonts for Chinese characters.
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-fontset-font
+           (frame-parameter nil 'font)
+           charset
+           (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
+                      :size (if (eq system-type 'windows-nt) 16.0 21.0)))))))
+
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'set-font)
+  (set-font))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
