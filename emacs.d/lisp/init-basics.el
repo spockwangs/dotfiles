@@ -25,7 +25,7 @@
   (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light))
                            (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord)))))
 
-;; Set font only when running from non-terminal.
+;; Set font only in GUI frame.
 (defun set-font ()
   (if window-system
       (progn
@@ -142,7 +142,7 @@
 (setq make-backup-files t
       version-control t
       delete-old-versions t
-      kept-new-versions 5
+      kept-new-versions 3
       kept-old-versions 0)
 
 ;; Update time stamp string in the buffer before saving.
