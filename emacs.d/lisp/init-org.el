@@ -14,15 +14,15 @@
   (org-archive-location (concat org-directory "GTD/archive.org::datetree/"))
   (org-capture-templates
    `(("i" "Inbox" entry (file "GTD/inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
-     ("r" "Reading" entry (file+olp "GTD/tasks.org" "Reading") "* TODO %^{title} [%<%F %R>]")
-     ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task} [%<%F %R>]%?")
-     ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}\nSCHEDULED: %^{Date}t")
-     ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task} [%<%F %R>]%?")))
+     ("r" "Reading" entry (file+olp "GTD/tasks.org" "Reading") "* TODO %^{title}%?")
+     ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task}%?")
+     ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}%?\nSCHEDULED: %^{Date}t")
+     ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task}%?")))
   (org-agenda-custom-commands
    '(("w" tags-todo "+work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %15SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down))))
-     ("t" tags-todo "-work"
+     ("d" tags-todo "-work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down))))))
   :config
