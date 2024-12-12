@@ -30,8 +30,7 @@
   (if window-system
       (progn
         ;; Set standard faces.
-        (set-face-font 'default (font-spec :family "Monaco"
-                                           :size (if (eq system-type 'windows-nt) 14.0 18.0)))
+        (set-face-font 'default (font-spec :family "Monaco" :size env/font-size))
 
         ;; Set fonts for Chinese characters.
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -39,7 +38,7 @@
            (frame-parameter nil 'font)
            charset
            (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-                      :size (if (eq system-type 'windows-nt) 16.0 21.0)))))))
+                      :size env/font-size-for-chinese))))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)
