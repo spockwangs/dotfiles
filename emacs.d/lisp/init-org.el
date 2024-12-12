@@ -20,7 +20,7 @@
      ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task}%?")))
   (org-agenda-custom-commands
    '(("w" tags-todo "+work"
-      ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %15SCHEDULED %25DEADLINE")
+      ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))))
      ("d" tags-todo "-work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
