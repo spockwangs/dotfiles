@@ -1,11 +1,36 @@
-(add-to-list 'default-frame-alist '(ns-appearance . dark))
+(defun set-font ()
+  ;; Set font only in GUI frame.
+  (if window-system
+      (progn
+        ;; Set fonts for Chinese characters.
+        (dolist (charset '(kana han symbol cjk-misc bopomofo))
+          (set-fontset-font "fontset-default" charset
+                            (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
+                                       :size env/font-size-for-chinese)))
+
+        ;; Set standard faces.
+        (set-face-font 'default (font-spec :family "Monaco" :size env/font-size))
+        (set-face-font 'fixed-pitch (font-spec :family "Courier New"))
+        (set-face-font 'italic (font-spec :family "Consolas" :slant 'italic)))))
+
+(if (daemonp)
+    (add-hook 'server-after-make-frame-hook #'set-font)
+  (set-font))
 
 ;; Set color themes.
 (use-package modus-themes
+  :ensure nil
+  :demand
   :custom
-  (modus-themes-common-palette-overrides
-   '((border-mode-line-active unspecified)
-     (border-mode-line-inactive unspecified))))
+  ;; (modus-themes-common-palette-overrides
+  ;;  '((border-mode-line-active unspecified)
+  ;;    (border-mode-line-inactive unspecified)))
+  (modus-themes-italic-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-mixed-fonts t)
+  (modus-themes-mode-line '(borderless))
+  (modus-themes-diffs 'desaturated)
+  )
 
 (use-package doom-themes)
 (use-package solarized-theme)
@@ -22,27 +47,8 @@
   :hook (after-init . circadian-setup)
   :demand
   :config
-  (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light))
+  (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light modus-operandi))
                            (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord)))))
-
-;; Set font only in GUI frame.
-(defun set-font ()
-  (if window-system
-      (progn
-        ;; Set standard faces.
-        (set-face-font 'default (font-spec :family "Monaco" :size env/font-size))
-
-        ;; Set fonts for Chinese characters.
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
-          (set-fontset-font
-           (frame-parameter nil 'font)
-           charset
-           (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-                      :size env/font-size-for-chinese))))))
-
-(if (daemonp)
-    (add-hook 'server-after-make-frame-hook #'set-font)
-  (set-font))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -230,5 +236,11 @@
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
+
+(use-package prog-mode
+  :ensure nil
+  :hook
+  (prog-mode . (lambda ()
+                 (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\(([^)]*)\\)?:" 1 font-lock-warning-face t))))))
 
 (provide 'init-basics)
