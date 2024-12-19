@@ -5,7 +5,7 @@
   (desktop-save t)
   (desktop-load-locked-desktop t)
   (desktop-files-not-to-save "^$" "Save all open files including remote files")
-  (desktop-restore-eager 5 "Restore a small number for files for performance")
+  (desktop-restore-eager 0 "Restore a small number for files for performance")
   :config
   (add-to-list 'desktop-modes-not-to-save 'dired-mode)
   (add-to-list 'desktop-modes-not-to-save 'Info-mode)
