@@ -18,9 +18,7 @@
   (set-font))
 
 ;; Set color themes.
-(use-package modus-themes
-  :ensure nil
-  :demand
+(use-package emacs
   :custom
   ;; (modus-themes-common-palette-overrides
   ;;  '((border-mode-line-active unspecified)
@@ -29,8 +27,7 @@
   (modus-themes-bold-constructs t)
   (modus-themes-mixed-fonts t)
   (modus-themes-mode-line '(borderless))
-  (modus-themes-diffs 'desaturated)
-  )
+  (modus-themes-diffs 'desaturated))
 
 (use-package doom-themes)
 (use-package solarized-theme)
@@ -241,6 +238,6 @@
   :ensure nil
   :hook
   (prog-mode . (lambda ()
-                 (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\(([^)]*)\\)?:" 1 font-lock-warning-face t))))))
+                 (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))))
 
 (provide 'init-basics)
