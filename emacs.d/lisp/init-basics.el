@@ -6,10 +6,10 @@
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
           (set-fontset-font "fontset-default" charset
                             (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-                                       :size 19.0)))
+                                       :size 20.0)))
 
         ;; Set standard faces.
-        (set-face-font 'default (font-spec :family "Monaco" :size 15.0))
+        (set-face-font 'default (font-spec :family "Monaco" :size 16.0))
         (set-face-font 'fixed-pitch (font-spec :family "Courier New")))))
 
 (if (daemonp)
@@ -19,14 +19,16 @@
 ;; Set color themes.
 (use-package emacs
   :custom
-  ;; (modus-themes-common-palette-overrides
-  ;;  '((border-mode-line-active unspecified)
-  ;;    (border-mode-line-inactive unspecified)))
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
   (modus-themes-mixed-fonts t)
   (modus-themes-mode-line '(borderless))
-  (modus-themes-diffs 'desaturated))
+  (modus-themes-diffs 'desaturated)
+  (modus-themes-vivendi-color-overrides '(
+    (bg-header . "#4c566a")
+    (bg-hl-line . "#434c5e")
+    (bg-inactive . "#3b4252")
+    (bg-main . "#2e3440"))))
 
 (use-package doom-themes)
 (use-package solarized-theme)
