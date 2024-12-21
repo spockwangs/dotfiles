@@ -65,7 +65,9 @@
            (mm-w (cl-second (assoc 'mm-size atts)))
            (mm-h (cl-third (assoc 'mm-size atts)))
            (mm-d (pyth mm-w mm-h)))
-      (/ pix-d (mm2in mm-d)))))
+      (progn
+        (message "d: %d" (mm2in mm-d))
+        (/ pix-d (mm2in mm-d))))))
 
 (defconst env/font-size (round (* (env/my-dpi) 0.22))
   "The default font size in pixels")
