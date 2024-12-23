@@ -6,12 +6,11 @@
         (dolist (charset '(kana han symbol cjk-misc bopomofo))
           (set-fontset-font "fontset-default" charset
                             (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-                                       :size env/font-size-for-chinese)))
+                                       :size 20.0)))
 
         ;; Set standard faces.
-        (set-face-font 'default (font-spec :family "Monaco" :size env/font-size))
-        (set-face-font 'fixed-pitch (font-spec :family "Courier New"))
-        (set-face-font 'italic (font-spec :family "Consolas" :slant 'italic)))))
+        (set-face-font 'default (font-spec :family "Monaco" :size 16.0))
+        (set-face-font 'fixed-pitch (font-spec :family "Courier New")))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)
