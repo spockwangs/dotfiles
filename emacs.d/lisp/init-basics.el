@@ -20,14 +20,12 @@
 ;; Set color themes.
 (use-package emacs
   :custom
-  ;; (modus-themes-common-palette-overrides
-  ;;  '((border-mode-line-active unspecified)
-  ;;    (border-mode-line-inactive unspecified)))
   (modus-themes-italic-constructs t)
   (modus-themes-bold-constructs t)
   (modus-themes-mixed-fonts t)
   (modus-themes-mode-line '(borderless))
-  (modus-themes-diffs 'desaturated))
+  (modus-themes-diffs 'desaturated)
+  (modus-themes-variable-pitch-ui t))
 
 (use-package doom-themes)
 (use-package solarized-theme)
