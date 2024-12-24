@@ -4,7 +4,6 @@
   :ensure nil
   :demand
   :custom
-  (org-agenda-view-columns-initially t)
   (org-directory (concat env/icloud-path "Notes/"))
   (org-agenda-files `(,org-directory "GTD/tasks.org"))
   (org-agenda-file-regexp "\\`[^.].*\\.org\\'")
@@ -25,6 +24,7 @@
      ("d" tags-todo "-work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))))))
+  (org-agenda-search-view-always-boolean t)
   :config
   ;; The program `latex' should be installed.
   (add-to-list 'org-preview-latex-process-alist

@@ -155,14 +155,4 @@ negative"
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
-(defun util/load-theme (theme)
-  "Disable all current themes and load the specified `theme'."
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-                             (mapcar #'symbol-name
-				                     (custom-available-themes))))))
-  (mapc #'disable-theme custom-enabled-themes)
-  (load-theme theme :no-confirm))
-
 (provide 'util)
