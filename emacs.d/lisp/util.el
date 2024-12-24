@@ -155,4 +155,22 @@ negative"
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
+(defun env/my-dpi (&optional frame)
+  "Get the DPI of FRAME (or current if nil)."
+  (cl-flet ((pyth (lambda (w h)
+                    (sqrt (+ (* w w)
+                             (* h h)))))
+            (mm2in (lambda (mm)
+                     (/ mm 25.4))))
+    (let* ((atts (frame-monitor-attributes frame))
+           (pix-w (cl-fourth (assoc 'geometry atts)))
+           (pix-h (cl-fifth (assoc 'geometry atts)))
+           (pix-d (pyth pix-w pix-h))
+           (mm-w (cl-second (assoc 'mm-size atts)))
+           (mm-h (cl-third (assoc 'mm-size atts)))
+           (mm-d (pyth mm-w mm-h)))
+      (progn
+        (message "d: %d" (mm2in mm-d))
+        (/ pix-d (mm2in mm-d))))))
+
 (provide 'util)
