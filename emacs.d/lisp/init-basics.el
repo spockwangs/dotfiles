@@ -1,16 +1,33 @@
+(defun choose-available-font (list)
+  (if (null list)
+      nil
+    (let ((elem (car list)))
+      (if (consp elem)
+          (if (member (car elem) (font-family-list))
+              (progn
+                (add-to-list 'face-font-rescale-alist elem)
+                (car elem))
+            (choose-available-font (cdr list)))
+        (if (member elem (font-family-list))
+            elem
+          (choose-available-font (cdr list)))))))
+
 (defun set-font ()
   ;; Set font only in GUI frame.
   (if window-system
-      (progn
-        ;; Set fonts for Chinese characters.
-        (let ((font-name (if (eq system-type 'windows-nt) "楷体" "STKaiti")))
-          (setq face-font-rescale-alist `((,font-name . 1.2)))
-          (dolist (charset '(kana han symbol cjk-misc bopomofo))
-            (set-fontset-font "fontset-default" charset (font-spec :family font-name))))
+      (let ((default-font-list '("Monaco" "Consolas" "Monospace"))
+            (fixed-pitch-font-list '("Courier New" "Monospace"))
+            (chinese-font-list '(("STKaiti" . 1.3)
+                                 ("楷体" . 1.2))))
+        (progn
+          ;; Set fonts for Chinese characters.
+          (let ((font-name (choose-available-font chinese-font-list)))
+            (dolist (charset '(kana han symbol cjk-misc bopomofo))
+              (set-fontset-font "fontset-default" charset (font-spec :family font-name))))
 
-        ;; Set standard faces.
-        (set-face-attribute 'default nil :family "Monaco" :height 140)
-        (set-face-attribute 'fixed-pitch nil :family "Courier New"))))
+          ;; Set standard faces.
+          (set-face-font 'default (font-spec :family (choose-available-font default-font-list) :size env/font-size))
+          (set-face-attribute 'fixed-pitch nil :family (choose-available-font fixed-pitch-font-list))))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)

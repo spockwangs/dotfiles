@@ -51,35 +51,13 @@
  '(:application tramp :protocol "ssh" :machine "devcloud2")
  'remote-bash)
 
-(defun env/my-dpi (&optional frame)
-  "Get the DPI of FRAME (or current if nil)."
-  (cl-flet ((pyth (lambda (w h)
-                    (sqrt (+ (* w w)
-                             (* h h)))))
-            (mm2in (lambda (mm)
-                     (/ mm 25.4))))
-    (let* ((atts (frame-monitor-attributes frame))
-           (pix-w (cl-fourth (assoc 'geometry atts)))
-           (pix-h (cl-fifth (assoc 'geometry atts)))
-           (pix-d (pyth pix-w pix-h))
-           (mm-w (cl-second (assoc 'mm-size atts)))
-           (mm-h (cl-third (assoc 'mm-size atts)))
-           (mm-d (pyth mm-w mm-h)))
-      (progn
-        (message "d: %d" (mm2in mm-d))
-        (/ pix-d (mm2in mm-d))))))
-
 (defconst env/font-size
   (let* ((atts (frame-monitor-attributes nil))
          (width-pixel (cl-fourth (assoc 'geometry atts))))
-    (cond ((< width-pixel 1500) 16.0)
+    (cond ((< width-pixel 1500) 18.0)
           ((< width-pixel 2000) 15.0)
           (t 14.0)))
   "The default font size in points")
-
-(defconst env/font-size-for-chinese
-  (+ env/font-size 1)
-  "The font size in points for chinese")
 
 (provide 'init-env)
 ;;; init-env.el ends here
