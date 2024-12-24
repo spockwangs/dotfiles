@@ -3,18 +3,22 @@
   (if window-system
       (progn
         ;; Set fonts for Chinese characters.
-        (dolist (charset '(kana han symbol cjk-misc bopomofo))
-          (set-fontset-font "fontset-default" charset
-                            (font-spec :family (if (eq system-type 'windows-nt) "楷体" "STKaiti")
-                                       :size 20.0)))
+        (let ((font-name (if (eq system-type 'windows-nt) "楷体" "STKaiti")))
+          (setq face-font-rescale-alist `((,font-name . 1.2)))
+          (dolist (charset '(kana han symbol cjk-misc bopomofo))
+            (set-fontset-font "fontset-default" charset (font-spec :family font-name))))
 
         ;; Set standard faces.
-        (set-face-font 'default (font-spec :family "Monaco" :size 16.0))
-        (set-face-font 'fixed-pitch (font-spec :family "Courier New")))))
+        (set-face-attribute 'default nil :family "Monaco" :height 140)
+        (set-face-attribute 'fixed-pitch nil :family "Courier New"))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)
   (set-font))
+
+(defadvice load-theme (before clear-previous-themes activate)
+  "Clear existing theme settings instead of layering them"
+  (mapc #'disable-theme custom-enabled-themes))
 
 ;; Set color themes.
 (use-package emacs
@@ -24,7 +28,13 @@
   (modus-themes-mixed-fonts t)
   (modus-themes-mode-line '(borderless))
   (modus-themes-diffs 'desaturated)
-  (modus-themes-variable-pitch-ui t))
+  (modus-themes-variable-pitch-ui t)
+  (modus-themes-vivendi-color-overrides '((bg-header . "#4c566a")
+                                          (bg-hl-line . "#434c5e")
+                                          (bg-inactive . "#3b4252")
+                                          (bg-main . "#2e3440")))
+  (modus-themes-org-agenda '((event . (varied))
+                             (scheduled . rainbow))))
 
 (use-package doom-themes)
 (use-package solarized-theme)
@@ -42,7 +52,7 @@
   :demand
   :config
   (setq circadian-themes '((:sunrise . (doom-one-light solarized-zenburn doom-zenburn spacemacs-light doom-nord-light modus-operandi))
-                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord)))))
+                           (:sunset  . (doom-one solarized-dark solarized-wombat-dark spacemacs-dark solarized-gruvbox doom-nord modus-vivendi)))))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -102,6 +112,8 @@
 (ido-mode t)
 (setq-default ido-create-new-buffer 'always)
 (setq ido-enable-regexp t)
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
 
 ;; Set the default directory when finding a file.
 (setq default-directory "~/")
@@ -144,11 +156,13 @@
       kept-new-versions 3
       kept-old-versions 0)
 
+(global-auto-revert-mode t)
+
 ;; Update time stamp string in the buffer before saving.
 (add-hook 'before-save-hook 'time-stamp)
 
 ;; Delete trailing whitespaces before saving.
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)

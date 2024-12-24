@@ -69,10 +69,17 @@
         (message "d: %d" (mm2in mm-d))
         (/ pix-d (mm2in mm-d))))))
 
-(defconst env/font-size (round (* (env/my-dpi) 0.22))
-  "The default font size in pixels")
-(defconst env/font-size-for-chinese (round (* (env/my-dpi) 0.26))
-  "The font size in pixels for chinese")
+(defconst env/font-size
+  (let* ((atts (frame-monitor-attributes nil))
+         (width-pixel (cl-fourth (assoc 'geometry atts))))
+    (cond ((< width-pixel 1500) 16.0)
+          ((< width-pixel 2000) 15.0)
+          (t 14.0)))
+  "The default font size in points")
+
+(defconst env/font-size-for-chinese
+  (+ env/font-size 1)
+  "The font size in points for chinese")
 
 (provide 'init-env)
 ;;; init-env.el ends here
