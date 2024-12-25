@@ -112,11 +112,10 @@
       tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
       tab-bar-tab-name-function #'tab-bar-tab-name-truncated
       tab-bar-tab-name-truncated-max 50)
-(custom-set-variables '(tab-bar-select-tab-modifiers '(meta)))
+(custom-set-variables '(tab-bar-select-tab-modifiers '(super)))
 
-
-(bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
-           ("C-<right>" . tab-bar-switch-to-next-tab))
+(bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
+           ("s-<right>" . tab-bar-switch-to-next-tab))
            
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
