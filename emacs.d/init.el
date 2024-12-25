@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-11-18 19:00:30 spockwang>
+;; Time-stamp: <2024-12-25 15:27:25 spockwang>
 ;;
 
 (require 'server)
@@ -54,3 +54,4 @@
 (setq custom-file "~/.emacs.d/custom.el")
 (when (file-exists-p custom-file)
   (load custom-file))
+(put 'dired-find-alternate-file 'disabled nil)
