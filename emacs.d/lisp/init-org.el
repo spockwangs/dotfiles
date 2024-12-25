@@ -18,7 +18,11 @@
      ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}%?\nSCHEDULED: %^{Date}t")
      ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task}%?")))
   (org-agenda-custom-commands
-   '(("w" tags-todo "+work"
+   '(("c" "Agenda bird view"
+      ((agenda "")
+       (alltodo "" ((org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))
+                    (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))))))
+     ("w" tags-todo "+work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))))
      ("d" tags-todo "-work"

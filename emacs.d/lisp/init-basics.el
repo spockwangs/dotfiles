@@ -26,7 +26,7 @@
               (set-fontset-font "fontset-default" charset (font-spec :family font-name))))
 
           ;; Set standard faces.
-          (set-face-font 'default (font-spec :family (choose-available-font default-font-list) :size env/font-size))
+          (set-face-font 'default (font-spec :family (choose-available-font default-font-list) :slant 'normal :size env/font-size))
           (set-face-attribute 'fixed-pitch nil :family (choose-available-font fixed-pitch-font-list))))))
 
 (if (daemonp)
@@ -104,9 +104,20 @@
 ;; Hide the menu bar.
 (menu-bar-mode 0)
 
-;; Disable tabs.
-(tab-bar-mode 0)
+;; Config tab bar.
+(tab-bar-mode 1)
+(setq tab-bar-show 1                    ; hide tab bar if <=1 tabs are open
+      tab-bar-close-button-show nil     ; hide tab bar close button
+      tab-bar-tab-hints t
+      tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
+      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
+      tab-bar-tab-name-truncated-max 50)
+(custom-set-variables '(tab-bar-select-tab-modifiers '(meta)))
 
+
+(bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
+           ("C-<right>" . tab-bar-switch-to-next-tab))
+           
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
 
@@ -183,6 +194,9 @@
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)
+
+;; Reuse the buffer when browsing in dired buffer.
+(setq dired-kill-when-opening-new-dired-buffer t)
 
 ;; Bind functional keys.
 (require 'redo+)
