@@ -155,7 +155,7 @@ negative"
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
-(defun env/my-dpi (&optional frame)
+(defun util/get-dpi (&optional frame)
   "Get the DPI of FRAME (or current if nil)."
   (cl-flet ((pyth (lambda (w h)
                     (sqrt (+ (* w w)
@@ -172,5 +172,54 @@ negative"
       (progn
         (message "d: %d" (mm2in mm-d))
         (/ pix-d (mm2in mm-d))))))
+
+(defun util/code-search (thing type)
+  "Browse code search to find the THING with type TYPE."
+  (pcase type
+    ('proto (browse-url (concat "https://codes.woa.com/codesearch/search?full=&defs="
+                                thing
+                                "&refs=&path=*proto&hist=&type=&xrd=&nn=134&searchall=true")))
+    ('path (browse-url (concat "https://codes.woa.com/codesearch/search?full=&defs=&refs=&path="
+                               thing
+                               "&type=&xrd=&nn=134&searchall=true")))
+    ('def (browse-url (concat "https://codes.woa.com/codesearch/search?full=&defs="
+                              thing
+                              "&refs=&path=&hist=&type=&xrd=&nn=134&searchall=true")))
+    ('ref (browse-url (concat "https://codes.woa.com/codesearch/search?full=&defs=&refs="
+                                 thing
+                                 "&path=&hist=&type=&xrd=&nn=134&searchall=true")))
+    (_ (message "Invalid type: %s" type))))
+
+(defun util/code-search-path (path)
+  "Open code search to search for a path."
+  (interactive (list (let ((thing (thing-at-point 'symbol)))
+                       (if thing
+                           thing
+                         (read-from-minibuffer "Code search for path: ")))))
+  (util/code-search path 'path))
+
+(defun util/code-search-message (msg)
+  "Open code search to search for a protobuf message."
+  (interactive (list (let ((thing (thing-at-point 'symbol)))
+                       (if thing
+                           thing
+                         (read-from-minibuffer "Code search for protobuf message: ")))))
+  (util/code-search msg 'proto))
+
+(defun util/code-search-def (symbol)
+  "Open code search to search for a protobuf message."
+  (interactive (list (let ((thing (thing-at-point 'symbol)))
+                       (if thing
+                           thing
+                         (read-from-minibuffer "Code search for definition of symbol: ")))))
+  (util/code-search symbol 'def))
+
+(defun util/code-search-ref (symbol)
+  "Open code search to search for a protobuf message."
+  (interactive (list (let ((thing (thing-at-point 'symbol)))
+                       (if thing
+                           thing
+                         (read-from-minibuffer "Code search for references of symbol: ")))))
+  (util/code-search symbol 'ref))
 
 (provide 'util)
