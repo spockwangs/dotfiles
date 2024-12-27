@@ -26,6 +26,7 @@
 (defun patch-build (target)
   "Use patchbuild to build a target."
   (interactive "sBuild target: ")
+  (require 'bazel)
   (let ((package-directory (bazel--package-directory (buffer-file-name) (bazel--workspace-root (buffer-file-name))))
         (buffer (get-buffer-create (concat "*Build: " target "*"))))
     (with-current-buffer buffer
