@@ -26,7 +26,9 @@
               (set-fontset-font "fontset-default" charset (font-spec :family font-name))))
 
           ;; Set standard faces.
-          (set-face-font 'default (font-spec :family (choose-available-font default-font-list) :slant 'normal :size env/font-size))
+          (set-face-font 'default (font-spec :family (choose-available-font default-font-list)
+                                             :slant 'normal
+                                             :size env/font-size))
           (set-face-attribute 'fixed-pitch nil :family (choose-available-font fixed-pitch-font-list))))))
 
 (if (daemonp)
@@ -116,7 +118,7 @@
 
 (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
            ("s-<right>" . tab-bar-switch-to-next-tab))
-           
+
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
 
