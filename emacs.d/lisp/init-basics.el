@@ -122,9 +122,12 @@
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
              ("s-<right>" . tab-bar-switch-to-next-tab)))
 
+<<<<<<< HEAD
 (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
            ("s-<right>" . tab-bar-switch-to-next-tab))
 
+=======
+>>>>>>> 28329b436171c259af5b1b4621fd72f370892ad3
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
 
