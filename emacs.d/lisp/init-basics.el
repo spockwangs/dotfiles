@@ -114,7 +114,13 @@
       tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
       tab-bar-tab-name-function #'tab-bar-tab-name-truncated
       tab-bar-tab-name-truncated-max 50)
-(custom-set-variables '(tab-bar-select-tab-modifiers '(super)))
+(custom-set-variables '(tab-bar-select-tab-modifiers '(control super)))
+
+(if (eq system-type 'windows-nt)
+    (bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
+               ("C-<right>" . tab-bar-switch-to-next-tab))
+  (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
+             ("s-<right>" . tab-bar-switch-to-next-tab)))
 
 (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
            ("s-<right>" . tab-bar-switch-to-next-tab))
@@ -261,7 +267,14 @@
 (bind-key "C-c d" #'dictionary-search)
 (setq dictionary-server "dict.org")
 
-(define-key search-map "O" 'multi-occur-in-matching-buffers)
+;; Bind keys to search key prefix "M-s".
+(bind-keys :map search-map
+           ("O" . multi-occur-in-matching-buffers)
+           ("g" . rgrep)
+           ("cm" . util/code-search-message)
+           ("cp" . util/code-search-path)
+           ("cd" . util/code-search-def)
+           ("cr" . util/code-search-ref))
 
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
