@@ -173,22 +173,26 @@ negative"
         (message "d: %d" (mm2in mm-d))
         (/ pix-d (mm2in mm-d))))))
 
+(defcustom code-search-url nil
+  "The URL of code search.")
+
 (defun util/code-search (thing type)
   "Browse code search to find the THING with type TYPE."
-  (pcase type
-    ('proto (browse-url (concat "https://xxx/codesearch/search?full=&defs="
+  (let ((path (pcase type
+                ('proto (concat "/codesearch/search?full=&defs="
                                 thing
-                                "&refs=&path=*proto&hist=&type=&xrd=&nn=134&searchall=true")))
-    ('path (browse-url (concat "https://xxx/codesearch/search?full=&defs=&refs=&path="
+                                "&refs=&path=*proto&hist=&type=&xrd=&nn=134&searchall=true"))
+                ('path (concat "/codesearch/search?full=&defs=&refs=&path="
                                thing
-                               "&type=&xrd=&nn=134&searchall=true")))
-    ('def (browse-url (concat "https://xxx/codesearch/search?full=&defs="
+                               "&type=&xrd=&nn=134&searchall=true"))
+                ('def (concat "/codesearch/search?full=&defs="
                               thing
-                              "&refs=&path=&hist=&type=&xrd=&nn=134&searchall=true")))
-    ('ref (browse-url (concat "https://xxx/codesearch/search?full=&defs=&refs="
-                                 thing
-                                 "&path=&hist=&type=&xrd=&nn=134&searchall=true")))
-    (_ (message "Invalid type: %s" type))))
+                              "&refs=&path=&hist=&type=&xrd=&nn=134&searchall=true"))
+                ('ref (concat "/codesearch/search?full=&defs=&refs="
+                              thing
+                              "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
+                (_ (message "Invalid type: %s" type)))))
+    (browse-url (concat code-search-url path))))
 
 (defun util/code-search-path (path)
   "Open code search to search for a path."
