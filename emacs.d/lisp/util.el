@@ -196,7 +196,7 @@ negative"
 
 (defun util/code-search-path (path)
   "Open code search to search for a path."
-  (interactive (list (let ((thing (thing-at-point 'symbol)))
+  (interactive (list (let ((thing (thing-at-point 'filename)))
                        (if thing
                            thing
                          (read-from-minibuffer "Code search for path: ")))))
