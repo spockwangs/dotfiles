@@ -19,7 +19,7 @@
      ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task}%?")))
   (org-agenda-custom-commands
    '(("c" "Agenda bird view"
-      ((agenda "")
+      ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE")))))
        (alltodo "" ((org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))
                     (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))))))
      ("w" tags-todo "+work"

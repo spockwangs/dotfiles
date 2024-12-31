@@ -271,7 +271,8 @@
            ("cm" . util/code-search-message)
            ("cp" . util/code-search-path)
            ("cd" . util/code-search-def)
-           ("cr" . util/code-search-ref))
+           ("cr" . util/code-search-ref)
+           ("l" . util/log-search-at-point))
 
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
