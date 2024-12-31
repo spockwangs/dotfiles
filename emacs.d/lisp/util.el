@@ -226,4 +226,42 @@ negative"
                          (read-from-minibuffer "Code search for references of symbol: ")))))
   (util/code-search symbol 'ref))
 
+(defcustom log-search-url nil
+  "The URL to access log search.")
+
+(defun util/log-search (env module keywords)
+  "Open xlog to search the log of MODULE for KEYWORDS under ENV."
+  (let* ((calendar-time (decode-time))
+         (year (nth 5 calendar-time))
+         (month (nth 4 calendar-time))
+         (day (nth 3 calendar-time))
+         (begin-time (format "%d-%d-%d 00:00:00" year month day))
+         (end-time (format "%d-%d-%d 23:59:59" year month day))
+         (url (concat log-search-url "/#/search/basic?param="
+                      (url-hexify-string (json-serialize
+                                       `((env . ,env)
+                                         ,(if (string-empty-p module)
+                                              `(type . "all")
+                                            `(type . "appoint"))
+                                         (module . ,module)
+                                         (beginTime . ,begin-time)
+                                         (endTime . ,end-time)
+                                         (keywordObj . ((,(intern "0") . ,keywords)
+                                                        (,(intern "1") . "")
+                                                        (,(intern "2") . "")))
+                                         (excludeKeywordObj . ((,(intern "0") . "")
+                                                               (,(intern "1") . "")))
+                                         (_type . "share")))))))
+    (browse-url url)))
+
+(defun util/log-search-at-point (keyword module env)
+  "Open xlog to search for the symbol at point."
+  (interactive (list (if (use-region-p)
+                         (buffer-substring (region-beginning) (region-end))
+                       (let ((thing (thing-at-point 'symbol)))
+                         (or thing (read-from-minibuffer "Search xlog for: "))))
+                     (read-from-minibuffer "Module: ")
+                     (completing-read "Env: " '("test" "idc"))))
+  (util/log-search env module keyword))
+
 (provide 'util)
