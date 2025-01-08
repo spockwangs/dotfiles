@@ -294,4 +294,10 @@
   (prog-mode . (lambda ()
                  (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))))
 
+(use-package ansi-color
+  :hook
+  ;; Make compile output buffer interpret color escape sequence.
+  (compilation-filter . ansi-color-compilation-filter))
+(setq compilation-skip-threshold 2)
+
 (provide 'init-basics)
