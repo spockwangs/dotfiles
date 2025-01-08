@@ -8,7 +8,7 @@
   (org-agenda-files `(,org-directory "GTD/tasks.org"))
   (org-agenda-file-regexp "\\`[^.].*\\.org\\'")
   (org-todo-keywords
-   '((sequence "TODO(t!)" "DOING(d!)" "WAITING(s)" "|" "DONE(d!)" "CANCELED(c@/!)")))
+   '((sequence "TODO(t!)" "DOING(i!)" "WAITING(s)" "|" "DONE(d!)" "CANCELED(c@/!)")))
   (org-log-into-drawer "LOGBOOK")
   (org-archive-location (concat org-directory "GTD/archive.org::datetree/"))
   (org-capture-templates
