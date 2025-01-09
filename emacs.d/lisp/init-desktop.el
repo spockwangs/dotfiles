@@ -8,6 +8,10 @@
   (desktop-files-not-to-save "^$" "Save all open files including remote files")
   (desktop-restore-eager 0 "Restore a small number for files for performance")
   :config
+  (advice-add 'desktop-kill :around (lambda (orig-fun &rest args)
+                                      (if (not desktop-lazy-timer)
+                                          (apply orig-fun args)
+                                        (message "Skip saving desktop during lazy desktop loading."))))
   (add-to-list 'desktop-modes-not-to-save 'dired-mode)
   (add-to-list 'desktop-modes-not-to-save 'Info-mode)
   (add-to-list 'desktop-modes-not-to-save 'info-lookup-mode)
