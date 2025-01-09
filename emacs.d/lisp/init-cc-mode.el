@@ -8,7 +8,7 @@
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . patch-build)
+              ("C-c C-b" . compile-under-directory)
               ("TAB" . company-complete))
   :hook ((c-mode-common . (lambda ()
                             (subword-mode 1)
@@ -24,13 +24,15 @@
   :ensure nil
   :hook (c-mode-common . spock-set-c-style))
 
-(defun patch-build (target)
-  "Use patchbuild to build a target."
-  (interactive "sBuild target: ")
-  (require 'bazel)
-  (let ((package-directory (bazel--package-directory (buffer-file-name) (bazel--workspace-root (buffer-file-name))))
-        (buffer (get-buffer-create (concat "*Build: " target "*"))))
-    (setq-local default-directory package-directory)
-    (compile (concat "patchbuild build --include-commit --gcc-version gcc7 :" target))))
+(defun compile-under-directory (directory)
+  "Prompt to compile under some directory."
+  (interactive (list (let* ((package-directory (progn (require 'bazel)
+                                                     (bazel--package-directory
+                                                      (buffer-file-name)
+                                                      (bazel--workspace-root (buffer-file-name)))))
+                            (init-dir (or package-directory default-directory)))
+                       (read-from-minibuffer "Directory: " init-dir))))
+  (let ((default-directory directory))
+    (call-interactively 'compile)))
 
 (provide 'init-cc-mode)

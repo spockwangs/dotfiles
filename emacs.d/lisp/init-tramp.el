@@ -9,6 +9,7 @@
                                 (cdr (assoc "ssh" tramp-methods))))
                 :test #'equal))
   ;; Make the PATH setting in "~/.bashrc" available to the remote shell.
-  (add-to-list 'tramp-remote-path 'tramp-own-remote-path))
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (setq enable-remote-dir-locals t))
 
 (provide 'init-tramp)
