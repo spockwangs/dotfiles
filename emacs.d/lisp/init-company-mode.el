@@ -8,6 +8,7 @@
   (company-minimum-prefix-length 3 "至少几个字符后开始补全")
   (company-dabbrev-downcase nil)
   (company-dabbrev-minimum-length 1)
-  (company-backends '((company-dabbrev-code :with company-capf company-keywords) company-files company-oddmuse)))
+  :config
+  (setq company-backends (delete 'company-semantic company-backends)))
 
 (provide 'init-company-mode)
