@@ -1,5 +1,5 @@
 [core]
-editor = emacsclient
+editor = vim
 excludesfile = ~/.gitignore
 
 [color]
@@ -20,6 +20,5 @@ default = tracking
 [include]
 path = .gitconfig.local
 
-[user]
-email = wbbtiger@gmail.com
-name = spockwang
+[credential]
+    helper = store
