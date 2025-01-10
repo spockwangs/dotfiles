@@ -1,7 +1,7 @@
 (use-package desktop
   :demand
   :custom
-  (desktop-path '("~/.emacs.d/"))
+  (desktop-path '("~/.emacs/"))
   (desktop-save t)
   (desktop-load-locked-desktop t)
   (desktop-restore-frames t)

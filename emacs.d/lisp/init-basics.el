@@ -107,13 +107,13 @@
 (menu-bar-mode 0)
 
 ;; Config tab bar.
-(tab-bar-mode 1)
 (setq tab-bar-show 1                    ; hide tab bar if <=1 tabs are open
       tab-bar-close-button-show nil     ; hide tab bar close button
       tab-bar-tab-hints t
       tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
       tab-bar-tab-name-function #'tab-bar-tab-name-truncated
       tab-bar-tab-name-truncated-max 50)
+(tab-bar-mode 1)
 (custom-set-variables '(tab-bar-select-tab-modifiers '(control super)))
 
 (if (eq system-type 'windows-nt)
@@ -142,6 +142,7 @@
 
 ;; Find buffer or file.
 (ido-mode t)
+(setq ido-save-directory-list-file "~/.emacs/ido.last")
 (setq-default ido-create-new-buffer 'always)
 (setq ido-enable-regexp t)
 (setq ido-enable-flex-matching t)
@@ -294,10 +295,24 @@
   (prog-mode . (lambda ()
                  (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enhancing compilation mode.
+
 (use-package ansi-color
   :hook
   ;; Make compile output buffer interpret color escape sequence.
   (compilation-filter . ansi-color-compilation-filter))
+
+;; Only cares about errors.
 (setq compilation-skip-threshold 2)
+
+(defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
+  "Advice around `compilation-find-file' to enhance file finding."
+  (require 'bazel)
+  (let* ((root-path (bazel--workspace-root default-directory))
+         (found-file (locate-file filename root-path)))
+    (if found-file
+        (find-file-noselect found-file)
+      (apply orig-fun marker filename directory args))))
 
 (provide 'init-basics)
