@@ -51,6 +51,7 @@
  '(:application tramp :protocol "ssh" :machine "devcloud2")
  'remote-bash)
 
+(require 'cl-lib)
 (defconst env/font-size
   (let* ((atts (frame-monitor-attributes nil))
          (width-pixel (cl-fourth (assoc 'geometry atts))))
