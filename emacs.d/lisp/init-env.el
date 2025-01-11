@@ -41,16 +41,6 @@
         ((eq system-type 'darwin) "~/Library/Mobile Documents/com~apple~CloudDocs/"))
   "The iCloud path")
 
-(connection-local-set-profile-variables
- 'remote-bash
- '((explicit-shell-file-name . "/bin/bash")
-   (explicit-bash-args . ("-i"))
-   (shell-file-name . "/bin/bash")))
-
-(connection-local-set-profiles
- '(:application tramp :protocol "ssh" :machine "devcloud2")
- 'remote-bash)
-
 (require 'cl-lib)
 (defconst env/font-size
   (let* ((atts (frame-monitor-attributes nil))
