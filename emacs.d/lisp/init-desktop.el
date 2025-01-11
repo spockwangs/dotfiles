@@ -1,12 +1,12 @@
 (use-package desktop
   :demand
   :custom
-  (desktop-path '("~/.emacs/"))
+  (desktop-path (list "~/.cache"))
   (desktop-save t)
   (desktop-load-locked-desktop t)
   (desktop-restore-frames t)
   (desktop-files-not-to-save "^$" "Save all open files including remote files")
-  (desktop-restore-eager 0 "Restore a small number for files for performance")
+  (desktop-restore-eager 0 "Restore a small number of files for performance")
   :config
   (advice-add 'desktop-kill :around (lambda (orig-fun &rest args)
                                       (if (not desktop-lazy-timer)

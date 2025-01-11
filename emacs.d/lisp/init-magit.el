@@ -11,7 +11,6 @@
    (lambda (buf) (not (file-remote-p (buffer-file-name buf))))
    "Do not auto-revert remote files to improve performance")
   :config
-  (require 'util)
   (transient-append-suffix 'magit-merge "m"
     '("r" "Merge request" do-merge-request)))
 

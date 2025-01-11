@@ -1,6 +1,7 @@
 (use-package treemacs
   :config
   (treemacs-set-width (* 0.3 (frame-width)))
+  (setq treemacs-persist-file "~/.cache/treemacs-persist")
   :bind (("<f8>" . treemacs)
          ("M-0" . treemacs-select-window)))
 
