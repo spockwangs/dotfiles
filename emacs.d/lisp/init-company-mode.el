@@ -9,6 +9,6 @@
   (company-dabbrev-downcase nil)
   (company-dabbrev-minimum-length 1)
   :config
-  (setq company-backends (delete 'company-semantic company-backends)))
+  (setq company-backends (delete 'company-clang (delete 'company-semantic company-backends))))
 
 (provide 'init-company-mode)

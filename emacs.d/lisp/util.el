@@ -1,7 +1,25 @@
+;; -*- coding: utf-8-unix -*-
 ;; Copyright 2010. wbb
 ;;     All rights reserved.
 ;;
 ;; util.el -- Common utility functions
+
+(defun util/choose-available-font (list)
+  "Return a available font name from the LIST, or nil if all of
+ them are not available on this computer. LIST is a list of font
+ names or (FONT-NAME . SCALE) pairs."
+  (if (null list)
+      nil
+    (let ((elem (car list)))
+      (if (consp elem)
+          (if (member (car elem) (font-family-list))
+              (progn
+                (add-to-list 'face-font-rescale-alist elem)
+                (car elem))
+            (choose-available-font (cdr list)))
+        (if (member elem (font-family-list))
+            elem
+          (choose-available-font (cdr list)))))))
 
 (defun util/shift-region (distance)
   "Shift the selected region right if distance is postive, left if
