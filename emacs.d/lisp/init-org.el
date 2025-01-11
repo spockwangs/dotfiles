@@ -4,7 +4,7 @@
   :ensure nil
   :demand
   :custom
-  (org-directory (concat env/icloud-path "Notes/"))
+  (org-directory (concat my-icloud-path "Notes/"))
   (org-agenda-files `(,org-directory "GTD/tasks.org"))
   (org-agenda-file-regexp "\\`[^.].*\\.org\\'")
   (org-todo-keywords
