@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2024-12-25 15:27:25 spockwang>
+;; Time-stamp: <2025-01-11 13:35:19 spock>
 ;;
 
 (require 'server)
@@ -10,13 +10,16 @@
   (server-start))
 
 ;; Add a load-path.
-(add-to-list 'load-path "~/.emacs.d/lisp")
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
 
 ;; For troubleshooting, start Emacs with command line flag `--debug-init'.
-(setq use-package-verbose t
+(setq debug-on-error t
+      use-package-verbose t
       use-package-expand-minimally nil
       use-package-compute-statistics t)
 
+(require 'util)
 (require 'init-env)
 (require 'init-benchmarking)
 (require 'init-package)
@@ -51,7 +54,7 @@
 (require 'init-bazel)
 (require 'init-desktop)
 (require 'init-epilog nil t)
-(setq custom-file "~/.emacs.d/custom.el")
+
+(setq custom-file "~/.cache/custom.el")
 (when (file-exists-p custom-file)
   (load custom-file))
-(put 'dired-find-alternate-file 'disabled nil)
