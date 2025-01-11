@@ -142,14 +142,11 @@
 
 ;; Find buffer or file.
 (ido-mode t)
-(setq ido-save-directory-list-file "~/.emacs/ido.last")
+(setq ido-save-directory-list-file "~/.cache/ido.last")
 (setq-default ido-create-new-buffer 'always)
 (setq ido-enable-regexp t)
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
-
-;; Set the default directory when finding a file.
-(setq default-directory "~/")
 
 ;; Set default major mode to text-mode.
 (setq major-mode 'text-mode)
@@ -202,6 +199,10 @@
 
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
+
+(put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
 
 ;; Bind functional keys.
 (require 'redo+)
@@ -298,13 +299,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhancing compilation mode.
 
-(use-package ansi-color
-  :hook
+(with-eval-after-load 'compile
+  (require 'ansi-color)
   ;; Make compile output buffer interpret color escape sequence.
-  (compilation-filter . ansi-color-compilation-filter))
+  (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
+  (add-hook 'compilation-mode-hook 'visual-line-mode))
 
-;; Only cares about errors.
-(setq compilation-skip-threshold 2)
+(setq
+ ;; Only cares about errors.
+ compilation-skip-threshold 2
+ ;; Scroll to the first error.
+ compilation-scroll-output 'first-error)
 
 (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
   "Advice around `compilation-find-file' to enhance file finding."
@@ -314,5 +319,17 @@
     (if found-file
         (find-file-noselect found-file)
       (apply orig-fun marker filename directory args))))
+
+(advice-add 'compilation-find-file :around #'compilation-find-file-smart)
+
+(setq bookmark-default-file "~/.cache/bookmarks")
+(setq recentf-save-file "~/.cache/recentf")
+
+(use-package paren
+  :config (show-paren-mode)
+  :custom (show-paren-style 'expression))
+
+(use-package rainbow-delimiters
+  :hook ((prog-mode . rainbow-delimiters-mode)))
 
 (provide 'init-basics)

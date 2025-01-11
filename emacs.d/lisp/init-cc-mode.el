@@ -24,14 +24,17 @@
   :ensure nil
   :hook (c-mode-common . spock-set-c-style))
 
+(defun read-directory ()
+  (let* ((package-directory (progn (require 'bazel)
+                                   (bazel--package-directory
+                                    (buffer-file-name)
+                                    (bazel--workspace-root (buffer-file-name)))))
+         (init-dir (or package-directory default-directory)))
+    (read-from-minibuffer "Directory: " init-dir)))
+
 (defun compile-under-directory (directory)
-  "Prompt to compile under some directory."
-  (interactive (list (let* ((package-directory (progn (require 'bazel)
-                                                     (bazel--package-directory
-                                                      (buffer-file-name)
-                                                      (bazel--workspace-root (buffer-file-name)))))
-                            (init-dir (or package-directory default-directory)))
-                       (read-from-minibuffer "Directory: " init-dir))))
+  "Prompt to run a command under specified directory."
+  (interactive (list (read-directory)))
   (let ((default-directory directory))
     (call-interactively 'compile)))
 
