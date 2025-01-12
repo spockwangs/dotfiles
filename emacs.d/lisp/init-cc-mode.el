@@ -20,7 +20,8 @@
                                 (add-hook 'completion-at-point-functions #'company-complete nil 'local))
                             (if (locate-dominating-file default-directory "GTAGS")
                                 (gtags-mode)
-                              (eglot-ensure))))
+                              (progn (eglot-ensure)
+                                     (add-to-list 'eglot-server-programs '(c++-mode . ("clangd" "--log=verbose" "--query-driver=/usr/bin/clang++")))))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
