@@ -13,24 +13,24 @@
 
 (use-package helm-themes)
 
-(use-package helm-gtags
-  :hook
-  ((c-mode . helm-gtags-mode)
-   (c++-mode . helm-gtags-mode))
-  :config
-  (setq helm-gtags-ignore-case t
-        helm-gtags-auto-update t
-        helm-gtags-use-input-at-cursor t
-        helm-gtags-pulse-at-cursor t
-        helm-gtags-prefix-key "\C-cg"
-        helm-gtags-suggested-key-mapping t)
-  :bind (:map helm-gtags-mode-map
-              ("C-c g a" . helm-gtags-tags-in-this-function)
-              ("C-j" . helm-gtags-select)
-              ("M-." . helm-gtags-dwim)
-              ("M-," . helm-gtags-pop-stack)
-              ("C-c <" . helm-gtags-previous-history)
-              ("C-c >" . helm-gtags-next-history)))
+;; (use-package helm-gtags
+;;   :hook
+;;   ((c-mode . helm-gtags-mode)
+;;    (c++-mode . helm-gtags-mode))
+;;   :config
+;;   (setq helm-gtags-ignore-case t
+;;         helm-gtags-auto-update t
+;;         helm-gtags-use-input-at-cursor t
+;;         helm-gtags-pulse-at-cursor t
+;;         helm-gtags-prefix-key "\C-cg"
+;;         helm-gtags-suggested-key-mapping t)
+;;   :bind (:map helm-gtags-mode-map
+;;               ("C-c g a" . helm-gtags-tags-in-this-function)
+;;               ("C-j" . helm-gtags-select)
+;;               ("M-." . helm-gtags-dwim)
+;;               ("M-," . helm-gtags-pop-stack)
+;;               ("C-c <" . helm-gtags-previous-history)
+;;               ("C-c >" . helm-gtags-next-history)))
 
 
 (provide 'init-helm)

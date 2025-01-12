@@ -133,8 +133,6 @@ Works with: arglist-intro, arglist-cont, arglist-cont-nonempt.
   "Set the current buffer's c-style to Spock C/C++ Programming
 Style. Meant to be added to `c-mode-common-hook'."
   (interactive)
-  (make-local-variable 'c-tab-always-indent)
-  (setq c-tab-always-indent t)
   (c-add-style "Spock" spock-c-style t))
 
 (provide 'spock-c-style)
