@@ -1,8 +1,8 @@
-;; -*- coding: utf-8-unix -*-
+;; -*- coding: utf-8-unix; lexical-binding: t; -*-
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-11 22:37:55 spock>
+;; Time-stamp: <2025-01-12 19:28:47 spock>
 ;;
 
 (setq
@@ -14,7 +14,9 @@
  gc-cons-threshold 100000000
  ;; accept `y' or `n' instead of yes/no
  use-short-answers t
- enable-local-variables :all)
+ enable-local-variables :all
+ read-process-output-max (* 4 1024 1024)
+ process-adaptive-read-buffering nil)
 
 (require 'package)
 (setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
@@ -217,8 +219,8 @@
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-(define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
+;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+;; (define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
 
 ;; Find the file at point.
 (bind-keys ("C-c f" . find-file-at-point))
@@ -258,7 +260,8 @@
  ;; Save bookmark automatically.
  bookmark-save-flag 1
  bookmark-default-file "~/.cache/bookmarks"
- recentf-save-file "~/.cache/recentf")
+ recentf-save-file "~/.cache/recentf"
+ project-list-file "~/.cache/projects")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text manipulation.
@@ -389,6 +392,57 @@
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
+
+(setq eglot-autoshutdown t)
+(setq
+ tab-always-indent 'complete
+ tab-first-completion 'eol)
+
+(defun my-xref-find-backends ()
+  (let (backends
+        backend)
+    (dolist (f xref-backend-functions)
+      (when (functionp f)
+        (setq backend (funcall f))
+        (when backend
+          (cl-pushnew backend backends))))
+    (reverse backends)))
+
+(defun my-xref--create-fetcher (input kind arg)
+  "Return an xref list fetcher function.
+
+It revisits the saved position and delegates the finding logic to
+the xref backend method indicated by KIND and passes ARG to it."
+  (let* ((orig-buffer (current-buffer))
+         (orig-position (point))
+         (backends (my-xref-find-backends))
+         (method (intern (format "xref-backend-%s" kind))))
+    (lambda ()
+      (save-excursion
+        ;; Xref methods are generally allowed to depend on the text
+        ;; around point, not just on their explicit arguments.
+        ;;
+        ;; There is only so much we can do, however, to recreate that
+        ;; context, given that the user is free to change the buffer
+        ;; contents freely in the meantime.
+        (when (buffer-live-p orig-buffer)
+          (set-buffer orig-buffer)
+          (ignore-errors (goto-char orig-position)))
+        (let (xrefs)
+          (cl-dolist (backend backends)
+            (message "using backend: %s" backend)
+            (set-buffer orig-buffer)
+            (ignore-errors (goto-char orig-position))
+            (ignore-errors
+              (setq xrefs (funcall method backend arg))
+              (message "xrefs: %s" xrefs)
+              (when xrefs
+                (cl-return))))
+          (unless xrefs
+            (xref--not-found-error kind input))
+          xrefs)))))
+
+(advice-add #'xref--create-fetcher :override #'my-xref--create-fetcher)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
