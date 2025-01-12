@@ -11,6 +11,8 @@
          ("C-c h g" . helm-google-suggest)
          ("M-y" . helm-show-kill-ring)))
 
+(use-package helm-xref)
+
 (use-package helm-themes)
 
 ;; (use-package helm-gtags
