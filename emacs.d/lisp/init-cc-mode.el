@@ -1,3 +1,5 @@
+(use-package gtags-mode)
+  
 (use-package cc-mode
   :mode (("\\.h\\'" . c++-mode)
          ("\\.c\\'" . c-mode)
@@ -9,11 +11,17 @@
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
               ("C-c C-b" . compile-under-directory)
-              ("TAB" . company-complete))
+              ("TAB" . indent-for-tab-command))
   :hook ((c-mode-common . (lambda ()
                             (subword-mode 1)
                             (turn-on-auto-fill)
-                            (c-toggle-auto-newline -1)))
+                            (c-toggle-auto-newline -1)
+                            (when (fboundp 'company-complete)
+                                (add-hook 'completion-at-point-functions #'company-complete nil 'local))
+                            (add-hook 'xref-backend-functions #'gtags-mode--local-plist nil 'local)
+                            (add-hook 'xref-backend-functions #'eglot-xref-backend nil 'local)))
+         (c-mode-common . eglot-ensure)
+         (c-mode-common . gtags-mode)
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
