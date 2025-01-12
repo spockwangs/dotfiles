@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-12 19:28:47 spock>
+;; Time-stamp: <2025-01-12 19:42:30 spock>
 ;;
 
 (setq
@@ -442,7 +442,7 @@ the xref backend method indicated by KIND and passes ARG to it."
             (xref--not-found-error kind input))
           xrefs)))))
 
-(advice-add #'xref--create-fetcher :override #'my-xref--create-fetcher)
+;; (advice-add #'xref--create-fetcher :override #'my-xref--create-fetcher)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
