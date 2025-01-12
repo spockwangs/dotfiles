@@ -18,10 +18,9 @@
                             (c-toggle-auto-newline -1)
                             (when (fboundp 'company-complete)
                                 (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-                            (add-hook 'xref-backend-functions #'gtags-mode--local-plist nil 'local)
-                            (add-hook 'xref-backend-functions #'eglot-xref-backend nil 'local)))
-         (c-mode-common . eglot-ensure)
-         (c-mode-common . gtags-mode)
+                            (if (locate-dominating-file default-directory "GTAGS")
+                                (gtags-mode)
+                              (eglot-ensure))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
