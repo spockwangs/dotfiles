@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-12 19:42:30 spock>
+;; Time-stamp: <2025-01-13 14:26:30 spockwang>
 ;;
 
 (setq
@@ -100,7 +100,15 @@
       tab-bar-tab-name-function #'tab-bar-tab-name-truncated
       tab-bar-tab-name-truncated-max 50)
 (tab-bar-mode 1)
-(custom-set-variables '(tab-bar-select-tab-modifiers '(control super)))
+
+(when (eq window-system 'w32)
+  (bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
+             ("C-<right>" . tab-bar-switch-to-next-tab))
+  (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
+(when (eq window-system 'darwin)
+  (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
+             ("s-<right>" . tab-bar-switch-to-next-tab))
+  (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
 
 ;; Show line numbers in the left margin.
 (global-display-line-numbers-mode)
@@ -264,6 +272,9 @@
  recentf-save-file "~/.cache/recentf"
  project-list-file "~/.cache/projects")
 
+(when (fboundp 'global-eldoc-mode)
+  (add-hook 'after-init-hook 'global-eldoc-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text manipulation.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -399,51 +410,10 @@
  tab-always-indent 'complete
  tab-first-completion 'eol)
 
-(defun my-xref-find-backends ()
-  (let (backends
-        backend)
-    (dolist (f xref-backend-functions)
-      (when (functionp f)
-        (setq backend (funcall f))
-        (when backend
-          (cl-pushnew backend backends))))
-    (reverse backends)))
-
-(defun my-xref--create-fetcher (input kind arg)
-  "Return an xref list fetcher function.
-
-It revisits the saved position and delegates the finding logic to
-the xref backend method indicated by KIND and passes ARG to it."
-  (let* ((orig-buffer (current-buffer))
-         (orig-position (point))
-         (backends (my-xref-find-backends))
-         (method (intern (format "xref-backend-%s" kind))))
-    (lambda ()
-      (save-excursion
-        ;; Xref methods are generally allowed to depend on the text
-        ;; around point, not just on their explicit arguments.
-        ;;
-        ;; There is only so much we can do, however, to recreate that
-        ;; context, given that the user is free to change the buffer
-        ;; contents freely in the meantime.
-        (when (buffer-live-p orig-buffer)
-          (set-buffer orig-buffer)
-          (ignore-errors (goto-char orig-position)))
-        (let (xrefs)
-          (cl-dolist (backend backends)
-            (message "using backend: %s" backend)
-            (set-buffer orig-buffer)
-            (ignore-errors (goto-char orig-position))
-            (ignore-errors
-              (setq xrefs (funcall method backend arg))
-              (message "xrefs: %s" xrefs)
-              (when xrefs
-                (cl-return))))
-          (unless xrefs
-            (xref--not-found-error kind input))
-          xrefs)))))
-
-;; (advice-add #'xref--create-fetcher :override #'my-xref--create-fetcher)
+(use-package which-key
+  :hook (after-init . which-key-mode)
+  :config
+  (setq-default which-key-idle-delay 1.5))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
