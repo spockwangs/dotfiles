@@ -16,10 +16,10 @@
               (progn
                 (add-to-list 'face-font-rescale-alist elem)
                 (car elem))
-            (choose-available-font (cdr list)))
+            (util/choose-available-font (cdr list)))
         (if (member elem (font-family-list))
             elem
-          (choose-available-font (cdr list)))))))
+          (util/choose-available-font (cdr list)))))))
 
 (defun util/shift-region (distance)
   "Shift the selected region right if distance is postive, left if
