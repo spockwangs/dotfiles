@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-13 14:26:30 spockwang>
+;; Time-stamp: <2025-01-13 20:21:15 spockwang>
 ;;
 
 (setq
@@ -305,12 +305,8 @@
 ;; Show matched parentheses.
 (show-paren-mode t)
 
-;; Automatic backup but no version control.
-(setq make-backup-files t
-      version-control t
-      delete-old-versions t
-      kept-new-versions 3
-      kept-old-versions 0)
+;; Disable automatic backup.
+(setq make-backup-files nil)
 
 (global-auto-revert-mode t)
 
