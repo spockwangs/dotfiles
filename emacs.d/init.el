@@ -40,11 +40,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide info about the user and running environment.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(when (memq window-system '(mac ns))
 (use-package exec-path-from-shell
   :demand t
   :init
   ;; Copy environment variables seen by shell to emacs.
-  (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
