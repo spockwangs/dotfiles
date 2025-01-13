@@ -21,7 +21,13 @@
                             (if (locate-dominating-file default-directory "GTAGS")
                                 (gtags-mode)
                               (progn (eglot-ensure)
-                                     (add-to-list 'eglot-server-programs '(c++-mode . ("clangd" "--log=verbose" "--query-driver=/usr/bin/clang++")))))))
+                                     (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"
+                                                                                       "-j" "6"
+                                                                                       "--log=error"
+                                                                                       "--malloc-trim"
+                                                                                       "--query-driver=/usr/**/clang++,/usr/**/clang"
+                                                                                       "--completion-style=detailed"
+                                                                                       "--pch-storage=memory")))))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
