@@ -210,6 +210,8 @@ negative"
                               thing
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
+    (unless code-search-url
+      (user-error "You should customize `code-search-url'."))
     (browse-url (concat code-search-url path))))
 
 (defun util/code-search-path (path)
@@ -255,7 +257,7 @@ negative"
          (day (nth 3 calendar-time))
          (begin-time (format "%d-%d-%d 00:00:00" year month day))
          (end-time (format "%d-%d-%d 23:59:59" year month day))
-         (url (concat log-search-url "/#/search/basic?param="
+         (url (concat "/#/search/basic?param="
                       (url-hexify-string (json-serialize
                                        `((env . ,env)
                                          ,(if (string-empty-p module)
@@ -270,7 +272,9 @@ negative"
                                          (excludeKeywordObj . ((,(intern "0") . "")
                                                                (,(intern "1") . "")))
                                          (_type . "share")))))))
-    (browse-url url)))
+    (unless log-search-url
+      (user-error "You should customize `log-search-url'."))
+    (browse-url (concat log-search-url url))))
 
 (defun util/log-search-at-point (keyword module env)
   "Open xlog to search for the symbol at point."
