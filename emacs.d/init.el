@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-13 20:21:15 spockwang>
+;; Time-stamp: <2025-01-14 19:29:07 spockwang>
 ;;
 
 (setq
@@ -41,11 +41,11 @@
 ;; Provide info about the user and running environment.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (memq window-system '(mac ns))
-(use-package exec-path-from-shell
-  :demand t
-  :init
-  ;; Copy environment variables seen by shell to emacs.
-  (exec-path-from-shell-initialize)))
+  (use-package exec-path-from-shell
+    :demand t
+    :init
+    ;; Copy environment variables seen by shell to emacs.
+    (exec-path-from-shell-initialize)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -102,8 +102,8 @@
 (tab-bar-mode 1)
 
 (when (eq window-system 'w32)
-  (bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
-             ("C-<right>" . tab-bar-switch-to-next-tab))
+  (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
+             ("M-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
 (when (eq window-system 'darwin)
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
@@ -231,8 +231,10 @@
 ;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 ;; (define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
 
-;; Find the file at point.
-(bind-keys ("C-c f" . find-file-at-point))
+;; Find the file or directory at point.
+(require 'ffap)
+(bind-keys ("C-x C-f" . find-file-at-point)
+           ("C-x d" . dired-at-point))
 
 ;; Move points.
 (bind-keys ("C-M-f" . forward-symbol)
@@ -264,7 +266,6 @@
            ("cr" . util/code-search-ref)
            ("l" . util/log-search-at-point))
 
-
 (setq
  ;; Save bookmark automatically.
  bookmark-save-flag 1
@@ -274,6 +275,24 @@
 
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
+
+(use-package projectile
+  :hook (after-init . projectile-mode)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map))
+  :custom
+  (projectile-known-projects-file "~/.cache/projectile-bookmarks.eld")
+  :config
+  ;; Shorter modeline
+  (setq-default projectile-mode-line-prefix " Proj")
+
+  ;; Integrate with ffap.
+  (add-to-list 'ffap-alist (cons (rx anything)
+                                 (lambda (filename)
+                                   (locate-file filename (projectile-project-root)))))
+  
+  (when (executable-find "rg")
+    (setq-default projectile-generic-command "rg --files --hidden -0")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text manipulation.
@@ -364,16 +383,16 @@
  ;; Scroll to the first error.
  compilation-scroll-output 'first-error)
 
-(defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
-  "Advice around `compilation-find-file' to enhance file finding."
-  (require 'bazel)
-  (let* ((root-path (bazel--workspace-root default-directory))
-         (found-file (locate-file filename root-path)))
-    (if found-file
-        (find-file-noselect found-file)
-      (apply orig-fun marker filename directory args))))
+(with-eval-after-load 'projectile
+  (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
+    "Advice around `compilation-find-file' to enhance file finding."
+    (let* ((root-path (projectile-project-root))
+           (found-file (locate-file filename root-path)))
+      (if found-file
+          (find-file-noselect found-file)
+        (apply orig-fun marker filename directory args))))
 
-(advice-add 'compilation-find-file :around #'compilation-find-file-smart)
+  (advice-add 'compilation-find-file :around #'compilation-find-file-smart))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
@@ -395,8 +414,8 @@
 
 (use-package google-translate
   :bind
-  (("C-c t" . google-translate-query-translate)
-   ("C-c T" . google-translate-query-translate-reverse))
+  (("C-c h t" . google-translate-query-translate)
+   ("C-c h T" . google-translate-query-translate-reverse))
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
