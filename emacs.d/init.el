@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-14 19:29:07 spockwang>
+;; Time-stamp: <2025-01-14 19:56:19 spockwang>
 ;;
 
 (setq
@@ -93,13 +93,13 @@
 (menu-bar-mode 0)
 
 ;; Config tab bar.
-(setq tab-bar-show 1                    ; hide tab bar if <=1 tabs are open
-      tab-bar-close-button-show nil     ; hide tab bar close button
-      tab-bar-tab-hints t
-      tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
-      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
-      tab-bar-tab-name-truncated-max 50)
 (tab-bar-mode 1)
+(custom-set-variables '(tab-bar-show 1)                    ; hide tab bar if <=1 tabs are open
+                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
+                      '(tab-bar-tab-hints t)
+                      '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+                      '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
+                      '(tab-bar-tab-name-truncated-max 50))
 
 (when (eq window-system 'w32)
   (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
@@ -298,7 +298,7 @@
 ;; Text manipulation.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set default major mode to text-mode.
-(setq major-mode 'text-mode)
+(setq-default major-mode 'text-mode)
 
 ;; Set default fill column.
 (setq-default fill-column 100)
