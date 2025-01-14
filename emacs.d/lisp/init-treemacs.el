@@ -3,7 +3,9 @@
   (treemacs-set-width (* 0.3 (frame-width)))
   (setq treemacs-persist-file "~/.cache/treemacs-persist")
   :bind (("<f8>" . treemacs)
-         ("M-0" . treemacs-select-window)))
+         ("M-0" . treemacs-select-window)
+         ("C-c t n" . treemacs-create-workspace)
+         ("C-c t a" . treemacs-add-project-to-workspace)))
 
 (use-package treemacs-nerd-icons
   :after (treemacs nerd-icons)
