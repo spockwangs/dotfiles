@@ -2,6 +2,7 @@
   :custom
   (helm-buffers-fuzzy-matching t)
   (helm-buffer-max-length 50)
+  (helm-ff-guess-ffap-filenames t)
   :config
   (require 'helm-autoloads)
   (helm-autoresize-mode t)
