@@ -4,19 +4,19 @@
   :ensure nil
   :demand
   :custom
-  (org-directory (concat my-icloud-path "Notes/"))
-  (org-agenda-files `(,org-directory "GTD/tasks.org"))
+  (org-directory (expand-file-name "GTD" my-icloud-path))
+  (org-agenda-files (list org-directory))
   (org-agenda-file-regexp "\\`[^.].*\\.org\\'")
   (org-todo-keywords
    '((sequence "TODO(t!)" "DOING(i!)" "WAITING(s)" "|" "DONE(d!)" "CANCELED(c@/!)")))
   (org-log-into-drawer "LOGBOOK")
-  (org-archive-location (concat org-directory "GTD/archive.org::datetree/"))
+  (org-archive-location (expand-file-name "GTD/archive.org::datetree/" my-icloud-path))
   (org-capture-templates
-   `(("i" "Inbox" entry (file "GTD/inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
-     ("r" "Reading" entry (file+olp "GTD/tasks.org" "Reading") "* TODO %^{title}%?")
-     ("w" "Work" entry (file+olp "GTD/tasks.org" "Work") "* TODO %^{task}%?")
-     ("a" "Agenda" entry (file+olp "GTD/tasks.org" "Agenda") "* TODO %^{description}%?\nSCHEDULED: %^{Date}t")
-     ("t" "Todo" entry (file+olp "GTD/tasks.org" "Todo") "* TODO %^{task}%?")))
+   `(("i" "Inbox" entry (file "inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
+     ("r" "Reading" entry (file+olp "tasks.org" "Reading") "* TODO %^{title}%?")
+     ("w" "Work" entry (file+olp "tasks.org" "Work") "* TODO %^{task}%?")
+     ("a" "Agenda" entry (file+olp "tasks.org" "Agenda") "* TODO %^{description}%?\nSCHEDULED: %^{Date}t")
+     ("t" "Todo" entry (file+olp "tasks.org" "Todo") "* TODO %^{task}%?")))
   (org-agenda-custom-commands
    '(("c" "Agenda bird view"
       ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE")))))
