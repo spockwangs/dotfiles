@@ -2,11 +2,10 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-14 19:56:19 spockwang>
+;; Time-stamp: <2025-01-15 21:07:54 spockwang>
 ;;
 
 (setq
- debug-on-error t
  use-package-verbose t
  use-package-expand-minimally nil
  use-package-compute-statistics t
@@ -219,22 +218,19 @@
 ;; Browse: find buffers, files or search around.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode t)
-(setq ido-save-directory-list-file "~/.cache/ido.last"
-      ido-create-new-buffer 'always
-      ido-enable-regexp t
-      ido-enable-flex-matching t
-      ido-everywhere t)
+(custom-set-variables '(ido-save-directory-list-file "~/.cache/ido.last")
+                      '(ido-create-new-buffer 'always)
+                      '(ido-enable-regexp t)
+                      '(ido-enable-flex-matching t)
+                      '(ido-everywhere t)
+                      '(ido-use-url-at-point t)
+                      '(ido-use-filename-at-point 'guess))
 
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
 ;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 ;; (define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
-
-;; Find the file or directory at point.
-(require 'ffap)
-(bind-keys ("C-x C-f" . find-file-at-point)
-           ("C-x d" . dired-at-point))
 
 ;; Move points.
 (bind-keys ("C-M-f" . forward-symbol)
@@ -285,11 +281,15 @@
   :config
   ;; Shorter modeline
   (setq-default projectile-mode-line-prefix " Proj")
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-enable-caching t)
 
   ;; Integrate with ffap.
+  (require 'ffap)
   (add-to-list 'ffap-alist (cons (rx anything)
                                  (lambda (filename)
-                                   (locate-file filename (projectile-project-root)))))
+                                   (locate-file filename (projectile-project-root))))
+               t)
   
   (when (executable-find "rg")
     (setq-default projectile-generic-command "rg --files --hidden -0")))
@@ -375,7 +375,11 @@
   (require 'ansi-color)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
-  (add-hook 'compilation-mode-hook 'visual-line-mode))
+  (add-hook 'compilation-mode-hook 'visual-line-mode)
+  (add-hook 'compilation-finish-functions
+               (lambda (buffer status)
+                 (and (fboundp 'w32-notification-notify)
+                      (w32-notification-notify :title "Compilation complete" :body "xxx")))))
 
 (setq
  ;; Only cares about errors.
@@ -383,16 +387,15 @@
  ;; Scroll to the first error.
  compilation-scroll-output 'first-error)
 
-(with-eval-after-load 'projectile
-  (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
-    "Advice around `compilation-find-file' to enhance file finding."
-    (let* ((root-path (projectile-project-root))
-           (found-file (locate-file filename root-path)))
-      (if found-file
-          (find-file-noselect found-file)
-        (apply orig-fun marker filename directory args))))
+(require 'ffap)
+(defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
+  "Advice around `compilation-find-file' to enhance file finding."
+  (let* ((found-file (find-file-at-point filename)))
+    (if found-file
+        (find-file-noselect found-file)
+      (apply orig-fun marker filename directory args))))
 
-  (advice-add 'compilation-find-file :around #'compilation-find-file-smart))
+(advice-add 'compilation-find-file :around #'compilation-find-file-smart)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
