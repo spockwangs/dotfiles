@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-15 21:07:54 spockwang>
+;; Time-stamp: <2025-01-16 01:25:34 spock>
 ;;
 
 (setq
@@ -104,7 +104,7 @@
   (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
              ("M-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
-(when (eq window-system 'darwin)
+(when (eq window-system 'ns)
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
              ("s-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
