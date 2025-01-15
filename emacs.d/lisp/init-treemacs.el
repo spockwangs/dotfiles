@@ -1,9 +1,13 @@
 (use-package treemacs
+  :bind (("<f8>" . treemacs)
+         ("M-0" . treemacs-select-window)
+         ("C-c t n" . treemacs-create-workspace)
+         ("C-c t s" . treemacs-switch-workspace)
+         ("C-c t a" . treemacs-add-project-to-workspace))
   :config
   (treemacs-set-width (* 0.3 (frame-width)))
-  (setq treemacs-persist-file "~/.cache/treemacs-persist")
-  :bind (("<f8>" . treemacs)
-         ("M-0" . treemacs-select-window)))
+  (require 'treemacs-customization)
+  (setq treemacs-persist-file "~/.cache/treemacs-persist"))
 
 (use-package treemacs-nerd-icons
   :after (treemacs nerd-icons)

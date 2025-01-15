@@ -4,13 +4,13 @@
   :ensure nil
   :demand
   :custom
-  (org-directory (expand-file-name "GTD" my-icloud-path))
+  (org-directory (expand-file-name "GTD/" my-icloud-path))
   (org-agenda-files (list org-directory))
   (org-agenda-file-regexp "\\`[^.].*\\.org\\'")
   (org-todo-keywords
    '((sequence "TODO(t!)" "DOING(i!)" "WAITING(s)" "|" "DONE(d!)" "CANCELED(c@/!)")))
   (org-log-into-drawer "LOGBOOK")
-  (org-archive-location (expand-file-name "GTD/archive.org::datetree/" my-icloud-path))
+  (org-archive-location (concat org-directory "archive.org::datetree/"))
   (org-capture-templates
    `(("i" "Inbox" entry (file "inbox.org") "* [%<%F %R>] %^{heading} %^g\n %?\n")
      ("r" "Reading" entry (file+olp "tasks.org" "Reading") "* TODO %^{title}%?")

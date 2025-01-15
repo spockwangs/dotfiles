@@ -2,11 +2,10 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-13 20:21:15 spockwang>
+;; Time-stamp: <2025-01-15 21:07:54 spockwang>
 ;;
 
 (setq
- debug-on-error t
  use-package-verbose t
  use-package-expand-minimally nil
  use-package-compute-statistics t
@@ -41,11 +40,11 @@
 ;; Provide info about the user and running environment.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (when (memq window-system '(mac ns))
-(use-package exec-path-from-shell
-  :demand t
-  :init
-  ;; Copy environment variables seen by shell to emacs.
-  (exec-path-from-shell-initialize)))
+  (use-package exec-path-from-shell
+    :demand t
+    :init
+    ;; Copy environment variables seen by shell to emacs.
+    (exec-path-from-shell-initialize)))
 
 ;; Set language environment and coding system.
 ;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
@@ -93,17 +92,17 @@
 (menu-bar-mode 0)
 
 ;; Config tab bar.
-(setq tab-bar-show 1                    ; hide tab bar if <=1 tabs are open
-      tab-bar-close-button-show nil     ; hide tab bar close button
-      tab-bar-tab-hints t
-      tab-bar-format '(tab-bar-format-tabs tab-bar-separator)
-      tab-bar-tab-name-function #'tab-bar-tab-name-truncated
-      tab-bar-tab-name-truncated-max 50)
 (tab-bar-mode 1)
+(custom-set-variables '(tab-bar-show 1)                    ; hide tab bar if <=1 tabs are open
+                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
+                      '(tab-bar-tab-hints t)
+                      '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+                      '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
+                      '(tab-bar-tab-name-truncated-max 50))
 
 (when (eq window-system 'w32)
-  (bind-keys ("C-<left>" . tab-bar-switch-to-prev-tab)
-             ("C-<right>" . tab-bar-switch-to-next-tab))
+  (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
+             ("M-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
 (when (eq window-system 'darwin)
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
@@ -219,20 +218,19 @@
 ;; Browse: find buffers, files or search around.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode t)
-(setq ido-save-directory-list-file "~/.cache/ido.last"
-      ido-create-new-buffer 'always
-      ido-enable-regexp t
-      ido-enable-flex-matching t
-      ido-everywhere t)
+(custom-set-variables '(ido-save-directory-list-file "~/.cache/ido.last")
+                      '(ido-create-new-buffer 'always)
+                      '(ido-enable-regexp t)
+                      '(ido-enable-flex-matching t)
+                      '(ido-everywhere t)
+                      '(ido-use-url-at-point t)
+                      '(ido-use-filename-at-point 'guess))
 
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
 ;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 ;; (define-key dired-mode-map (kbd "^") 'dired-up-directory-same-buffer)
-
-;; Find the file at point.
-(bind-keys ("C-c f" . find-file-at-point))
 
 ;; Move points.
 (bind-keys ("C-M-f" . forward-symbol)
@@ -264,7 +262,6 @@
            ("cr" . util/code-search-ref)
            ("l" . util/log-search-at-point))
 
-
 (setq
  ;; Save bookmark automatically.
  bookmark-save-flag 1
@@ -275,11 +272,33 @@
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
 
+(use-package projectile
+  :hook (after-init . projectile-mode)
+  :bind (:map projectile-mode-map
+              ("C-c p" . projectile-command-map))
+  :custom
+  (projectile-known-projects-file "~/.cache/projectile-bookmarks.eld")
+  :config
+  ;; Shorter modeline
+  (setq-default projectile-mode-line-prefix " Proj")
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-enable-caching t)
+
+  ;; Integrate with ffap.
+  (require 'ffap)
+  (add-to-list 'ffap-alist (cons (rx anything)
+                                 (lambda (filename)
+                                   (locate-file filename (projectile-project-root))))
+               t)
+  
+  (when (executable-find "rg")
+    (setq-default projectile-generic-command "rg --files --hidden -0")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Text manipulation.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set default major mode to text-mode.
-(setq major-mode 'text-mode)
+(setq-default major-mode 'text-mode)
 
 ;; Set default fill column.
 (setq-default fill-column 100)
@@ -356,7 +375,11 @@
   (require 'ansi-color)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
-  (add-hook 'compilation-mode-hook 'visual-line-mode))
+  (add-hook 'compilation-mode-hook 'visual-line-mode)
+  (add-hook 'compilation-finish-functions
+               (lambda (buffer status)
+                 (and (fboundp 'w32-notification-notify)
+                      (w32-notification-notify :title "Compilation complete" :body "xxx")))))
 
 (setq
  ;; Only cares about errors.
@@ -364,11 +387,10 @@
  ;; Scroll to the first error.
  compilation-scroll-output 'first-error)
 
+(require 'ffap)
 (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
   "Advice around `compilation-find-file' to enhance file finding."
-  (require 'bazel)
-  (let* ((root-path (bazel--workspace-root default-directory))
-         (found-file (locate-file filename root-path)))
+  (let* ((found-file (find-file-at-point filename)))
     (if found-file
         (find-file-noselect found-file)
       (apply orig-fun marker filename directory args))))
@@ -395,8 +417,8 @@
 
 (use-package google-translate
   :bind
-  (("C-c t" . google-translate-query-translate)
-   ("C-c T" . google-translate-query-translate-reverse))
+  (("C-c h t" . google-translate-query-translate)
+   ("C-c h T" . google-translate-query-translate-reverse))
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
