@@ -1,5 +1,5 @@
 (use-package gtags-mode)
-  
+
 (use-package cc-mode
   :mode (("\\.h\\'" . c++-mode)
          ("\\.c\\'" . c-mode)
@@ -17,17 +17,19 @@
                             (turn-on-auto-fill)
                             (c-toggle-auto-newline -1)
                             (when (fboundp 'company-complete)
-                                (add-hook 'completion-at-point-functions #'company-complete nil 'local))
+                              (add-hook 'completion-at-point-functions #'company-complete nil 'local))
                             (if (locate-dominating-file default-directory "GTAGS")
                                 (gtags-mode)
-                              (progn (eglot-ensure)
-                                     (add-to-list 'eglot-server-programs '(c++-mode . ("clangd"
-                                                                                       "-j" "6"
-                                                                                       "--log=error"
-                                                                                       "--malloc-trim"
-                                                                                       "--query-driver=/usr/**/clang++,/usr/**/clang"
-                                                                                       "--completion-style=detailed"
-                                                                                       "--pch-storage=memory")))))))
+                              (progn (require 'eglot)
+                                     (add-to-list 'eglot-server-programs
+                                                  '(c++-mode . ("clangd"
+                                                                "-j" "6"
+                                                                "--log=error"
+                                                                "--malloc-trim"
+                                                                "--query-driver=/usr/**/clang++,/usr/**/clang"
+                                                                "--completion-style=detailed"
+                                                                "--pch-storage=memory")))
+                                     (eglot-ensure)))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
