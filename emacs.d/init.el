@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-16 15:22:34 spockwang>
+;; Time-stamp: <2025-01-17 01:15:30 spock>
 ;;
 
 (setq
@@ -109,8 +109,8 @@
              ("s-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
 
-;; Show line numbers in the left margin.
-(global-display-line-numbers-mode)
+;; Show line numbers in some modes.
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 
 ;; Configure mode line.
 (use-package doom-modeline
@@ -495,7 +495,7 @@
             (unless (server-running-p)
               (server-start))))
 
-(defun get-tab-name-for-buffer (buffer)
+(defun my-get-tab-name-for-buffer (buffer)
   "Find the Treemacs workspace associated with the current buffer."
   (require 'treemacs-workspaces)
   (with-current-buffer buffer
@@ -503,10 +503,22 @@
            (workspace (treemacs-find-workspace-by-path file-or-dir)))
       (if workspace         
           (treemacs-workspace->name workspace)
-        "Emacs"))))
+        (cond ((memq major-mode '(org-agenda-mode))
+               "Agenda")
+              (t "Emacs"))))))
 
-(defun switch-to-buffer-and-tab (buffer &rest args)
-  (let ((tab-name (get-tab-name-for-buffer buffer)))
-    (tab-bar-switch-to-tab tab-name)))
+(defun my-switch-to-buffer-and-tab (buffer &rest args)
+  (let ((tab-name (my-get-tab-name-for-buffer buffer)))
+    (tab-bar-switch-to-tab tab-name)
+    (let ((workspace (treemacs-find-workspace-by-name tab-name)))
+      (when workspace
+        (setf (treemacs-current-workspace) workspace)
+        (message "workspace: %s" workspace)
+        (treemacs-without-following
+         (--when-let (treemacs-get-local-window)
+           (save-selected-window
+             (with-selected-window it
+               (treemacs-quit))
+             (treemacs-select-window))))))))
 
-(advice-add 'ido-visit-buffer :before #'switch-to-buffer-and-tab)
+(advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab)
