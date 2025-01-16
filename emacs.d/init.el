@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-15 21:07:54 spockwang>
+;; Time-stamp: <2025-01-16 15:16:48 spockwang>
 ;;
 
 (setq
@@ -371,15 +371,32 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhancing compilation mode.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package alert
+  :demand t
+  :config
+  (defun my-notify (info)
+    (let ((title (plist-get info :title))
+          (body (plist-get info :message))
+          (icon (or (plist-get info :icon) alert-default-icon)))
+      (when (fboundp 'w32-notification-notify)
+        (let ((args (list :title title :body body :level 'info)))
+          (let ((notify-id (apply #'w32-notification-notify args)))
+            (run-with-timer 10 nil #'w32-notification-close notify-id))))))
+  
+  (alert-define-style
+   'desktop-notification
+   :title "Desktop Notification style"
+   :notifier #'my-notify)
+  (setq alert-default-style 'desktop-notification))
+
 (with-eval-after-load 'compile
   (require 'ansi-color)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
   (add-hook 'compilation-finish-functions
-               (lambda (buffer status)
-                 (and (fboundp 'w32-notification-notify)
-                      (w32-notification-notify :title "Compilation complete" :body "xxx")))))
+            (lambda (buffer status)
+              (alert status :title (format "From %s" (buffer-name buffer))))))
 
 (setq
  ;; Only cares about errors.
@@ -477,3 +494,19 @@
             (require 'server)
             (unless (server-running-p)
               (server-start))))
+
+(defun get-tab-name-for-buffer (buffer)
+  "Find the Treemacs workspace associated with the current buffer."
+  (require 'treemacs-workspaces)
+  (with-current-buffer buffer
+    (let* ((file-or-dir (or (buffer-file-name) default-directory))
+           (workspace (treemacs-find-workspace-by-path file-or-dir)))
+      (if workspace         
+          (treemacs-workspace->name workspace)
+        "Emacs"))))
+
+(defun switch-to-buffer-and-tab (buffer &rest args)
+  (let ((tab-name (get-tab-name-for-buffer buffer)))
+    (tab-bar-switch-to-tab tab-name)))
+
+(advice-add 'ido-visit-buffer :before #'switch-to-buffer-and-tab)
