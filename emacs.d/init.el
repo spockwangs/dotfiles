@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-17 12:43:56 spockwang>
+;; Time-stamp: <2025-01-17 15:26:26 spockwang>
 ;;
 
 (setq
@@ -492,30 +492,29 @@
             (unless (server-running-p)
               (server-start))))
 
-(defun my-get-tab-name-for-buffer (buffer)
+(defun my-switch-to-buffer-and-tab (buffer &rest _)
   "Find the Treemacs workspace associated with the current buffer."
   (require 'treemacs-workspaces)
-  (with-current-buffer buffer
-    (let* ((file-or-dir (or (buffer-file-name) default-directory))
-           (workspace (treemacs-find-workspace-by-path file-or-dir)))
-      (if workspace         
-          (treemacs-workspace->name workspace)
-        (cond ((memq major-mode '(org-agenda-mode))
-               "Agenda")
-              (t "Emacs"))))))
+  (let (tab-name)
+    (with-current-buffer buffer
+      (let* ((file-or-dir (or (buffer-file-name) default-directory))
+             (workspace (treemacs-find-workspace-by-path file-or-dir)))
+        (setq tab-name
+              (if workspace         
+                  (treemacs-workspace->name workspace)
+                (cond ((memq major-mode '(org-agenda-mode))
+                       "Agenda")
+                      (t "Emacs"))))))
+    (tab-bar-switch-to-tab tab-name)))
 
-(defun my-switch-to-buffer-and-tab (buffer &rest args)
-  (let ((tab-name (my-get-tab-name-for-buffer buffer)))
-    (tab-bar-switch-to-tab tab-name)
-    (let ((workspace (treemacs-find-workspace-by-name tab-name)))
-      (when workspace
-        (setf (treemacs-current-workspace) workspace)
-        (message "workspace: %s" workspace)
-        (treemacs-without-following
-         (--when-let (treemacs-get-local-window)
-           (save-selected-window
-             (with-selected-window it
-               (treemacs-quit))
-             (treemacs-select-window))))))))
+(defun my-on-switch-tab (&rest _)
+  (let* ((tab-name (cdr (assq 'name (tab-bar--current-tab))))
+         (workspace (treemacs-find-workspace-by-name tab-name)))
+    (when workspace
+      (treemacs-do-switch-workspace workspace))))
 
 (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab)
+(advice-add 'tab-bar-select-tab :after #'my-on-switch-tab)
+(add-to-list 'tab-bar-tab-post-open-functions #'my-on-switch-tab)
+
+;; (advice-remove 'tab-bar-select-tab #'my-on-switch-tab)

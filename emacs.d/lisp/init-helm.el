@@ -4,6 +4,7 @@
   (helm-buffer-max-length 50)
   (helm-ff-guess-ffap-filenames t)
   :config
+  (require 'helm-buffers)
   (require 'helm-autoloads)
   (helm-autoresize-mode t)
   :bind (("M-x" . helm-M-x)

@@ -1,4 +1,5 @@
 (use-package treemacs
+  ;; :hook (after-init . treemacs-start-on-boot)
   :bind (("<f8>" . treemacs)
          ("M-0" . treemacs-select-window)
          ("C-c t n" . treemacs-create-workspace)
@@ -17,7 +18,5 @@
   ;; You should download (https://www.nerdfonts.com/font-downloads) and install the font "Symbols
   ;; Nerd Font" first.
   (treemacs-load-theme "nerd-icons"))
-
-(treemacs-start-on-boot)
 
 (provide 'init-treemacs)
