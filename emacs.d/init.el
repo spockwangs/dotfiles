@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-16 15:22:34 spockwang>
+;; Time-stamp: <2025-01-17 10:58:52 spockwang>
 ;;
 
 (setq
@@ -358,9 +358,6 @@
         try-expand-line
         try-complete-lisp-symbol-partially
         try-complete-lisp-symbol))
-
-(bind-key "C-c i d" #'util/insert-current-date)
-(bind-key "C-c i t" #'util/insert-current-time)
 
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util/delete-file-and-buffer)
