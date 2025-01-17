@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-17 15:26:26 spockwang>
+;; Time-stamp: <2025-01-18 02:11:44 spock>
 ;;
 
 (setq
@@ -65,7 +65,7 @@
   "The iCloud path")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Set UI, fonts, themes, etc.
+;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
@@ -295,7 +295,7 @@
     (setq-default projectile-generic-command "rg --files --hidden -0")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Text manipulation.
+;; Editing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set default major mode to text-mode.
 (setq-default major-mode 'text-mode)
@@ -365,6 +365,11 @@
 ;; Rename current visited file.
 (bind-key "C-c r" #'rename-visited-file)
 
+;; Use TAB key to do indent and auto-completion.
+(setq tab-always-indent 'complete
+      tab-first-completion 'eol)
+(bind-key "TAB" #'indent-for-tab-command prog-mode-map)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enhancing compilation mode.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -388,28 +393,27 @@
 
 (with-eval-after-load 'compile
   (require 'ansi-color)
+  (setq
+   ;; Only cares about errors.
+   compilation-skip-threshold 2
+   ;; Scroll to the first error.
+   compilation-scroll-output 'first-error)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
   (add-hook 'compilation-finish-functions
             (lambda (buffer status)
-              (alert status :title (format "From %s" (buffer-name buffer))))))
+              (alert status :title (format "From %s" (buffer-name buffer)))))
 
-(setq
- ;; Only cares about errors.
- compilation-skip-threshold 2
- ;; Scroll to the first error.
- compilation-scroll-output 'first-error)
+  (require 'ffap)
+  (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
+    "Advice around `compilation-find-file' to enhance file finding."
+    (let* ((found-file (find-file-at-point filename)))
+      (if found-file
+          (find-file-noselect found-file)
+        (apply orig-fun marker filename directory args))))
 
-(require 'ffap)
-(defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
-  "Advice around `compilation-find-file' to enhance file finding."
-  (let* ((found-file (find-file-at-point filename)))
-    (if found-file
-        (find-file-noselect found-file)
-      (apply orig-fun marker filename directory args))))
-
-(advice-add 'compilation-find-file :around #'compilation-find-file-smart)
+  (advice-add 'compilation-find-file :around #'compilation-find-file-smart))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
@@ -437,10 +441,11 @@
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
 
-(setq eglot-autoshutdown t)
-(setq
- tab-always-indent 'complete
- tab-first-completion 'eol)
+(use-package eglot
+  :ensure nil
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-sync-connect nil))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
@@ -514,7 +519,7 @@
       (treemacs-do-switch-workspace workspace))))
 
 (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab)
-(advice-add 'tab-bar-select-tab :after #'my-on-switch-tab)
-(add-to-list 'tab-bar-tab-post-open-functions #'my-on-switch-tab)
+;; (advice-add 'tab-bar-select-tab :after #'my-on-switch-tab)
+;; (add-to-list 'tab-bar-tab-post-open-functions #'my-on-switch-tab)
 
 ;; (advice-remove 'tab-bar-select-tab #'my-on-switch-tab)

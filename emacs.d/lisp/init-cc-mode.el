@@ -1,17 +1,11 @@
 (use-package gtags-mode)
 
 (use-package cc-mode
-  :mode (("\\.h\\'" . c++-mode)
-         ("\\.c\\'" . c-mode)
-         ("\\.cpp\\'" . c++-mode)
-         ("\\.cc\\'" . c++-mode)
-         ("\\.java\\'" . java-mode))
   :bind (:map c-mode-base-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . compile-under-directory)
-              ("TAB" . indent-for-tab-command))
+              ("C-c C-b" . compile-under-directory))
   :hook ((c-mode-common . (lambda ()
                             (subword-mode 1)
                             (turn-on-auto-fill)
