@@ -286,4 +286,11 @@ negative"
                      (completing-read "Env: " '("test" "idc"))))
   (util/log-search env module keyword))
 
+(defun util/tab-create (name)
+  "Create a tab of NAME if it does not exist."
+  (unless (cl-find-if (lambda (item) (equal (alist-get 'name item) name))
+                      (funcall tab-bar-tabs-function))
+    (tab-new)
+    (tab-bar-rename-tab name)))
+
 (provide 'util)
