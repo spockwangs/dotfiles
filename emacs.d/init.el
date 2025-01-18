@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-18 15:12:21 spock>
+;; Time-stamp: <2025-01-18 19:08:15 spock>
 ;;
 
 (setq
@@ -386,10 +386,14 @@
             (run-with-timer 10 nil #'w32-notification-close notify-id))))))
   
   (alert-define-style
-   'desktop-notification
-   :title "Desktop Notification style"
+   'windows-notifier
+   :title "Windows Desktop Notification style"
    :notifier #'my-notify)
-  (setq alert-default-style 'desktop-notification))
+
+  (when (eq system-type 'w32)
+    (setq alert-default-style 'windows-notifier))
+  (when (eq system-type 'darwin)
+    (setq alert-default-style 'osx-notifier)))
 
 (with-eval-after-load 'compile
   (require 'ansi-color)
