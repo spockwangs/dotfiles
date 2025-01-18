@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-18 02:11:44 spock>
+;; Time-stamp: <2025-01-18 15:12:21 spock>
 ;;
 
 (setq
@@ -91,15 +91,6 @@
 ;; Hide the menu bar.
 (menu-bar-mode 0)
 
-;; Config tab bar.
-(tab-bar-mode 1)
-(custom-set-variables '(tab-bar-show 1)                    ; hide tab bar if <=1 tabs are open
-                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
-                      '(tab-bar-tab-hints t)
-                      '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
-                      '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
-                      '(tab-bar-tab-name-truncated-max 50))
-
 (when (eq window-system 'w32)
   (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
              ("M-<right>" . tab-bar-switch-to-next-tab))
@@ -126,6 +117,12 @@
 
 ;; Highlight current line.
 (global-hl-line-mode 1)
+
+;; Syntax highlight.
+(global-font-lock-mode 1)
+
+;; Show matched parentheses.
+(show-paren-mode t)
 
 (defun set-font ()
   ;; Set font only in GUI frame.
@@ -294,6 +291,15 @@
   (when (executable-find "rg")
     (setq-default projectile-generic-command "rg --files --hidden -0")))
 
+;; Enable tab bar.
+(tab-bar-mode 1)
+(custom-set-variables '(tab-bar-show 1)                    ; hide tab bar if <=1 tabs are open
+                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
+                      '(tab-bar-tab-hints t)
+                      '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
+                      '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
+                      '(tab-bar-tab-name-truncated-max 50))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Editing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -317,12 +323,6 @@
 
 ;; Set transient-mark-mode.
 (setq transient-mark-mode t)
-
-;; Syntax highlight.
-(global-font-lock-mode 1)
-
-;; Show matched parentheses.
-(show-paren-mode t)
 
 ;; Disable automatic backup.
 (setq make-backup-files nil)
@@ -401,9 +401,10 @@
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
-  (add-hook 'compilation-finish-functions
-            (lambda (buffer status)
-              (alert status :title (format "From %s" (buffer-name buffer)))))
+  (when (fboundp 'alert)
+    (add-hook 'compilation-finish-functions
+              (lambda (buffer status)
+                (alert status :title (format "From %s" (buffer-name buffer))))))
 
   (require 'ffap)
   (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
@@ -496,30 +497,3 @@
             (require 'server)
             (unless (server-running-p)
               (server-start))))
-
-(defun my-switch-to-buffer-and-tab (buffer &rest _)
-  "Find the Treemacs workspace associated with the current buffer."
-  (require 'treemacs-workspaces)
-  (let (tab-name)
-    (with-current-buffer buffer
-      (let* ((file-or-dir (or (buffer-file-name) default-directory))
-             (workspace (treemacs-find-workspace-by-path file-or-dir)))
-        (setq tab-name
-              (if workspace         
-                  (treemacs-workspace->name workspace)
-                (cond ((memq major-mode '(org-agenda-mode))
-                       "Agenda")
-                      (t "Emacs"))))))
-    (tab-bar-switch-to-tab tab-name)))
-
-(defun my-on-switch-tab (&rest _)
-  (let* ((tab-name (cdr (assq 'name (tab-bar--current-tab))))
-         (workspace (treemacs-find-workspace-by-name tab-name)))
-    (when workspace
-      (treemacs-do-switch-workspace workspace))))
-
-(advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab)
-;; (advice-add 'tab-bar-select-tab :after #'my-on-switch-tab)
-;; (add-to-list 'tab-bar-tab-post-open-functions #'my-on-switch-tab)
-
-;; (advice-remove 'tab-bar-select-tab #'my-on-switch-tab)
