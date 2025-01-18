@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-18 19:08:15 spock>
+;; Time-stamp: <2025-01-18 23:29:20 spock>
 ;;
 
 (setq
@@ -298,7 +298,8 @@
                       '(tab-bar-tab-hints t)
                       '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
                       '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
-                      '(tab-bar-tab-name-truncated-max 50))
+                      '(tab-bar-tab-name-truncated-max 50)
+                      '(tab-bar-new-tab-choice "*scratch*"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Editing
