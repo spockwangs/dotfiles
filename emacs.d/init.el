@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-18 23:29:20 spock>
+;; Time-stamp: <2025-01-19 16:24:11 spock>
 ;;
 
 (setq
@@ -67,6 +67,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 
@@ -375,7 +377,6 @@
 ;; Enhancing compilation mode.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package alert
-  :demand t
   :config
   (defun my-notify (info)
     (let ((title (plist-get info :title))
