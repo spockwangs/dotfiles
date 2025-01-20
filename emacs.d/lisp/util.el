@@ -211,7 +211,7 @@ negative"
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
     (unless code-search-url
-      (user-error "You should customize `code-search-url'."))
+      (customize-save-variable code-search-url (completing-read "Customize `code-search-url': " nil)))
     (browse-url (concat code-search-url path))))
 
 (defun util/code-search-path (path)
@@ -273,7 +273,7 @@ negative"
                                                                   (,(intern "1") . "")))
                                             (_type . "share")))))))
     (unless log-search-url
-      (user-error "You should customize `log-search-url'."))
+      (customize-save-variable 'log-search-url (completing-read "Customize `log-search-url': " nil)))
     (browse-url (concat log-search-url url))))
 
 (defun util/log-search-at-point (keyword module env)
