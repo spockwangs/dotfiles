@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-20 12:35:05 spockwang>
+;; Time-stamp: <2025-01-20 12:37:35 spockwang>
 ;;
 
 (setq
@@ -73,7 +73,7 @@
 (setq inhibit-startup-message t)
 
 ;; Get a visual, instead of audio, feedback of an exception.
-(setq visible-bell 0)
+(setq visible-bell nil)
 
 ;; Configure frame title bar.
 (setq frame-title-format
@@ -99,7 +99,7 @@
   (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
              ("M-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
-(when (eq window-system 'darwin)
+(when (eq system-type 'darwin)
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
              ("s-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
