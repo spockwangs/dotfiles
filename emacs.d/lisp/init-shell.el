@@ -5,6 +5,7 @@
   :custom
   (comint-use-prompt-regexp 1)
   :config
+  (setq shell-command-switch "-ic")
   ;; Use bash for remote ssh.
   (connection-local-set-profile-variables
    'remote-bash

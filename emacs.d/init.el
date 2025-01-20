@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-18 19:08:15 spock>
+;; Time-stamp: <2025-01-20 12:04:50 spockwang>
 ;;
 
 (setq
@@ -79,23 +79,25 @@
             '(buffer-file-name "%f" (dired-directory
                                      dired-directory "%b"))))
 
-;; Hide tool bar.
-(tool-bar-mode 0)
 
-;; Hide right scroll bar.
-(scroll-bar-mode 0)
+(when (memq window-system '(x, w32, ns))
+  ;; Hide tool bar.
+  (tool-bar-mode 0)
 
-;; Hide horizontal scroll bar.
-(horizontal-scroll-bar-mode 0)
+  ;; Hide right scroll bar.
+  (scroll-bar-mode 0)
+
+  ;; Hide horizontal scroll bar.
+  (horizontal-scroll-bar-mode 0))
 
 ;; Hide the menu bar.
 (menu-bar-mode 0)
 
-(when (eq window-system 'w32)
+(when (eq system-type 'windows-nt)
   (bind-keys ("M-<left>" . tab-bar-switch-to-prev-tab)
              ("M-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(meta))))
-(when (eq window-system 'ns)
+(when (eq window-system 'darwin)
   (bind-keys ("s-<left>" . tab-bar-switch-to-prev-tab)
              ("s-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
