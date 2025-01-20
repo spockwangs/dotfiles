@@ -1,18 +1,17 @@
 (defun my-treemacs-switch-to-workspace (name)
   "Switch to the specified treemacs workspace NAME. Create it if not exist."
-  (interactive (list (completing-read "Switch to workspace: "
-                                      (->> (treemacs-workspaces)
-                                           (--reject (eq it (treemacs-current-workspace)))
-                                           (--map (cons (treemacs-workspace->name it) it)))
-                                      nil 'confirm)))
+  (interactive (list (progn (require 'treemacs)
+                            (completing-read "Switch to workspace: "
+                                             (->> (treemacs-workspaces)
+                                                  (--reject (eq it (treemacs-current-workspace)))
+                                                  (--map (cons (treemacs-workspace->name it) it)))
+                                             nil 'confirm))))
   (let ((workspace (treemacs-find-workspace-by-name name)))
     (unless workspace
       (pcase (treemacs-do-create-workspace name)
         (`(success ,new-workspace) (setq workspace new-workspace))
         (_ (user-error "Failed to create workspace."))))
     (treemacs-do-switch-workspace workspace)))
-
-(autoload 'my-treemacs-switch-to-workspace "treemacs" "Switch treemacs workspaces." t)
 
 (use-package treemacs
   :bind (("<f8>" . treemacs)
@@ -34,30 +33,30 @@
   ;; Nerd Font" first.
   (treemacs-load-theme "nerd-icons"))
 
+(defun my-switch-to-buffer-and-tab (buffer &rest _)
+  "Switch buffer and its associated tab at the same time."
+  (require 'treemacs)
+  (let (tab-name)
+    (with-current-buffer buffer
+      (let* ((file-or-dir (or (buffer-file-name) default-directory))
+             (workspace (treemacs-find-workspace-by-path file-or-dir)))
+        (setq tab-name
+              (if workspace         
+                  (treemacs-workspace->name workspace)
+                (cond ((memq major-mode '(org-agenda-mode))
+                       "Agenda")
+                      (t "Emacs"))))))
+    (tab-bar-switch-to-tab tab-name)))
+
+(with-eval-after-load 'ido
+  (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab))
+
 (use-package my-treemacs-tab-bar
   :ensure nil
-  :after treemacs
+  :after (treemacs tab-bar)
   :demand
   :config
   (treemacs-set-scope-type 'Tabs)
-
-  (defun my-switch-to-buffer-and-tab (buffer &rest _)
-    "Switch buffer and its associated tab at the same time."
-    (require 'treemacs-workspaces)
-    (let (tab-name)
-      (with-current-buffer buffer
-        (let* ((file-or-dir (or (buffer-file-name) default-directory))
-               (workspace (treemacs-find-workspace-by-path file-or-dir)))
-          (setq tab-name
-                (if workspace         
-                    (treemacs-workspace->name workspace)
-                  (cond ((memq major-mode '(org-agenda-mode))
-                         "Agenda")
-                        (t "Emacs"))))))
-      (tab-bar-switch-to-tab tab-name)))
-
-  (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab)
-
   ;; Create a default tab.
   (tab-rename "Emacs"))
 
