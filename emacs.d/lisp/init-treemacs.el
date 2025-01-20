@@ -1,8 +1,24 @@
+(defun my-treemacs-switch-to-workspace (name)
+  "Switch to the specified treemacs workspace NAME. Create it if not exist."
+  (interactive (list (completing-read "Switch to workspace: "
+                                      (->> (treemacs-workspaces)
+                                           (--reject (eq it (treemacs-current-workspace)))
+                                           (--map (cons (treemacs-workspace->name it) it)))
+                                      nil 'confirm)))
+  (let ((workspace (treemacs-find-workspace-by-name name)))
+    (unless workspace
+      (pcase (treemacs-do-create-workspace name)
+        (`(success ,new-workspace) (setq workspace new-workspace))
+        (_ (user-error "Failed to create workspace."))))
+    (treemacs-do-switch-workspace workspace)))
+
+(autoload 'my-treemacs-switch-to-workspace "treemacs" "Switch treemacs workspaces." t)
+
 (use-package treemacs
   :bind (("<f8>" . treemacs)
          ("M-0" . treemacs-select-window)
          ("C-c t n" . treemacs-create-workspace)
-         ("C-c t s" . treemacs-switch-workspace)
+         ("C-c t s" . my-treemacs-switch-to-workspace)
          ("C-c t a" . treemacs-add-project-to-workspace)
          ("C-c t e" . treemacs-edit-workspaces))
   :config
