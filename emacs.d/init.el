@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-20 12:37:35 spockwang>
+;; Time-stamp: <2025-01-20 19:51:04 spockwang>
 ;;
 
 (setq
@@ -417,9 +417,11 @@
   (require 'ffap)
   (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
     "Advice around `compilation-find-file' to enhance file finding."
-    (let* ((found-file (find-file-at-point filename)))
-      (if found-file
-          (find-file-noselect found-file)
+    (let* ((buffer-or-filename (find-file-at-point filename)))
+      (if buffer-or-filename
+          (if (bufferp buffer-or-filename)
+              buffer-or-filename
+            (find-file-noselect buffer-or-filename))
         (apply orig-fun marker filename directory args))))
 
   (advice-add 'compilation-find-file :around #'compilation-find-file-smart))
