@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-20 12:04:50 spockwang>
+;; Time-stamp: <2025-01-20 12:35:05 spockwang>
 ;;
 
 (setq
@@ -67,6 +67,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 
@@ -300,7 +302,8 @@
                       '(tab-bar-tab-hints t)
                       '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
                       '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
-                      '(tab-bar-tab-name-truncated-max 50))
+                      '(tab-bar-tab-name-truncated-max 50)
+                      '(tab-bar-new-tab-choice "*scratch*"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Editing
@@ -376,7 +379,6 @@
 ;; Enhancing compilation mode.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package alert
-  :demand t
   :config
   (defun my-notify (info)
     (let ((title (plist-get info :title))
@@ -392,9 +394,9 @@
    :title "Windows Desktop Notification style"
    :notifier #'my-notify)
 
-  (when (eq system-type 'w32)
+  (when (eq window-system 'w32)
     (setq alert-default-style 'windows-notifier))
-  (when (eq system-type 'darwin)
+  (when (eq window-system 'ns)
     (setq alert-default-style 'osx-notifier)))
 
 (with-eval-after-load 'compile
