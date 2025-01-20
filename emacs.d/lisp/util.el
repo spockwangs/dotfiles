@@ -191,6 +191,12 @@ negative"
         (message "d: %d" (mm2in mm-d))
         (/ pix-d (mm2in mm-d))))))
 
+(defmacro util/customize-variable-if-unset (var)
+  "Prompt to customize VAR if it is nil."
+  `(unless ,var
+    (customize-save-variable
+     ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
+
 (defcustom code-search-url nil
   "The URL of code search.")
 
@@ -210,8 +216,7 @@ negative"
                               thing
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
-    (unless code-search-url
-      (customize-save-variable code-search-url (completing-read "Customize `code-search-url': " nil)))
+    (util/customize-variable-if-unset code-search-url)
     (browse-url (concat code-search-url path))))
 
 (defun util/code-search-path (path)
@@ -272,8 +277,7 @@ negative"
                                             (excludeKeywordObj . ((,(intern "0") . "")
                                                                   (,(intern "1") . "")))
                                             (_type . "share")))))))
-    (unless log-search-url
-      (customize-save-variable 'log-search-url (completing-read "Customize `log-search-url': " nil)))
+    (util/customize-variable-if-unset log-search-url)
     (browse-url (concat log-search-url url))))
 
 (defun util/log-search-at-point (keyword module env)
@@ -283,7 +287,7 @@ negative"
                        (let ((thing (thing-at-point 'symbol)))
                          (or thing (read-from-minibuffer "Search xlog for: "))))
                      (read-from-minibuffer "Module: ")
-                     (completing-read "Env: " '("test" "idc"))))
+                     (completing-read "Env: " '("test" "idc") nil t '("idc" . 0))))
   (util/log-search env module keyword))
 
 (defun util/tab-create (name)
