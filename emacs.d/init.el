@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-19 16:24:11 spock>
+;; Time-stamp: <2025-01-20 11:07:49 spockwang>
 ;;
 
 (setq
@@ -392,9 +392,9 @@
    :title "Windows Desktop Notification style"
    :notifier #'my-notify)
 
-  (when (eq system-type 'w32)
+  (when (eq window-system 'w32)
     (setq alert-default-style 'windows-notifier))
-  (when (eq system-type 'darwin)
+  (when (eq window-system 'ns)
     (setq alert-default-style 'osx-notifier)))
 
 (with-eval-after-load 'compile
