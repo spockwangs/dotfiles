@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-21 11:13:31 spockwang>
+;; Time-stamp: <2025-01-21 23:21:40 spock>
 ;;
 
 (setq
@@ -458,7 +458,7 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil))
+  (eglot-sync-connect 1))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
