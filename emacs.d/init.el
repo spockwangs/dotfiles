@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-20 19:51:04 spockwang>
+;; Time-stamp: <2025-01-21 11:00:32 spockwang>
 ;;
 
 (setq
@@ -346,6 +346,7 @@
 ;; Copy.
 (bind-keys ("C-c y" . util/copy-line)
            ("C-c w" . util/copy-symbol)
+           ("C-c f" . util/copy-filename-at-point)
            ("C-c M-f" . util/copy-current-file-name)
            ("C-c M-d" . util/copy-current-directory)
            ("C-c M-p" . util/copy-current-path))
@@ -416,7 +417,7 @@
 
   (require 'ffap)
   (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
-    "Advice around `compilation-find-file' to enhance file finding."
+    "Advice around `compilation-find-file' to enhance file finding. Return the found buffer."
     (let* ((buffer-or-filename (find-file-at-point filename)))
       (if buffer-or-filename
           (if (bufferp buffer-or-filename)
