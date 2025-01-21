@@ -58,6 +58,15 @@ negative"
         (progn (kill-new str) (message "Copied `%s'." str))
       (message "No symbols under current cursor."))))
 
+(defun util/copy-filename-at-point ()
+  "Copy a filename at the point."
+  (interactive)
+  (let ((str (thing-at-point 'filename)))
+    (if str
+        (progn (kill-new str)
+               (message "Copied `%s'." str))
+      (message "No filename at the point."))))
+
 (defun util/insert-current-date ()
   "Insert current date at current point."
   (interactive)
