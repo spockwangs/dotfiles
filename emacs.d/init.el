@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-21 11:00:32 spockwang>
+;; Time-stamp: <2025-01-21 11:13:31 spockwang>
 ;;
 
 (setq
@@ -279,6 +279,7 @@
               ("C-c p" . projectile-command-map))
   :custom
   (projectile-known-projects-file "~/.cache/projectile-bookmarks.eld")
+  (projectile-cache-file "~/.cache/projectile.cache")
   :config
   ;; Shorter modeline
   (setq-default projectile-mode-line-prefix " Proj")
