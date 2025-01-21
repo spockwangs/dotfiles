@@ -41,12 +41,14 @@
       (let* ((file-or-dir (or (buffer-file-name) default-directory))
              (workspace (treemacs-find-workspace-by-path file-or-dir)))
         (setq tab-name
-              (if workspace         
-                  (treemacs-workspace->name workspace)
-                (cond ((memq major-mode '(org-agenda-mode))
-                       "Agenda")
-                      (t "Emacs"))))))
-    (tab-bar-switch-to-tab tab-name)))
+              (cond (workspace (treemacs-workspace->name workspace))
+                    ((memq major-mode '(org-agenda-mode))
+                     "Agenda")
+                    ((or (memq major-mode '(emacs-lisp-mode))
+                         (string-prefix-p "*" (buffer-name)))
+                     "Emacs")))))
+    (when tab-name
+      (tab-bar-switch-to-tab tab-name))))
 
 (with-eval-after-load 'ido
   (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab))
