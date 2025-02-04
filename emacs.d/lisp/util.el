@@ -53,7 +53,7 @@ negative"
 (defun util/copy-symbol ()
   "Copy a symbol under current cursor."
   (interactive)
-  (let ((str (thing-at-point 'symbol)))
+  (let ((str (thing-at-point 'symbol :no-properties)))
     (if str
         (progn (kill-new str) (message "Copied `%s'." str))
       (message "No symbols under current cursor."))))
@@ -61,7 +61,7 @@ negative"
 (defun util/copy-filename-at-point ()
   "Copy a filename at the point."
   (interactive)
-  (let ((str (thing-at-point 'filename)))
+  (let ((str (thing-at-point 'filename :no-properties)))
     (if str
         (progn (kill-new str)
                (message "Copied `%s'." str))
@@ -298,12 +298,5 @@ negative"
                      (read-from-minibuffer "Module: ")
                      (completing-read "Env: " '("test" "idc") nil t '("idc" . 0))))
   (util/log-search env module keyword))
-
-(defun util/tab-create (name)
-  "Create a tab of NAME if it does not exist."
-  (unless (cl-find-if (lambda (item) (equal (alist-get 'name item) name))
-                      (funcall tab-bar-tabs-function))
-    (tab-new)
-    (tab-bar-rename-tab name)))
 
 (provide 'util)

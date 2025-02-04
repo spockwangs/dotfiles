@@ -12,8 +12,8 @@
          ("C-c b" . helm-mini)
          ("C-c h g" . helm-google-suggest)
          ("M-y" . helm-show-kill-ring)
-         ("C-c i" . helm-imenu)
-         ("C-c I" . helm-imenu-in-all-buffers)))
+         ("M-g i" . helm-imenu)
+         ("M-g I" . helm-imenu-in-all-buffers)))
 
 (use-package helm-xref)
 
