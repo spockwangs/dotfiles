@@ -17,12 +17,13 @@
                               (progn (require 'eglot)
                                      (add-to-list 'eglot-server-programs
                                                   '(c++-mode . ("clangd"
-                                                                "-j" "6"
+                                                                "-j" "10"
                                                                 "--log=error"
-                                                                "--malloc-trim"
-                                                                "--query-driver=/usr/**/clang++,/usr/**/clang"
+                                                                "--query-driver=**/clang++,**/clang"
+                                                                "--background-index"
                                                                 "--completion-style=detailed"
-                                                                "--pch-storage=memory")))
+                                                                "--pch-storage=memory"
+                                                                "--pretty")))
                                      (eglot-ensure)))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))

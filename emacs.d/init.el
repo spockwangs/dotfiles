@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-21 23:21:40 spock>
+;; Time-stamp: <2025-01-29 23:28:09 spock>
 ;;
 
 (setq
@@ -173,6 +173,10 @@
                                           (bg-hl-line . "#434c5e")
                                           (bg-inactive . "#3b4252")
                                           (bg-main . "#2e3440")))
+  (modus-themes-headings '((1 . (2.0))
+                           (2 . (1.7))
+                           (3 . (1.4))
+                           (4 . (1.1))))
   (modus-themes-org-agenda '((event . (varied))
                              (scheduled . rainbow))))
 
@@ -458,7 +462,8 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect 1))
+  (eglot-sync-connect 1)
+  (eglot-report-progress nil))
 
 (use-package which-key
   :hook (after-init . which-key-mode)

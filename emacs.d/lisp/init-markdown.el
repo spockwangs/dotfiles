@@ -32,7 +32,11 @@
   :custom
   (markdown-header-scaling t)
   (markdown-hide-urls t)
-  (markdown-fontify-code-blocks-natively t))
+  (markdown-fontify-code-blocks-natively t)
+  :bind (:map markdown-mode-map
+              ("C-c v" . markdown-view-mode)
+              :map markdown-view-mode-map
+              ("e" . markdown-mode)))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here
