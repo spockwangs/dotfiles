@@ -20,8 +20,12 @@
   (org-agenda-custom-commands
    '(("c" "Agenda bird view"
       ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo '("DONE")))))
-       (alltodo "" ((org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))
-                    (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))))))
+       (tags-todo "+work" ((org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))
+                           (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
+                           (org-agenda-overriding-header "All work tasks:")))
+       (tags-todo "-work" ((org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))
+                           (org-agenda-skip-function '(org-agenda-skip-if nil '(scheduled deadline)))
+                           (org-agenda-overriding-header "Other tasks:")))))
      ("w" tags-todo "+work"
       ((org-overriding-columns-format "%50ITEM %TODO %PRIORITY %TAGS %25SCHEDULED %25DEADLINE")
        (org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))))
