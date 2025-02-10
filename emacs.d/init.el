@@ -2,7 +2,6 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-02-10 15:11:15 spockwang>
 ;;
 
 (setq
@@ -173,10 +172,9 @@
                                           (bg-hl-line . "#434c5e")
                                           (bg-inactive . "#3b4252")
                                           (bg-main . "#2e3440")))
-  (modus-themes-headings '((1 . (2.0))
-                           (2 . (1.7))
-                           (3 . (1.4))
-                           (4 . (1.1))))
+  (modus-themes-headings '((1 . (1.2))
+                           (2 . (1.15))
+                           (3 . (1.1))))
   (modus-themes-org-agenda '((event . (varied))
                              (scheduled . rainbow))))
 
