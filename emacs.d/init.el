@@ -2,7 +2,7 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;; Time-stamp: <2025-01-29 23:28:09 spock>
+;; Time-stamp: <2025-02-10 15:11:15 spockwang>
 ;;
 
 (setq
@@ -224,11 +224,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode t)
 (custom-set-variables '(ido-save-directory-list-file "~/.cache/ido.last")
-                      '(ido-create-new-buffer 'always)
+                      '(ido-create-new-buffer 'prompt)
                       '(ido-enable-regexp t)
                       '(ido-enable-flex-matching t)
                       '(ido-everywhere t)
-                      '(ido-use-url-at-point t)
+                      '(ido-use-url-at-point nil)
                       '(ido-use-filename-at-point 'guess))
 
 ;; Reuse the buffer when browsing in dired buffer.
@@ -302,7 +302,7 @@
 
 ;; Enable tab bar.
 (tab-bar-mode 1)
-(custom-set-variables '(tab-bar-show 1)                    ; hide tab bar if <=1 tabs are open
+(custom-set-variables '(tab-bar-show nil)                    ; hide tab bar if <=1 tabs are open
                       '(tab-bar-close-button-show nil)     ; hide tab bar close button
                       '(tab-bar-tab-hints t)
                       '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
@@ -462,7 +462,7 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect 1)
+  (eglot-sync-connect nil)
   (eglot-report-progress nil))
 
 (use-package which-key
