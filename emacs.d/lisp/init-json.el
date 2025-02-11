@@ -10,10 +10,13 @@
   :config
   (setq json-encoding-default-indentation "    "))
 
-(use-package json-ts-mode
+(use-package yafolding)
+  
+(use-package js
   :ensure nil
-  :mode (("\\.json\\'" . json-ts-mode))
-  :bind (:map json-ts-mode-map
+  :mode (("\\.json\\'" . js-json-mode))
+  :hook (js-json-mode . (lambda () (yafolding-mode)))
+  :bind (:map js-json-mode-map
               ("C-M-\\" . json-format)))
 
 (provide 'init-json)
