@@ -226,7 +226,7 @@
                       '(ido-enable-regexp t)
                       '(ido-enable-flex-matching t)
                       '(ido-everywhere t)
-                      '(ido-use-url-at-point nil)
+                      '(ido-use-url-at-point t)
                       '(ido-use-filename-at-point 'guess))
 
 ;; Reuse the buffer when browsing in dired buffer.
@@ -263,7 +263,8 @@
            ("cp" . util/code-search-path)
            ("cd" . util/code-search-def)
            ("cr" . util/code-search-ref)
-           ("l" . util/log-search-at-point))
+           ("l" . util/log-search-at-point)
+           ("f" . find-name-dired))
 
 (setq
  ;; Save bookmark automatically.
@@ -275,28 +276,28 @@
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
 
-(use-package projectile
-  :hook (after-init . projectile-mode)
-  :bind (:map projectile-mode-map
-              ("C-c p" . projectile-command-map))
-  :custom
-  (projectile-known-projects-file "~/.cache/projectile-bookmarks.eld")
-  (projectile-cache-file "~/.cache/projectile.cache")
-  :config
-  ;; Shorter modeline
-  (setq-default projectile-mode-line-prefix " Proj")
-  (setq projectile-indexing-method 'alien)
-  (setq projectile-enable-caching t)
+;; (use-package projectile
+;;   :hook (after-init . projectile-mode)
+;;   :bind (:map projectile-mode-map
+;;               ("C-c p" . projectile-command-map))
+;;   :custom
+;;   (projectile-known-projects-file "~/.cache/projectile-bookmarks.eld")
+;;   (projectile-cache-file "~/.cache/projectile.cache")
+;;   :config
+;;   ;; Shorter modeline
+;;   (setq-default projectile-mode-line-prefix " Proj")
+;;   (setq projectile-indexing-method 'alien)
+;;   (setq projectile-enable-caching t)
 
-  ;; Integrate with ffap.
-  (require 'ffap)
-  (add-to-list 'ffap-alist (cons (rx anything)
-                                 (lambda (filename)
-                                   (locate-file filename (projectile-project-root))))
-               t)
+;;   ;; Integrate with ffap.
+;;   (require 'ffap)
+;;   (add-to-list 'ffap-alist (cons (rx anything)
+;;                                  (lambda (filename)
+;;                                    (locate-file filename (projectile-project-root))))
+;;                t)
   
-  (when (executable-find "rg")
-    (setq-default projectile-generic-command "rg --files --hidden -0")))
+;;   (when (executable-find "rg")
+;;     (setq-default projectile-generic-command "rg --files --hidden -0")))
 
 ;; Enable tab bar.
 (tab-bar-mode 1)
@@ -460,7 +461,7 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil)
+  (eglot-sync-connect 1)
   (eglot-report-progress nil))
 
 (use-package which-key
