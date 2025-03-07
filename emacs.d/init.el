@@ -460,7 +460,7 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil)
+  (eglot-sync-connect 1)
   (eglot-report-progress nil))
 
 (use-package which-key
