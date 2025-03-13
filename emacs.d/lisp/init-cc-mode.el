@@ -47,6 +47,8 @@
   "Prompt to run a command under specified directory."
   (interactive (list (read-directory)))
   (let ((default-directory directory))
+    ;; Copy from the buffer-local value, which may be set in per-directory settings.
+    (setq-default compilation-search-path compilation-search-path)
     (call-interactively 'compile)))
 
 (provide 'init-cc-mode)
