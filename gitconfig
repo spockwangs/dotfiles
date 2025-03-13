@@ -22,3 +22,5 @@ path = .gitconfig.local
 
 [credential]
     helper = store
+[credential "https://chrome-internal.googlesource.com"]
+	provider = generic
