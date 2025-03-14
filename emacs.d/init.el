@@ -28,7 +28,7 @@
  ;; Always defer loading a package unless :demand is specified.
  use-package-always-defer t)
 
-;; Add load-path.
+;; Add load-path. Put my own scripts in `lisp' and third-party scripts in `site-lisp'.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
 
@@ -62,6 +62,15 @@
   (cond ((eq system-type 'windows-nt) "~/iCloudDrive/")
         ((eq system-type 'darwin) "~/Library/Mobile Documents/com~apple~CloudDocs/"))
   "The iCloud path")
+
+;; Use bash for remote ssh.
+(connection-local-set-profile-variables
+ 'remote-bash
+ '((explicit-shell-file-name . "/bin/bash")
+   (explicit-bash-args . ("-i"))))
+(connection-local-set-profiles
+ '(:application tramp :protocol "ssh" :machine "devcloud2")
+ 'remote-bash)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
@@ -294,7 +303,7 @@
 ;;                                  (lambda (filename)
 ;;                                    (locate-file filename (projectile-project-root))))
 ;;                t)
-  
+
 ;;   (when (executable-find "rg")
 ;;     (setq-default projectile-generic-command "rg --files --hidden -0")))
 
@@ -416,19 +425,7 @@
   (when (fboundp 'alert)
     (add-hook 'compilation-finish-functions
               (lambda (buffer status)
-                (alert status :title (format "From %s" (buffer-name buffer))))))
-
-  (require 'ffap)
-  (defun compilation-find-file-smart (orig-fun marker filename directory &rest args)
-    "Advice around `compilation-find-file' to enhance file finding. Return the found buffer."
-    (let* ((buffer-or-filename (find-file-at-point filename)))
-      (if buffer-or-filename
-          (if (bufferp buffer-or-filename)
-              buffer-or-filename
-            (find-file-noselect buffer-or-filename))
-        (apply orig-fun marker filename directory args))))
-
-  (advice-add 'compilation-find-file :around #'compilation-find-file-smart))
+                (alert status :title (format "From %s" (buffer-name buffer)))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
