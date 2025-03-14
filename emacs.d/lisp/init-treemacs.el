@@ -44,8 +44,7 @@
               (cond (workspace (treemacs-workspace->name workspace))
                     ((memq major-mode '(org-agenda-mode))
                      "Agenda")
-                    ((or (memq major-mode '(emacs-lisp-mode))
-                         (string-prefix-p "*" (buffer-name)))
+                    ((memq major-mode '(emacs-lisp-mode))
                      "Emacs")))))
     (when tab-name
       (tab-bar-switch-to-tab tab-name))))
