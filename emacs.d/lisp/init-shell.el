@@ -6,15 +6,6 @@
   (comint-use-prompt-regexp 1)
   :config
   (when (memq system-type (list 'gnu/linux 'darwin))
-    (setq shell-command-switch "-ic"))
-  
-  ;; Use bash for remote ssh.
-  (connection-local-set-profile-variables
-   'remote-bash
-   '((explicit-shell-file-name . "/bin/bash")
-     (explicit-bash-args . ("-i"))))
-  (connection-local-set-profiles
-   '(:application tramp :protocol "ssh" :machine "devcloud2")
-   'remote-bash))
+    (setq shell-command-switch "-ic")))
 
 (provide 'init-shell)
