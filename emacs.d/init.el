@@ -457,13 +457,30 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil)
+  (eglot-sync-connect 1)
   (eglot-report-progress nil))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
   :config
   (setq-default which-key-idle-delay 1.5))
+
+;; Find the project root by project root markers.
+(defcustom project-root-markers
+  '("WORKSPACE" "compile_commands.json")
+  "Files or directories that indicate the root of a project."
+  :type '(repeat string)
+  :group 'project)
+
+(defun my-find-project-root (dir)
+  "Find the project root which contains DIR."
+  (catch 'ret
+    (dolist (f project-root-markers)
+      (when-let ((root (locate-dominating-file dir f)))
+        (throw 'ret (cons 'transient root))))))
+
+(with-eval-after-load 'project
+  (add-to-list 'project-find-functions #'my-find-project-root))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
