@@ -169,22 +169,39 @@
   (mapc #'disable-theme custom-enabled-themes))
 
 ;; Set color themes.
-(use-package emacs
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-mixed-fonts t)
-  (modus-themes-variable-pitch-ui t)
-  (modus-vivendi-palette-overrides
-   '((bg-header "#4c566a")
-     (bg-hl-line "#434c5e")
-     (bg-inactive "#3b4252")
-     (bg-main "#2e3440")))
-  (modus-themes-headings '((1 . (1.2))
-                           (2 . (1.15))
-                           (3 . (1.1))))
-  (modus-themes-org-agenda '((event . (varied))
-                             (scheduled . rainbow))))
+(if (version< emacs-version "30.1")
+    (use-package emacs
+      :custom
+      (modus-themes-italic-constructs t)
+      (modus-themes-bold-constructs t)
+      (modus-themes-mixed-fonts t)
+      (modus-themes-variable-pitch-ui t)
+      (modus-themes-vivendi-color-overrides
+       '((bg-header . "#4c566a")
+         (bg-hl-line . "#434c5e")
+         (bg-inactive . "#3b4252")
+         (bg-main . "#2e3440")))
+      (modus-themes-headings '((1 . (1.2))
+                               (2 . (1.15))
+                               (3 . (1.1))))
+      (modus-themes-org-agenda '((event . (varied))
+                                 (scheduled . rainbow))))
+  (use-package emacs
+    :custom
+    (modus-themes-italic-constructs t)
+    (modus-themes-bold-constructs t)
+    (modus-themes-mixed-fonts t)
+    (modus-themes-variable-pitch-ui t)
+    (modus-vivendi-palette-overrides
+     '((bg-header "#4c566a")
+       (bg-hl-line "#434c5e")
+       (bg-inactive "#3b4252")
+       (bg-main "#2e3440")))
+    (modus-themes-headings '((1 . (1.2))
+                             (2 . (1.15))
+                             (3 . (1.1))))
+    (modus-themes-org-agenda '((event . (varied))
+                               (scheduled . rainbow)))))
 
 (use-package doom-themes)
 (use-package solarized-theme)
@@ -425,7 +442,13 @@
   (when (fboundp 'alert)
     (add-hook 'compilation-finish-functions
               (lambda (buffer status)
-                (alert status :title (format "From %s" (buffer-name buffer)))))))
+                (alert status :title (format "From %s" (buffer-name buffer))))))
+
+  ;; Rename compilation buffer according to its default directory so we can run mulitiple
+  ;; compiliation commands concurrently.
+  (defun my-compilation-buffer-name (mode-name)
+    (concat "*" (downcase mode-name) ": " compilation-directory "*"))
+  (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
