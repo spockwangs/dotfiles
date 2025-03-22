@@ -169,22 +169,39 @@
   (mapc #'disable-theme custom-enabled-themes))
 
 ;; Set color themes.
-(use-package emacs
-  :custom
-  (modus-themes-italic-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-mixed-fonts t)
-  (modus-themes-variable-pitch-ui t)
-  (modus-vivendi-palette-overrides
-   '((bg-header "#4c566a")
-     (bg-hl-line "#434c5e")
-     (bg-inactive "#3b4252")
-     (bg-main "#2e3440")))
-  (modus-themes-headings '((1 . (1.2))
-                           (2 . (1.15))
-                           (3 . (1.1))))
-  (modus-themes-org-agenda '((event . (varied))
-                             (scheduled . rainbow))))
+(if (version< emacs-version "30.1")
+    (use-package emacs
+      :custom
+      (modus-themes-italic-constructs t)
+      (modus-themes-bold-constructs t)
+      (modus-themes-mixed-fonts t)
+      (modus-themes-variable-pitch-ui t)
+      (modus-themes-vivendi-color-overrides
+       '((bg-header . "#4c566a")
+         (bg-hl-line . "#434c5e")
+         (bg-inactive . "#3b4252")
+         (bg-main . "#2e3440")))
+      (modus-themes-headings '((1 . (1.2))
+                               (2 . (1.15))
+                               (3 . (1.1))))
+      (modus-themes-org-agenda '((event . (varied))
+                                 (scheduled . rainbow))))
+  (use-package emacs
+    :custom
+    (modus-themes-italic-constructs t)
+    (modus-themes-bold-constructs t)
+    (modus-themes-mixed-fonts t)
+    (modus-themes-variable-pitch-ui t)
+    (modus-vivendi-palette-overrides
+     '((bg-header "#4c566a")
+       (bg-hl-line "#434c5e")
+       (bg-inactive "#3b4252")
+       (bg-main "#2e3440")))
+    (modus-themes-headings '((1 . (1.2))
+                             (2 . (1.15))
+                             (3 . (1.1))))
+    (modus-themes-org-agenda '((event . (varied))
+                               (scheduled . rainbow)))))
 
 (use-package doom-themes)
 (use-package solarized-theme)
@@ -425,7 +442,13 @@
   (when (fboundp 'alert)
     (add-hook 'compilation-finish-functions
               (lambda (buffer status)
-                (alert status :title (format "From %s" (buffer-name buffer)))))))
+                (alert status :title (format "From %s" (buffer-name buffer))))))
+
+  ;; Rename compilation buffer according to its default directory so we can run mulitiple
+  ;; compiliation commands concurrently.
+  (defun my-compilation-buffer-name (mode-name)
+    (concat "*" (downcase mode-name) ": " compilation-directory "*"))
+  (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
@@ -457,13 +480,30 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil)
+  (eglot-sync-connect 1)
   (eglot-report-progress nil))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
   :config
   (setq-default which-key-idle-delay 1.5))
+
+;; Find the project root by project root markers.
+(defcustom project-root-markers
+  '("WORKSPACE" "compile_commands.json")
+  "Files or directories that indicate the root of a project."
+  :type '(repeat string)
+  :group 'project)
+
+(defun my-find-project-root (dir)
+  "Find the project root which contains DIR."
+  (catch 'ret
+    (dolist (f project-root-markers)
+      (when-let ((root (locate-dominating-file dir f)))
+        (throw 'ret (cons 'transient root))))))
+
+(with-eval-after-load 'project
+  (add-to-list 'project-find-functions #'my-find-project-root))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
