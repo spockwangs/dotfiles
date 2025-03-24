@@ -254,6 +254,10 @@
                       '(ido-use-url-at-point t)
                       '(ido-use-filename-at-point 'guess))
 
+;; Disable remote file detection for ffap.
+(with-eval-after-load 'ffap
+  (custom-set-variables '(ffap-ftp-regexp nil)))
+
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
