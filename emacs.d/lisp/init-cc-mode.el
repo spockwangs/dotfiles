@@ -12,19 +12,11 @@
                             (c-toggle-auto-newline -1)
                             (when (fboundp 'company-complete)
                               (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-                            (if (locate-dominating-file default-directory "GTAGS")
-                                (gtags-mode)
-                              (progn (require 'eglot)
-                                     (add-to-list 'eglot-server-programs
-                                                  '(c++-mode . ("clangd"
-                                                                "-j" "10"
-                                                                "--log=error"
-                                                                "--query-driver=**/clang++,**/clang"
-                                                                "--background-index"
-                                                                "--completion-style=detailed"
-                                                                "--pch-storage=memory"
-                                                                "--pretty")))
-                                     (eglot-ensure)))))
+                            (cond ((locate-dominating-file default-directory "GTAGS")
+                                   (gtags-mode))
+                                  ((locate-dominating-file default-directory "compile_commands.json")
+                                   (require 'eglot)
+                                   (eglot-ensure)))))
          (java-mode . (lambda ()
                         (c-set-style "java"))))
   :config
