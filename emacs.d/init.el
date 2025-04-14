@@ -483,6 +483,15 @@
 (use-package eglot
   :ensure nil
   :custom
+  (add-to-list 'eglot-server-programs
+               '(c++-mode . ("clangd"
+                             "-j" "10"
+                             "--log=verbose"
+                             "--query-driver=**/clang++,**/clang"
+                             "--background-index"
+                             "--completion-style=detailed"
+                             "--pch-storage=memory"
+                             "--pretty")))
   (eglot-autoshutdown t)
   (eglot-sync-connect 1)
   (eglot-report-progress nil))
