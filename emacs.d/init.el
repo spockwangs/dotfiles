@@ -330,8 +330,8 @@
 
 ;; Enable tab bar.
 (tab-bar-mode 1)
-(custom-set-variables '(tab-bar-show nil)                    ; hide tab bar if <=1 tabs are open
-                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
+(custom-set-variables '(tab-bar-show nil)
+                      '(tab-bar-close-button-show nil)
                       '(tab-bar-tab-hints t)
                       '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
                       '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
@@ -483,18 +483,18 @@
 (use-package eglot
   :ensure nil
   :custom
+  (eglot-autoshutdown t)
+  (eglot-sync-connect 1)
+  (eglot-report-progress nil)
+  :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
-                             "-j" "10"
-                             "--log=verbose"
+                             "--log=error"
                              "--query-driver=**/clang++,**/clang"
                              "--background-index"
                              "--completion-style=detailed"
                              "--pch-storage=memory"
-                             "--pretty")))
-  (eglot-autoshutdown t)
-  (eglot-sync-connect 1)
-  (eglot-report-progress nil))
+                             "--pretty"))))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
