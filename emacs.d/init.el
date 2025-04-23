@@ -330,8 +330,8 @@
 
 ;; Enable tab bar.
 (tab-bar-mode 1)
-(custom-set-variables '(tab-bar-show nil)                    ; hide tab bar if <=1 tabs are open
-                      '(tab-bar-close-button-show nil)     ; hide tab bar close button
+(custom-set-variables '(tab-bar-show nil)
+                      '(tab-bar-close-button-show nil)
                       '(tab-bar-tab-hints t)
                       '(tab-bar-format '(tab-bar-format-tabs tab-bar-separator))
                       '(tab-bar-tab-name-function #'tab-bar-tab-name-truncated)
@@ -489,7 +489,10 @@
   :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
+<<<<<<< HEAD
                              "-j" "10"
+=======
+>>>>>>> d92584c5b9b4e61e43dd121bbc2adde6a2729cee
                              "--log=error"
                              "--query-driver=**/clang++,**/clang"
                              "--background-index"
