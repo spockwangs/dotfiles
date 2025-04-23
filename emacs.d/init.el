@@ -483,18 +483,19 @@
 (use-package eglot
   :ensure nil
   :custom
+  (eglot-autoshutdown t)
+  (eglot-sync-connect 1)
+  (eglot-report-progress nil)
+  :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
                              "-j" "10"
-                             "--log=verbose"
+                             "--log=error"
                              "--query-driver=**/clang++,**/clang"
                              "--background-index"
                              "--completion-style=detailed"
                              "--pch-storage=memory"
-                             "--pretty")))
-  (eglot-autoshutdown t)
-  (eglot-sync-connect 1)
-  (eglot-report-progress nil))
+                             "--pretty"))))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
