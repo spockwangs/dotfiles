@@ -371,7 +371,7 @@
 (add-hook 'before-save-hook 'time-stamp)
 
 ;; Delete trailing whitespaces before saving.
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)
