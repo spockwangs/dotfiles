@@ -2,7 +2,6 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;;
 
 (setq
  use-package-verbose t
@@ -422,7 +421,7 @@
         (let ((args (list :title title :body body :level 'info)))
           (let ((notify-id (apply #'w32-notification-notify args)))
             (run-with-timer 10 nil #'w32-notification-close notify-id))))))
-  
+
   (alert-define-style
    'windows-notifier
    :title "Windows Desktop Notification style"
@@ -489,10 +488,6 @@
   :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
-<<<<<<< HEAD
-                             "-j" "10"
-=======
->>>>>>> d92584c5b9b4e61e43dd121bbc2adde6a2729cee
                              "--log=error"
                              "--query-driver=**/clang++,**/clang"
                              "--background-index"
