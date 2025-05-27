@@ -2,7 +2,6 @@
 ;; Copyright (c) 2010-2024 spockwang
 ;;     All rights reserved.
 ;;
-;;
 
 (setq
  use-package-verbose t
