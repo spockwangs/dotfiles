@@ -8,7 +8,7 @@
  use-package-verbose t
  use-package-expand-minimally nil
  use-package-compute-statistics t
- ;; Set GC threshold as 1MB.
+ ;; Set GC threshold as 100MB.
  gc-cons-threshold 100000000
  ;; accept `y' or `n' instead of yes/no
  use-short-answers t
@@ -414,24 +414,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package alert
   :config
-  (defun my-notify (info)
-    (let ((title (plist-get info :title))
-          (body (plist-get info :message))
-          (icon (or (plist-get info :icon) alert-default-icon)))
-      (when (fboundp 'w32-notification-notify)
-        (let ((args (list :title title :body body :level 'info)))
-          (let ((notify-id (apply #'w32-notification-notify args)))
-            (run-with-timer 10 nil #'w32-notification-close notify-id))))))
-  
-  (alert-define-style
-   'windows-notifier
-   :title "Windows Desktop Notification style"
-   :notifier #'my-notify)
+  (setq alert-default-style 'toast))
 
-  (when (eq window-system 'w32)
-    (setq alert-default-style 'windows-notifier))
-  (when (eq window-system 'ns)
-    (setq alert-default-style 'osx-notifier)))
+(use-package alert-toast
+  :after alert)
 
 (with-eval-after-load 'compile
   (require 'ansi-color)
@@ -443,10 +429,10 @@
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
-  (when (fboundp 'alert)
-    (add-hook 'compilation-finish-functions
-              (lambda (buffer status)
-                (alert status :title (format "From %s" (buffer-name buffer))))))
+  (add-hook 'compilation-finish-functions
+            (lambda (buffer status)
+              (alert-toast-notify `(:title ,(format "From %s" (buffer-name buffer))
+                                           :message ,status :data (:long t)))))
 
   ;; Rename compilation buffer according to its default directory so we can run mulitiple
   ;; compiliation commands concurrently.
@@ -489,10 +475,6 @@
   :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
-<<<<<<< HEAD
-                             "-j" "10"
-=======
->>>>>>> d92584c5b9b4e61e43dd121bbc2adde6a2729cee
                              "--log=error"
                              "--query-driver=**/clang++,**/clang"
                              "--background-index"
