@@ -10,6 +10,7 @@
                             (subword-mode 1)
                             (turn-on-auto-fill)
                             (c-toggle-auto-newline -1)
+                            (setq clang-format-fallback-style "Google")
                             (when (fboundp 'company-complete)
                               (add-hook 'completion-at-point-functions #'company-complete nil 'local))
                             (cond ((locate-dominating-file default-directory "GTAGS")
