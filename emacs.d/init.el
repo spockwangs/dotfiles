@@ -418,6 +418,10 @@
 (use-package alert-toast
   :after alert)
 
+(defun my-notify (title message)
+  (pcase window-system
+    ('w32 (alert-toast-notify `(:title ,title :message ,message :data (:long t))))))
+
 (with-eval-after-load 'compile
   (require 'ansi-color)
   (setq
@@ -430,10 +434,9 @@
   (add-hook 'compilation-mode-hook 'visual-line-mode)
   (add-hook 'compilation-finish-functions
             (lambda (buffer status)
-              (alert-toast-notify `(:title ,(format "From %s" (buffer-name buffer))
-                                           :message ,status :data (:long t)))))
+              (my-notify (format "From %s" (buffer-name buffer)) status)))
 
-  ;; Rename compilation buffer according to its default directory so we can run mulitiple
+  ;; Rename compilation buffer according to its default directory so we can run multiple
   ;; compiliation commands concurrently.
   (defun my-compilation-buffer-name (mode-name)
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
