@@ -24,10 +24,18 @@
 
 ;;; Code:
 
+(defun compile-for-bazel ()
+  (interactive)
+  ;; Set this variable in per-directory setting if bazel is not used for building.
+  (if (bound-and-true-p compilation-do-not-use-bazel)
+      (call-interactively 'util/compile-project)
+    (call-interactively 'bazel-build)))
+
 (use-package bazel
   :bind
   (:map bazel-mode-map
-        ("C-M-\\" . bazel-buildifier)))
+        ("C-M-\\" . bazel-buildifier)
+        ("C-c C-b" . compile-for-bazel)))
 
 (provide 'init-bazel)
 ;;; init-bazel.el ends here

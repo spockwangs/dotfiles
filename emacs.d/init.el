@@ -472,8 +472,11 @@
   :ensure nil
   :custom
   (eglot-autoshutdown t)
-  (eglot-sync-connect 1)
+  (eglot-sync-connect nil)
   (eglot-report-progress nil)
+  (eglot-ignored-server-capabilities '(:documentHighlightProvider
+                                       :documentFormattingProvider
+                                       :documentRangeFormattingProvider))
   :config
   (add-to-list 'eglot-server-programs
                '(c++-mode . ("clangd"
@@ -482,6 +485,9 @@
                              "--background-index"
                              "--completion-style=detailed"
                              "--pch-storage=memory"
+                             "--malloc-trim"
+                             "--header-insertion=iwyu"
+                             "--header-insertion-decorators"
                              "--pretty"))))
 
 (use-package which-key

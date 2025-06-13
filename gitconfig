@@ -1,6 +1,10 @@
 [core]
 editor = vim
 excludesfile = ~/.gitignore
+	autocrlf = false
+	filemode = false
+	fscache = true
+	preloadindex = true
 
 [color]
 ui = auto
