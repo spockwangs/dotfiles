@@ -420,7 +420,8 @@
 
 (defun my-notify (title message)
   (pcase window-system
-    ('w32 (alert-toast-notify `(:title ,title :message ,message :data (:long t))))))
+    ('w32 (alert-toast-notify `(:title ,title :message ,message :data (:long t))))
+    ('ns (do-applescript (format "display notification \"%s\" with title \"%s\"" message title)))))
 
 (with-eval-after-load 'compile
   (require 'ansi-color)
@@ -485,9 +486,9 @@
                              "--background-index"
                              "--completion-style=detailed"
                              "--pch-storage=memory"
-                             "--malloc-trim"
                              "--header-insertion=iwyu"
                              "--header-insertion-decorators"
+                             "--clang-tidy"
                              "--pretty"))))
 
 (use-package which-key
