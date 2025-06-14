@@ -413,10 +413,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package alert
   :config
-  (setq alert-default-style 'toast))
+  (when (eq window-system 'w32)
+    (setq alert-default-style 'toast)))
 
-(use-package alert-toast
-  :after alert)
+(when (eq window-system 'w32)
+  (use-package alert-toast
+    :after alert))
 
 (defun my-notify (title message)
   (pcase window-system
