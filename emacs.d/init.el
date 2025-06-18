@@ -446,6 +446,31 @@
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Language server protocols
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package eglot
+  :ensure nil
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-sync-connect nil)
+  (eglot-report-progress nil)
+  (eglot-ignored-server-capabilities '(:documentHighlightProvider
+                                       :documentFormattingProvider
+                                       :documentRangeFormattingProvider))
+  :config
+  (add-to-list 'eglot-server-programs
+               '(c++-mode . ("clangd"
+                             "--log=error"
+                             "--query-driver=**/clang++,**/clang"
+                             "--background-index"
+                             "--completion-style=detailed"
+                             "--pch-storage=memory"
+                             "--header-insertion=iwyu"
+                             "--header-insertion-decorators"
+                             "--clang-tidy"
+                             "--pretty"))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Misc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bind functional keys.
@@ -471,27 +496,6 @@
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
 
-(use-package eglot
-  :ensure nil
-  :custom
-  (eglot-autoshutdown t)
-  (eglot-sync-connect nil)
-  (eglot-report-progress nil)
-  (eglot-ignored-server-capabilities '(:documentHighlightProvider
-                                       :documentFormattingProvider
-                                       :documentRangeFormattingProvider))
-  :config
-  (add-to-list 'eglot-server-programs
-               '(c++-mode . ("clangd"
-                             "--log=error"
-                             "--query-driver=**/clang++,**/clang"
-                             "--background-index"
-                             "--completion-style=detailed"
-                             "--pch-storage=memory"
-                             "--header-insertion=iwyu"
-                             "--header-insertion-decorators"
-                             "--clang-tidy"
-                             "--pretty"))))
 
 (use-package which-key
   :hook (after-init . which-key-mode)
@@ -514,6 +518,12 @@
 
 (with-eval-after-load 'project
   (add-to-list 'project-find-functions #'my-find-project-root))
+
+;; Clean old buffers periodically.
+(midnight-mode)
+(custom-set-variables
+ '(clean-buffer-list-delay-general 14)
+ '(clean-buffer-list-kill-regexps '("\\`\\*gcc-flymake\\*")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
