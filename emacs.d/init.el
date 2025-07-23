@@ -523,7 +523,32 @@
 (midnight-mode)
 (custom-set-variables
  '(clean-buffer-list-delay-general 14)
- '(clean-buffer-list-kill-regexps '("\\`\\*gcc-flymake\\*")))
+ '(clean-buffer-list-kill-regexps '(("\\`\\*gcc-flymake\\*.*" . 3600))))
+
+;; Midnight will never kill a buffer never displayed so we add a hook to clean buffers without
+;; assoicated files.
+(defun my-clean-buffer-never-displayed ()
+  (interactive)
+  (let* ((tm (current-time)) bct (ts (format-time-string "%Y-%m-%d %T" tm))
+         bn)
+    (dolist (buf (buffer-list))
+      (setq bn (buffer-name buf))
+      (when (and (buffer-live-p buf)
+                 (not (with-current-buffer buf buffer-display-time))
+                 (not (get-buffer-process buf))
+                 (not (buffer-file-name buf)))
+        (unless (or (cl-find bn clean-buffer-list-kill-never-regexps
+                             :test (lambda (bn re)
+                                     (if (functionp re)
+                                         (funcall re bn)
+                                       (string-match re bn))))
+                    (cl-find bn clean-buffer-list-kill-never-buffer-names
+                             :test #'string-equal)
+                    (get-buffer-window buf 'visible))
+          (message "[%s] killing `%s'" ts bn)
+          (kill-buffer buf))))))
+
+(add-hook 'midnight-hook #'my-clean-buffer-never-displayed)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
