@@ -1,10 +1,10 @@
 [core]
 editor = vim
 excludesfile = ~/.gitignore
-	autocrlf = false
-	filemode = false
-	fscache = true
-	preloadindex = true
+autocrlf = false
+filemode = false
+fscache = true
+preloadindex = true
 
 [color]
 ui = auto
@@ -25,6 +25,6 @@ default = tracking
 path = .gitconfig.local
 
 [credential]
-    helper = store
+helper = store
 [credential "https://chrome-internal.googlesource.com"]
-	provider = generic
+provider = generic
