@@ -5,7 +5,7 @@ set DOTFILES_DIR="%~dp0"
 
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo "Äã²»ÊÇ¹ÜÀíÔ±£¬Ö»ÓÐ¹ÜÀíÔ±²ÅÄÜÖ´ÐÐ¡£"
+    echo "ä½ ä¸æ˜¯ç®¡ç†å‘˜ï¼Œåªæœ‰ç®¡ç†å‘˜æ‰èƒ½æ‰§è¡Œã€‚"
     exit /b 1
 )
 
@@ -20,7 +20,7 @@ for %%G in (emacs.d) DO (
     rmdir /S /Q "%HOME%\.%%G" 2>nul
     mklink /D "%HOME%\.%%G" "%DOTFILES_DIR%%%G"
     if %errorlevel% neq 0 (
-       echo "Ö´ÐÐÊ§°ÜÍË³ö"
+       echo "æ‰§è¡Œå¤±è´¥é€€å‡º"
        exit /b %errorlevel%
     )
 )
@@ -31,7 +31,7 @@ for %%G in (bash_profile, bashrc, dir_colors, fonts.conf, gitignore, indent.pro,
     del /Q "%HOME%\.%%G" 2> nul
     mklink "%HOME%\.%%G" "%DOTFILES_DIR%%%G"
     if %errorlevel% neq 0 (
-       echo "Ö´ÐÐÊ§°ÜÍË³ö"
+       echo "æ‰§è¡Œå¤±è´¥é€€å‡º"
        exit /b %errorlevel%
     )
 )
