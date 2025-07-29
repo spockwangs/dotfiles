@@ -1,7 +1,7 @@
 (use-package sqlformat
   :custom
   (sqlformat-command 'sqlformat)
-  (sqlformat-args '("-k" "upper" "-i" "lower" "-r" "-s" "--indent_columns" "--indent_width" "4" "--strip-comments"))
+  (sqlformat-args '("-k" "upper" "-i" "lower" "-r" "-s" "--indent_columns" "--indent_width" "4" "--wrap_after=100"))
   :config
   (setenv "PYTHONIOENCODING" "utf-8"))
 
