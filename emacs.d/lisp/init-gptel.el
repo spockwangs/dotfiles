@@ -3,7 +3,7 @@
 ;; Copyright (C) 2025  Tencent
 
 ;; Author: spockwang <wbbtiger@gmail.com>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,21 +20,35 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 (use-package gptel
+  :init
+  (defun gpt ()
+    "Create a GPT session."
+    (interactive)
+    (if-let* ((backend-name (completing-read "Choose a LLM provider: "
+                                             (mapcar #'car gptel--known-backends) nil :require-match))
+              (backend (alist-get backend-name gptel--known-backends nil nil #'equal))
+              (model (intern (completing-read "Choose a model: "
+                                              (gptel-backend-models backend) nil :require-match))))
+        (progn (setq gptel-backend backend
+                     gptel-model model)
+               (call-interactively 'gptel))
+      (error "Can't find the LLM backend")))
+  :bind (:map gptel-mode-map
+              ("<return>" . gptel-send))
   :config
   (gptel-make-gemini "Gemini"
     :key 'gptel-api-key
     :stream t
     :models '(gemini-2.5-flash))
-  (setq gptel-backend (gptel-make-openai "Qwen"
+  (gptel-make-openai "Qwen"
     :key 'gptel-api-key :stream t
     :models '(qwen-plus qwen-flash)
-    :host "dashscope.aliyuncs.com" :endpoint "/compatible-mode/v1/chat/completions")))
-
+    :host "dashscope.aliyuncs.com" :endpoint "/compatible-mode/v1/chat/completions"))
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
