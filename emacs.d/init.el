@@ -13,7 +13,8 @@
  use-short-answers t
  enable-local-variables :all
  read-process-output-max (* 4 1024 1024)
- process-adaptive-read-buffering nil)
+ process-adaptive-read-buffering nil
+ epg-pinentry-mode 'loopback)
 
 (require 'package)
 (setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
