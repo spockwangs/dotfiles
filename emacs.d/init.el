@@ -371,7 +371,7 @@
 (add-hook 'before-save-hook 'time-stamp)
 
 ;; Delete trailing whitespaces before saving.
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+;(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)
@@ -551,6 +551,8 @@
 
 (add-hook 'midnight-hook #'my-clean-buffer-never-displayed)
 
+(add-to-list 'auth-sources "~/.emacs.d/authinfo.gpg")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -583,6 +585,7 @@
 (require 'init-tramp)
 (require 'init-markdown)
 (require 'init-bazel)
+(require 'init-gptel)
 
 ;; Load local customizations.
 (setq custom-file "~/.cache/custom.el")
