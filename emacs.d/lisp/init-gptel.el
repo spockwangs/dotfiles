@@ -26,10 +26,15 @@
 
 (use-package gptel
   :config
-  (setq gptel-model 'gemini-2.5-flash
-        gptel-backend (gptel-make-gemini "Gemini"
-                        :key 'gptel-api-key
-                        :stream t)))
+  (gptel-make-gemini "Gemini"
+    :key 'gptel-api-key
+    :stream t
+    :models '(gemini-2.5-flash))
+  (setq gptel-backend (gptel-make-openai "Qwen"
+    :key 'gptel-api-key :stream t
+    :models '(qwen-plus qwen-flash)
+    :host "dashscope.aliyuncs.com" :endpoint "/compatible-mode/v1/chat/completions")))
+
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
