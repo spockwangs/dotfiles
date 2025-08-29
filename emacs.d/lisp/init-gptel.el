@@ -48,7 +48,12 @@
   (gptel-make-openai "Qwen"
     :key 'gptel-api-key :stream t
     :models '(qwen-plus qwen-flash)
-    :host "dashscope.aliyuncs.com" :endpoint "/compatible-mode/v1/chat/completions"))
+    :host "dashscope.aliyuncs.com" :endpoint "/compatible-mode/v1/chat/completions")
+  (gptel-make-openai "Kimi"
+    :models '(kimi-k2-0711-preview)
+    :key 'gptel-api-key :stream t
+    :host "api.moonshot.cn" :endpoint "/v1/chat/completions")
+  )
 
 (provide 'init-gptel)
 ;;; init-gptel.el ends here
