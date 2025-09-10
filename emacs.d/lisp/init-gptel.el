@@ -41,10 +41,13 @@
   :bind (:map gptel-mode-map
               ("<return>" . gptel-send))
   :config
-  (gptel-make-gemini "Gemini"
-    :key 'gptel-api-key
-    :stream t
-    :models '(gemini-2.5-flash))
+  (setq gptel-include-reasoning nil)
+  ;(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
+  (setq gptel-model "gemini-2.5-flash")
+  (setq gptel-backend (gptel-make-gemini "Gemini"
+                        :key 'gptel-api-key
+                        :stream t
+                        :models '(gemini-2.5-flash)))
   (gptel-make-openai "Qwen"
     :key 'gptel-api-key :stream t
     :models '(qwen-plus qwen-flash)

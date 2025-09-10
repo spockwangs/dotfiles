@@ -136,15 +136,16 @@
 ;; Show matched parentheses.
 (show-paren-mode t)
 
+(setq my-default-font-list '("Monaco" "Consolas" "Monospace")
+      my-fixed-pitch-font-list '("Courier New" "Monospace")
+      my-variable-pitch-font-list '("Helvetica" "Arial")
+      my-chinese-font-list '(("STKaiti" . 1.3) ("楷体" . 1.2)))
+      
 (defun set-font ()
   ;; Set font only in GUI frame.
   (when window-system
     (require 'cl-lib)
-    (let* ((default-font-list '("Monaco" "Consolas" "Monospace"))
-           (fixed-pitch-font-list '("Courier New" "Monospace"))
-           (chinese-font-list '(("STKaiti" . 1.3)
-                                ("楷体" . 1.2)))
-           (chinese-font-name (util/choose-available-font chinese-font-list))
+    (let* ((chinese-font-name (util/choose-available-font my-chinese-font-list))
            (atts (frame-monitor-attributes nil))
            (width-pixel (cl-fourth (assoc 'geometry atts)))
            (font-size (cond ((< width-pixel 1500) 18.0)
@@ -155,10 +156,11 @@
         (set-fontset-font "fontset-default" charset (font-spec :family chinese-font-name)))
 
       ;; Set standard faces.
-      (set-face-font 'default (font-spec :family (util/choose-available-font default-font-list)
+      (set-face-font 'default (font-spec :family (util/choose-available-font my-default-font-list)
                                          :slant 'normal
                                          :size font-size))
-      (set-face-attribute 'fixed-pitch nil :family (util/choose-available-font fixed-pitch-font-list)))))
+      (set-face-attribute 'fixed-pitch nil :family (util/choose-available-font my-fixed-pitch-font-list))
+      (set-face-attribute 'variable-pitch nil :family (util/choose-available-font my-variable-pitch-font-list)))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)
@@ -492,12 +494,12 @@
 
 (use-package google-translate
   :bind
-  (("C-c h t" . google-translate-query-translate)
-   ("C-c h T" . google-translate-query-translate-reverse))
+  (("C-c g t" . google-translate-query-translate)
+   ("C-c g T" . google-translate-query-translate-reverse)
+   ("C-c g p" . google-translate-at-point))
   :custom
   (google-translate-default-source-language "en")
   (google-translate-default-target-language "zh-CN"))
-
 
 (use-package which-key
   :hook (after-init . which-key-mode)
@@ -587,6 +589,7 @@
 (require 'init-markdown)
 (require 'init-bazel)
 (require 'init-gptel)
+(require 'init-elfeed)
 
 ;; Load local customizations.
 (setq custom-file "~/.cache/custom.el")
