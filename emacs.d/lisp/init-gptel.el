@@ -25,24 +25,16 @@
 ;;; Code:
 
 (use-package gptel
-  :init
-  (defun gpt ()
-    "Create a GPT session."
-    (interactive)
-    (if-let* ((backend-name (completing-read "Choose a LLM provider: "
-                                             (mapcar #'car gptel--known-backends) nil :require-match))
-              (backend (alist-get backend-name gptel--known-backends nil nil #'equal))
-              (model (intern (completing-read "Choose a model: "
-                                              (gptel-backend-models backend) nil :require-match))))
-        (progn (setq gptel-backend backend
-                     gptel-model model)
-               (call-interactively 'gptel))
-      (error "Can't find the LLM backend")))
   :bind (:map gptel-mode-map
               ("<return>" . gptel-send))
+  :custom
+  (gptel-prompt-prefix-alist '((markdown-mode . "**Prompt**: ")
+                               (org-mode . "*Prompt*: ")))
+  (gptel-response-prefix-alist '((markdown-mode . "**Response**: ")
+                                 (org-mode . "*Response*: ")))
+  (gptel-default-mode 'org-mode)
   :config
   (setq gptel-include-reasoning nil)
-  ;(add-hook 'gptel-post-response-functions 'gptel-end-of-response)
   (setq gptel-model "gemini-2.5-flash")
   (setq gptel-backend (gptel-make-gemini "Gemini"
                         :key 'gptel-api-key
