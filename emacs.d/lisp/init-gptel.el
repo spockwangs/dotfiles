@@ -32,7 +32,7 @@
                                (org-mode . "*Prompt*: ")))
   (gptel-response-prefix-alist '((markdown-mode . "**Response**: ")
                                  (org-mode . "*Response*: ")))
-  (gptel-default-mode 'org-mode)
+  (gptel-default-mode 'markdown-mode)
   :config
   (setq gptel-include-reasoning nil)
   (setq gptel-model "gemini-2.5-flash")

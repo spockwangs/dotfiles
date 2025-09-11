@@ -1,17 +1,58 @@
+(defun merge-request-to-gongfeng ()
+  "请求工蜂合并代码。"
+  (interactive)
+  (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
+                      "/-/merge_requests/new?ADTAG=git-cli&"
+                      (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
+
+(defun my-list-merged-branches ()
+  (interactive)
+  (let* ((default-branch "master")
+         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+         (merged-branches (magit-list-merged-branches dest-branch)))
+    (message (concat "Merged branches to `" dest-branch "':\n"
+                     (mapconcat 'identity merged-branches "\n")))))
+
+(defun my-list-unmerged-branches ()
+  (interactive)
+  (let* ((default-branch "master")
+         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+         (unmerged-branches (magit-list-unmerged-branches dest-branch)))
+    (message (concat "Un-merged branches to `" dest-branch "':\n"
+                     (mapconcat 'identity unmerged-branches "\n")))))
+
+(defun my-delete-merged-branches ()
+  (interactive)
+  (let* ((default-branch "master")
+         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+         (merged-branches (magit-list-merged-branches dest-branch))
+         (branches-to-delete (remove dest-branch merged-branches))
+         (total-num (length branches-to-delete))
+         (processed-count 0))
+    (if branches-to-delete
+        (dolist (br branches-to-delete)
+          (setq processed-count (1+ processed-count))
+          (if (yes-or-no-p (format "Delete branch `%s'? (%d/%d)" br processed-count total-num))
+              (magit-branch-delete (list br))
+            (message "Nothing to delete"))))))
+
 (use-package magit
   :preface
-  (defun do-merge-request ()
-    "请求工蜂合并代码。"
-    (interactive)
-    (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
-                        "/-/merge_requests/new?ADTAG=git-cli&"
-                        (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
   :custom
   (auto-revert-buffer-list-filter
    (lambda (buf) (not (file-remote-p (buffer-file-name buf))))
    "Do not auto-revert remote files to improve performance")
   :config
   (transient-append-suffix 'magit-merge "m"
-    '("r" "Merge request" do-merge-request)))
+    '("r" "Merge request" merge-request-to-gongfeng))
+  (transient-append-suffix 'magit-branch t
+    '("K" "Delete all merged branches" my-delete-merged-branches))
+  (transient-append-suffix 'magit-branch t
+    '("M" "List all merged branches" my-list-merged-branches))
+  (transient-append-suffix 'magit-branch t
+    '("U" "List all unmerged branches" my-list-unmerged-branches)))
 
 (provide 'init-magit)
