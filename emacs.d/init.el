@@ -38,6 +38,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Provide info about the user and running environment.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; There is a `~' in the temporary path on Windows which some programs (e.g. latex) can't recognize
+;; so we change the temporary path for Emacs.
+(when (eq system-type 'windows-nt)
+  (make-directory "c:/tmp" t)
+  (custom-set-variables '(temporary-file-directory "c:/tmp")))
+
 (when (memq window-system '(mac ns))
   (use-package exec-path-from-shell
     :demand t
