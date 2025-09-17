@@ -27,6 +27,8 @@
 (use-package gptel
   :bind (:map gptel-mode-map
               ("<return>" . gptel-send))
+  :hook ((gptel-mode . (lambda ()
+                         (markdown-toggle-markup-hiding 1))))
   :custom
   (gptel-prompt-prefix-alist '((markdown-mode . "**Prompt**: ")
                                (org-mode . "*Prompt*: ")))
@@ -35,6 +37,7 @@
   (gptel-default-mode 'markdown-mode)
   :config
   (setq gptel-include-reasoning nil)
+  (add-to-list 'gptel-post-response-functions #'math-preview-region)
   (setq gptel-model "gemini-2.5-flash")
   (setq gptel-backend (gptel-make-gemini "Gemini"
                         :key 'gptel-api-key
