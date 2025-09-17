@@ -37,7 +37,7 @@
   ;; To preview latex the TeX distribution should be installed.
   (setq org-preview-latex-default-process 'dvisvgm)
   (setq org-format-latex-options
-        (plist-put org-format-latex-options :scale 2.0))
+        (plist-put org-format-latex-options :scale 1.7))
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
