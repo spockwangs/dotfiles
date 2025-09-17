@@ -96,7 +96,7 @@
                                      dired-directory "%b"))))
 
 
-(when (memq window-system '(x, w32, ns))
+(when (memq window-system '(x w32 ns))
   ;; Hide tool bar.
   (tool-bar-mode 0)
 
@@ -380,7 +380,7 @@
 (add-hook 'before-save-hook 'time-stamp)
 
 ;; Delete trailing whitespaces before saving.
-;(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Require newline at the end.
 (setq-default require-final-newline t)
@@ -561,6 +561,8 @@
 (add-hook 'midnight-hook #'my-clean-buffer-never-displayed)
 
 (add-to-list 'auth-sources "~/.emacs.d/authinfo.gpg")
+
+(use-package math-preview)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load configs of various packages.
