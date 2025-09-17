@@ -34,21 +34,10 @@
        (org-agenda-sorting-strategy '(priority-down todo-state-down deadline-up scheduled-up))))))
   (org-agenda-search-view-always-boolean t)
   :config
-  ;; The program `latex' should be installed.
-  ;; (add-to-list 'org-preview-latex-process-alist
-  ;;              '(dvipng . (:programs
-  ;;                          ("latex" "dvipng")
-  ;;                          :description "dvi > png" :message "you need to install the programs: latex and dvipng."
-  ;;                          :image-input-type "dvi" :image-output-type "png" :image-size-adjust
-  ;;                          (1.0 . 1.0)
-  ;;                          :latex-compiler
-  ;;                          ("latex -interaction nonstopmode -output-directory %o %F")
-  ;;                          :image-converter
-  ;;                          ("dvipng -D %D -T tight -o %O %f")
-  ;;                          :transparent-image-converter
-  ;;                          ("dvipng -D %D -T tight -bg Transparent -o %O %f"))))
   ;; To preview latex the TeX distribution should be installed.
   (setq org-preview-latex-default-process 'dvisvgm)
+  (setq org-format-latex-options
+        (plist-put org-format-latex-options :scale 2.0))
   :bind (("C-c o l" . org-store-link)
          ("C-c o a" . org-agenda)
          ("C-c o c" . org-capture)))
