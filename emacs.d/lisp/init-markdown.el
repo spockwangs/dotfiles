@@ -36,7 +36,14 @@
   :bind (:map markdown-mode-map
               ("C-c v" . markdown-view-mode)
               :map markdown-view-mode-map
-              ("e" . markdown-mode)))
+              ("e" . markdown-mode))
+  :config
+  ;; Render the latex fragments when opening and saving a markdown buffer.
+  (with-eval-after-load 'math-preview
+    (add-hook 'markdown-mode-hook
+              (lambda ()
+                (math-preview-all)
+                (add-hook 'after-save-hook #'math-preview-all)))))
 
 (provide 'init-markdown)
 ;;; init-markdown.el ends here
