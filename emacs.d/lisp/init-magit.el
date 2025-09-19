@@ -10,9 +10,11 @@
   (let* ((default-branch "master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
                                        (magit-list-local-branch-names) nil :require-match nil nil default-branch))
-         (merged-branches (magit-list-merged-branches dest-branch)))
-    (message (concat "Merged branches to `" dest-branch "':\n"
-                     (mapconcat 'identity merged-branches "\n")))))
+         (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
+    (if (null merged-branches)
+        (message "No merged branches.")
+      (message (concat "Merged branches to `" dest-branch "':\n"
+                       (mapconcat 'identity merged-branches "\n"))))))
 
 (defun my-list-unmerged-branches ()
   (interactive)
@@ -48,11 +50,11 @@
   :config
   (transient-append-suffix 'magit-merge "m"
     '("r" "Merge request" merge-request-to-gongfeng))
-  (transient-append-suffix 'magit-branch t
+  (transient-append-suffix 'magit-branch "k"
     '("K" "Delete all merged branches" my-delete-merged-branches))
-  (transient-append-suffix 'magit-branch t
+  (transient-append-suffix 'magit-branch "K"
     '("M" "List all merged branches" my-list-merged-branches))
-  (transient-append-suffix 'magit-branch t
+  (transient-append-suffix 'magit-branch "M"
     '("U" "List all unmerged branches" my-list-unmerged-branches)))
 
 (provide 'init-magit)
