@@ -6,6 +6,7 @@
                       (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
 
 (defun my-list-merged-branches ()
+  "List all branches which have merged into the specified branch."
   (interactive)
   (let* ((default-branch "master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
@@ -17,6 +18,7 @@
                        (mapconcat 'identity merged-branches "\n"))))))
 
 (defun my-list-unmerged-branches ()
+  "List all branches which have not merged into the specified branch."
   (interactive)
   (let* ((default-branch "master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
@@ -26,6 +28,7 @@
                      (mapconcat 'identity unmerged-branches "\n")))))
 
 (defun my-delete-merged-branches ()
+  "Iterate to delete all branches which have merged into the specified branch."
   (interactive)
   (let* ((default-branch "master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
@@ -42,11 +45,12 @@
             (message "Nothing to delete"))))))
 
 (use-package magit
-  :preface
   :custom
   (auto-revert-buffer-list-filter
    (lambda (buf) (not (file-remote-p (buffer-file-name buf))))
    "Do not auto-revert remote files to improve performance")
+  (magit-stage-all-confirm nil "disable `Stage all changes?")
+  (magit-stage-modified-confirm nil "disable `Stage N modified files?'")
   :config
   (transient-append-suffix 'magit-merge "m"
     '("r" "Merge request" merge-request-to-gongfeng))
