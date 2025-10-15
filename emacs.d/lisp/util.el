@@ -296,7 +296,7 @@ negative"
                        (let ((thing (thing-at-point 'symbol)))
                          (or thing (read-from-minibuffer "Search xlog for: "))))
                      (read-from-minibuffer "Module: ")
-                     (completing-read "Env: " '("test" "idc") nil t '("idc" . 0))))
+                     (completing-read "Env (default `idc'): " '("test" "idc") nil t nil nil "idc")))
   (util/log-search env module keyword))
 
 (defun util--read-directory ()

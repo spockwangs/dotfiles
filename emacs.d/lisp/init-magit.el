@@ -8,9 +8,9 @@
 (defun my-list-merged-branches ()
   "List all branches which have merged into the specified branch."
   (interactive)
-  (let* ((default-branch "master")
+  (let* ((default-branch "origin/master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
          (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
     (if (null merged-branches)
         (message "No merged branches.")
@@ -20,9 +20,9 @@
 (defun my-list-unmerged-branches ()
   "List all branches which have not merged into the specified branch."
   (interactive)
-  (let* ((default-branch "master")
+  (let* ((default-branch "origin/master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
          (unmerged-branches (magit-list-unmerged-branches dest-branch)))
     (message (concat "Un-merged branches to `" dest-branch "':\n"
                      (mapconcat 'identity unmerged-branches "\n")))))
@@ -30,11 +30,11 @@
 (defun my-delete-merged-branches ()
   "Iterate to delete all branches which have merged into the specified branch."
   (interactive)
-  (let* ((default-branch "master")
+  (let* ((default-branch "origin/master")
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-local-branch-names) nil :require-match nil nil default-branch))
+                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
          (merged-branches (magit-list-merged-branches dest-branch))
-         (branches-to-delete (remove dest-branch merged-branches))
+         (branches-to-delete (remove dest-branch (remove merged-branches "master")))
          (total-num (length branches-to-delete))
          (processed-count 0))
     (if branches-to-delete
