@@ -34,7 +34,7 @@
          (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
                                        (magit-list-branch-names) nil :require-match nil nil default-branch))
          (merged-branches (magit-list-merged-branches dest-branch))
-         (branches-to-delete (remove dest-branch (remove merged-branches "master")))
+         (branches-to-delete (remove dest-branch (remove "master" merged-branches)))
          (total-num (length branches-to-delete))
          (processed-count 0))
     (if branches-to-delete
