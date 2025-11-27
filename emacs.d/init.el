@@ -44,11 +44,11 @@
   (make-directory "c:/tmp" t)
   (custom-set-variables '(temporary-file-directory "c:/tmp")))
 
-(when (memq window-system '(mac ns))
-  (use-package exec-path-from-shell
-    :demand t
-    :init
-    ;; Copy environment variables seen by shell to emacs.
+(use-package exec-path-from-shell
+  :demand t
+  :config
+  ;; Copy environment variables seen by shell to emacs on UNIX-like systems.
+  (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
 ;; Set language environment and coding system.
@@ -146,7 +146,7 @@
       my-fixed-pitch-font-list '("Courier New" "Monospace")
       my-variable-pitch-font-list '("Helvetica" "Arial")
       my-chinese-font-list '(("STKaiti" . 1.3) ("楷体" . 1.2)))
-      
+
 (defun set-font ()
   ;; Set font only in GUI frame.
   (when window-system
@@ -222,13 +222,12 @@
   (setq calendar-latitude 22.53
         calendar-longitude 113.93))
 
-;; (use-package circadian
-;;   :hook (after-init . circadian-setup)
-;;   :demand
-;;   :config
-;;   (setq circadian-themes '((:sunrise . (modus-operandi))
-;;                            (:sunset  . (modus-vivendi)))))
-(load-theme 'modus-vivendi)
+(use-package circadian
+  :hook (after-init . circadian-setup)
+  :demand
+  :config
+  (setq circadian-themes '((:sunrise . (modus-operandi))
+                           (:sunset  . (modus-vivendi)))))
 
 (use-package nerd-icons
   :demand t)
