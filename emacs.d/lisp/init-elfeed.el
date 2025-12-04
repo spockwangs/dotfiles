@@ -3,7 +3,7 @@
 ;; Copyright (C) 2025  Tencent
 
 ;; Author: spockwang <wbbtiger@gmail.com>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,16 +20,19 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 (use-package elfeed
+  :hook
+  (elfeed-search-mode . visual-line-mode)
   :custom
   (elfeed-feeds
    '(("https://hnrss.org/frontpage" Tech News)
      ("https://www.technologyreview.com/feed/" Tech News)
-     )))
+     ))
+  (elfeed-search-title-max-width 100))
 
 (provide 'init-elfeed)
 ;;; init-elfeed.el ends here
