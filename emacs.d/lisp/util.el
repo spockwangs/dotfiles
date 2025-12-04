@@ -182,6 +182,11 @@ negative"
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
+(defun util/refresh-exec-path ()
+  "Refresh `exec-path` from the value of "PATH"."
+  (interactive)
+  (setq exec-path (split-string (getenv "PATH") path-separator)))
+
 (defun util/get-dpi (&optional frame)
   "Get the DPI of FRAME (or current if nil)."
   (cl-flet ((pyth (lambda (w h)
@@ -206,7 +211,7 @@ negative"
     (customize-save-variable
      ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
 
-(defcustom code-search-url nil
+(defcustom util/code-search-url nil
   "The URL of code search.")
 
 (defun util/code-search (thing type)
@@ -225,8 +230,8 @@ negative"
                               thing
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
-    (util/customize-variable-if-unset code-search-url)
-    (browse-url (concat code-search-url path))))
+    (util/customize-variable-if-unset util/code-search-url)
+    (browse-url (concat util/code-search-url path))))
 
 (defun util/code-search-path (path)
   "Open code search to search for a path."
@@ -260,7 +265,7 @@ negative"
                          (read-from-minibuffer "Code search for references of symbol: ")))))
   (util/code-search symbol 'ref))
 
-(defcustom log-search-url nil
+(defcustom util/log-search-url nil
   "The URL to access log search.")
 
 (defun util/log-search (env module keywords)
@@ -286,8 +291,8 @@ negative"
                                             (excludeKeywordObj . ((,(intern "0") . "")
                                                                   (,(intern "1") . "")))
                                             (_type . "share")))))))
-    (util/customize-variable-if-unset log-search-url)
-    (browse-url (concat log-search-url url))))
+    (util/customize-variable-if-unset util/log-search-url)
+    (browse-url (concat util/log-search-url url))))
 
 (defun util/log-search-at-point (keyword module env)
   "Open xlog to search for the symbol at point."
