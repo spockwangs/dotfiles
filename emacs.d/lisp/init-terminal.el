@@ -1,6 +1,6 @@
 ;;; init-terminal.el --- Configure how to access terminals.  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025  Tencent
+;; Copyright (C) 2025  spockwang
 
 ;; Author: spockwang <wbbtiger@gmail.com>
 ;; Keywords:

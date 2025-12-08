@@ -1,6 +1,6 @@
 ;;; init-env.el --- Configure environment info of the system running Emacs.  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025  Tencent
+;; Copyright (C) 2025  spockwang
 
 ;; Author: spockwang <wbbtiger@gmail.com>
 ;; Keywords:
