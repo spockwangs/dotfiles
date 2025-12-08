@@ -1,6 +1,6 @@
-;;; init-bazel.el --- Configure bazel related mode   -*- lexical-binding: t; -*-
+;;; init-terminal.el --- Configure how to access terminals.  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2024  spockwang
+;; Copyright (C) 2025  Tencent
 
 ;; Author: spockwang <wbbtiger@gmail.com>
 ;; Keywords:
@@ -24,18 +24,25 @@
 
 ;;; Code:
 
-(defun compile-for-bazel ()
-  (interactive)
-  ;; Set this variable in per-directory setting if bazel is not used for building.
-  (if (bound-and-true-p compilation-do-not-use-bazel)
-      (call-interactively 'util/compile-project)
-    (call-interactively 'bazel-build)))
+(use-package esh-mode
+  :ensure nil
+  :config
+  (setq comint-prompt-regexp "^[^#$%>\n]*[#$] "))
 
-(use-package bazel
-  :bind
-  (:map bazel-mode-map
-        ("C-M-\\" . bazel-buildifier)
-        ("C-c C-b" . compile-for-bazel)))
+(use-package sh-mode
+  :ensure nil
+  :bind (:map sh-mode-map
+              ([(return)] . newline-and-indent)))
 
-(provide 'init-bazel)
-;;; init-bazel.el ends here
+(use-package shell
+  :ensure nil
+  :hook (shell-mode . (lambda ()
+                        (setq comint-prompt-regexp "^[^#$%>\n]*[#$] ")))
+  :custom
+  (comint-use-prompt-regexp 1)
+  :config
+  (when (memq system-type (list 'gnu/linux 'darwin))
+    (setq shell-command-switch "-ic")))
+
+(provide 'init-terminal)
+;;; init-terminal.el ends here

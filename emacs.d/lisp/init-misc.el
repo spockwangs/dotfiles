@@ -1,4 +1,4 @@
-;;; init-gptel.el --- Configure methods of accessing LLMs  -*- lexical-binding: t; -*-
+;;; init-misc.el --- Miscellaneous settings.          -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025  Tencent
 
@@ -23,6 +23,18 @@
 ;;
 
 ;;; Code:
+
+(bind-key "C-c d" #'dictionary-search)
+(setq dictionary-server "dict.org")
+
+(use-package google-translate
+  :bind
+  (("C-c g t" . google-translate-query-translate)
+   ("C-c g T" . google-translate-query-translate-reverse)
+   ("C-c g p" . google-translate-at-point))
+  :custom
+  (google-translate-default-source-language "en")
+  (google-translate-default-target-language "zh-CN"))
 
 (use-package gptel
   :hook ((gptel-mode . (lambda ()
@@ -52,5 +64,15 @@
     :host "api.moonshot.cn" :endpoint "/v1/chat/completions")
   )
 
-(provide 'init-gptel)
-;;; init-gptel.el ends here
+(use-package elfeed
+  :hook
+  (elfeed-search-mode . visual-line-mode)
+  :custom
+  (elfeed-feeds
+   '(("https://hnrss.org/frontpage" Tech News)
+     ("https://www.technologyreview.com/feed/" Tech News)
+     ))
+  (elfeed-search-title-max-width 100))
+
+(provide 'init-misc)
+;;; init-misc.el ends here
