@@ -37,6 +37,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set language environment.
+(set-locale-environment "en_US.UTF-8")
+;; Set default coding system for new buffers and files. The coding system for existing files will be auto detected.
+(setq-default buffer-file-coding-system 'utf-8-unix)
+
 ;; Disable remote file detection for ffap.
 (with-eval-after-load 'ffap
   (custom-set-variables '(ffap-ftp-regexp nil)))

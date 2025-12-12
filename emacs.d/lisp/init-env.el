@@ -63,14 +63,6 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-;; Set language environment and coding system.
-;; See `set-file-name-coding-system', `set-buffer-file-coding-system',
-;; `set-buffer-process-coding-system', `set-terminal-coding-system',
-;; `set-selection-coding-system' and `set-input-method'.
-(set-locale-environment "en_US.UTF-8")
-(prefer-coding-system 'utf-8)
-(set-default-coding-systems 'utf-8-unix)
-
 (setq user-full-name "spockwang"
       user-mail-address "wbbtiger@gmail.com")
 (setenv "ORGANIZATION" "Tencent")
