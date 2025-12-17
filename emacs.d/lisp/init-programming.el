@@ -28,9 +28,11 @@
 
 (use-package prog-mode
   :ensure nil
+  :preface
+  (defun init-prog-mode ()
+    (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))
   :hook
-  (prog-mode . (lambda ()
-                 (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))))
+  (prog-mode . init-prog-mode))
 
 (defun merge-request-to-gongfeng ()
   "请求工蜂合并代码。"
@@ -101,7 +103,7 @@
   ;; loaded, unless `:demand' is specified.
   :demand
   :preface
-  (defun autoinsert-yas-expand()
+  (defun autoinsert-yas-expand ()
     "Replace text in yasnippet template."
     (yas-expand-snippet (buffer-string) (point-min) (point-max)))
   :custom
@@ -116,8 +118,11 @@
   (auto-insert-mode))
 
 (use-package yasnippet
+  :preface
+  (defun init-yasnippet ()
+    (yas-global-mode 1))
   :hook
-  (after-init . (lambda () (yas-global-mode 1))))
+  (after-init . init-yasnippet))
 
 (use-package company
   :hook (after-init . global-company-mode)
@@ -174,6 +179,8 @@
     ('ns (do-applescript (format "display notification \"%s\" with title \"%s\"" message title)))))
 
 (with-eval-after-load 'compile
+  (defun notify-compilation-result (buffer status)
+    (my-notify (format "From %s" (buffer-name buffer)) status))
   (require 'ansi-color)
   (setq
    ;; Only cares about errors.
@@ -183,9 +190,7 @@
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
-  (add-hook 'compilation-finish-functions
-            (lambda (buffer status)
-              (my-notify (format "From %s" (buffer-name buffer)) status)))
+  (add-hook 'compilation-finish-functions 'notify-compilation-result)
 
   ;; Rename compilation buffer according to its default directory so we can run multiple
   ;; compiliation commands concurrently.
@@ -194,25 +199,25 @@
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
 (use-package cc-mode
+  :preface
+  (defun init-cc-mode ()
+    (subword-mode 1)
+    (turn-on-auto-fill)
+    (c-toggle-auto-newline -1)
+    (setq clang-format-fallback-style "Google")
+    (when (fboundp 'company-complete)
+      (add-hook 'completion-at-point-functions #'company-complete nil 'local))
+    (cond ((locate-dominating-file default-directory "GTAGS")
+           (gtags-mode))
+          ((locate-dominating-file default-directory "compile_commands.json")
+           (require 'eglot)
+           (eglot-ensure))))
   :bind (:map c-mode-base-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
               ("C-c C-b" . util/compile-project))
-  :hook ((c-mode-common . (lambda ()
-                            (subword-mode 1)
-                            (turn-on-auto-fill)
-                            (c-toggle-auto-newline -1)
-                            (setq clang-format-fallback-style "Google")
-                            (when (fboundp 'company-complete)
-                              (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-                            (cond ((locate-dominating-file default-directory "GTAGS")
-                                   (gtags-mode))
-                                  ((locate-dominating-file default-directory "compile_commands.json")
-                                   (require 'eglot)
-                                   (eglot-ensure)))))
-         (java-mode . (lambda ()
-                        (c-set-style "java"))))
+  :hook ((c-mode-common . init-cc-mode))
   :config
   (require 'clang-format)
   (require 'spock-c-style))
@@ -222,8 +227,10 @@
   :hook (c-mode-common . spock-set-c-style))
 
 (use-package go-mode
-  :hook (go-mode . (lambda ()
-                     (subword-mode 1)))
+  :preface
+  (defun init-go-mode ()
+    (subword-mode 1))
+  :hook (go-mode . init-go-mode)
   :mode ("\\.go\\'" . go-mode))
 
 (use-package haskell-mode
@@ -261,11 +268,14 @@
   :mode ("\\.php\\'" . php-mode))
 
 (use-package python
-  :hook ((python-mode . (lambda () (subword-mode 1)
-                          ;; You should install pyright (Microsoft's Python language server).
-                          ;;   $ pip install pyright
-                          (require 'eglot)
-                          (eglot-ensure))))
+  :hook ((python-mode . init-python-mode))
+  :preface
+  (defun init-python-mode ()
+    (subword-mode 1)
+    ;; You should install pyright (Microsoft's Python language server).
+    ;;   $ pip install pyright
+    (require 'eglot)
+    (eglot-ensure))
   :custom
   (python-indent-offset 4)
   :bind (:map python-mode-map
