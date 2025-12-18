@@ -208,8 +208,8 @@ negative"
 (defmacro util/customize-variable-if-unset (var)
   "Prompt to customize VAR if it is nil."
   `(unless ,var
-    (customize-save-variable
-     ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
+     (customize-save-variable
+      ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
 
 (defcustom util/code-search-url nil
   "The URL of code search.")
@@ -319,5 +319,22 @@ negative"
     ;; Copy from the buffer-local value, which may be set in per-directory settings.
     (setq-default compilation-search-path compilation-search-path)
     (call-interactively 'compile)))
+
+(defun util/hex-encode-region (begin end)
+  "Replace the string in the region (BEGIN END) with hexified string."
+  (interactive "r")
+  (let* ((text (buffer-substring begin end))
+         (hex (mapconcat (lambda (c) (format "%02X" c)) text)))
+    (delete-region begin end)
+    (insert hex)))
+
+(defun util/hex-decode-region (begin end)
+  "Replace the hex string in the region (BEGIN END) with unhexified string."
+  (interactive "r")
+  (let* ((hex (buffer-substring begin end))
+         (decoded-text (apply #'string (cl-loop for i from 0 below (length hex) by 2
+                                                collect (string-to-number (substring hex i (+ i 2)) 16)))))
+    (delete-region begin end)
+    (insert decoded-text)))
 
 (provide 'util)
