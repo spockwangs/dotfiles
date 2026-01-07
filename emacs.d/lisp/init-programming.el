@@ -360,6 +360,7 @@
 (use-package web-mode
   :mode ("\\.html?\\'" . web-mode)
   :preface
+  ;; You should install the program `tidy'.
   (defun html-format ()
     "Format HTML buffer using tidy."
     (interactive)
