@@ -358,6 +358,15 @@
 
 (use-package web-mode
   :mode ("\\.html?\\'" . web-mode)
+  :preface
+  (defun html-format ()
+    "Format HTML buffer using tidy."
+    (interactive)
+    (let ((tidy-args '("-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
+          (begin (if (use-region-p) (region-beginning) (point-min)))
+          (end (if (use-region-p) (region-end) (point-max))))
+      (apply 'call-process-region begin end "tidy" t t nil tidy-args)))
+  :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
   (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))
 
