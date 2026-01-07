@@ -285,14 +285,14 @@
 (use-package python-black
   :after python
   :demand
+  :preface
+  (defun python-format ()
+    (interactive)
+    (if (use-region-p)
+        (python-black-region (region-beginning) (region-end))
+      (python-black-buffer)))
   :bind (:map python-mode-map
               ("C-M-\\" . python-format)))
-
-(defun python-format ()
-  (interactive)
-  (if (use-region-p)
-      (python-black-region (region-beginning) (region-end))
-    (python-black-buffer)))
 
 (use-package pylint
   :after python
@@ -330,15 +330,16 @@
   :config
   (turn-on-auto-fill))
 
-(defun json-format ()
-  "Format the region if any, or the buffer as JSON."
-  (interactive)
-  (if (use-region-p)
-      (json-pretty-print (region-beginning) (region-end))
-    (json-pretty-print (point-min) (point-max))))
 
 (use-package json
   :commands (json-pretty-print)
+  :preface
+  (defun json-format ()
+    "Format the region if any, or the buffer as JSON."
+    (interactive)
+    (if (use-region-p)
+        (json-pretty-print (region-beginning) (region-end))
+      (json-pretty-print (point-min) (point-max))))
   :config
   (setq json-encoding-default-indentation "    "))
 
@@ -362,10 +363,10 @@
   (defun html-format ()
     "Format HTML buffer using tidy."
     (interactive)
-    (let ((tidy-args '("-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
+    (let ((tidy-args '("-m" "-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
           (begin (if (use-region-p) (region-beginning) (point-min)))
           (end (if (use-region-p) (region-end) (point-max))))
-      (apply 'call-process-region begin end "tidy" t t nil tidy-args)))
+      (util/format-buffer "html-format" begin end "tidy" tidy-args)))
   :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
   (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))

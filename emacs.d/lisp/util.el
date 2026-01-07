@@ -164,9 +164,24 @@ negative"
         (unwind-protect
             (progn
               (write-region start end temp-file)
+              (when delete
+                (delete-region start end))
               (apply #'process-file program temp-file buffer display args))
           (when temp-file (delete-file temp-file))))
     (apply #'call-process-region start end program delete buffer display args)))
+
+(defun util/format-buffer (name begin end format-program format-args)
+  "Define a general format function with NAME to format current buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
+  (let ((error-output-file (make-temp-file name)))
+    (unwind-protect
+        (let ((status (apply #'util/process-region begin end format-program t (list t error-output-file) nil format-args))
+              (stderr (with-temp-buffer
+                        (insert-file-contents error-output-file)
+                        (buffer-substring-no-properties (point-min) (point-max)))))
+          (when (not (zerop status))
+            (error "%s failed with code %d: %s" name status stderr))
+          (message "%s succeeds" name))
+      (delete-file error-output-file))))
 
 (defun util/add-exec-path (path &optional append)
   "Emacs does set `exec-path' from the value of `PATH' on startup,
