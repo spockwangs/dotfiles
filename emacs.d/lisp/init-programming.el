@@ -148,16 +148,16 @@
                                        :documentRangeFormattingProvider))
   :config
   (add-to-list 'eglot-server-programs
-               '(c++-mode . ("clangd"
-                             "--log=error"
-                             "--query-driver=**/clang++,**/clang"
-                             "--background-index"
-                             "--completion-style=detailed"
-                             "--pch-storage=memory"
-                             "--header-insertion=iwyu"
-                             "--header-insertion-decorators"
-                             "--clang-tidy"
-                             "--pretty"))))
+               '(c++-ts-mode . ("clangd"
+                                "--log=error"
+                                "--query-driver=**/clang++,**/clang"
+                                "--background-index"
+                                "--completion-style=detailed"
+                                "--pch-storage=memory"
+                                "--header-insertion=iwyu"
+                                "--header-insertion-decorators"
+                                "--clang-tidy"
+                                "--pretty"))))
 
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
@@ -198,20 +198,44 @@
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
+(use-package tree-sitter
+  :demand)
+
+(use-package tree-sitter-langs
+  :demand
+  :config
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+  (setopt treesit-font-lock-level 3)
+  (global-tree-sitter-mode))
+
+(defun init-cc-mode ()
+  (subword-mode 1)
+  (turn-on-auto-fill)
+  (c-toggle-auto-newline -1)
+  (setq clang-format-fallback-style "Google")
+  (when (fboundp 'company-complete)
+    (add-hook 'completion-at-point-functions #'company-complete nil 'local))
+  (cond ((locate-dominating-file default-directory "GTAGS")
+         (gtags-mode))
+        ((locate-dominating-file default-directory "compile_commands.json")
+         (require 'eglot)
+         (eglot-ensure))))
+
+(use-package c++-ts-mode
+  :ensure nil
+  :bind (:map c++-ts-mode-map
+              ("<return>" . newline-and-indent)
+              ("M-q" . c-fill-paragraph)
+              ("C-M-\\" . clang-format)
+              ("C-c C-b" . util/compile-project))
+  :hook (c++-ts-mode . init-cc-mode)
+  :config
+  (require 'clang-format))
+
 (use-package cc-mode
   :preface
-  (defun init-cc-mode ()
-    (subword-mode 1)
-    (turn-on-auto-fill)
-    (c-toggle-auto-newline -1)
-    (setq clang-format-fallback-style "Google")
-    (when (fboundp 'company-complete)
-      (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-    (cond ((locate-dominating-file default-directory "GTAGS")
-           (gtags-mode))
-          ((locate-dominating-file default-directory "compile_commands.json")
-           (require 'eglot)
-           (eglot-ensure))))
   :bind (:map c-mode-base-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
