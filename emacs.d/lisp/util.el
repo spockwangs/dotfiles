@@ -170,8 +170,9 @@ negative"
           (when temp-file (delete-file temp-file))))
     (apply #'call-process-region start end program delete buffer display args)))
 
-(defun util/format-buffer (name begin end format-program format-args)
-  "Define a general format function with NAME to format current buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
+(defun util/format-region (name begin end format-program format-args)
+  "Define a general format function with NAME to format a region of current
+buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (let ((error-output-file (make-temp-file name)))
     (unwind-protect
         (let ((status (apply #'util/process-region begin end format-program t (list t error-output-file) nil format-args))

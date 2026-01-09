@@ -391,7 +391,7 @@
     (let ((tidy-args '("-m" "-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
           (begin (if (use-region-p) (region-beginning) (point-min)))
           (end (if (use-region-p) (region-end) (point-max))))
-      (util/format-buffer "html-format" begin end "tidy" tidy-args)))
+      (util/format-region "html-format" begin end "tidy" tidy-args)))
   :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
   (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))
