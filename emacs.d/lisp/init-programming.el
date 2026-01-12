@@ -208,6 +208,8 @@
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
   (setopt treesit-font-lock-level 3)
+  (treesit-install-language-grammar 'cpp)
+  (treesit-install-language-grammar 'c)
   (global-tree-sitter-mode))
 
 (defun init-cc-mode ()

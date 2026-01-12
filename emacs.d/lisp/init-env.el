@@ -42,6 +42,7 @@
 (setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
+(package-refresh-contents)
 
 (require 'use-package-ensure)
 (setq
