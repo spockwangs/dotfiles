@@ -148,16 +148,17 @@
                                        :documentRangeFormattingProvider))
   :config
   (add-to-list 'eglot-server-programs
-               '(c++-ts-mode . ("clangd"
-                                "--log=error"
-                                "--query-driver=**/clang++,**/clang"
-                                "--background-index"
-                                "--completion-style=detailed"
-                                "--pch-storage=memory"
-                                "--header-insertion=iwyu"
-                                "--header-insertion-decorators"
-                                "--clang-tidy"
-                                "--pretty"))))
+               '((c-mode c++-mode c-ts-mode c++-ts-mode) .
+                 ("clangd"
+                  "--log=error"
+                  "--query-driver=**/clang++,**/clang"
+                  "--background-index"
+                  "--completion-style=detailed"
+                  "--pch-storage=memory"
+                  "--header-insertion=iwyu"
+                  "--header-insertion-decorators"
+                  "--clang-tidy"
+                  "--pretty"))))
 
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
@@ -208,8 +209,6 @@
   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
   (setopt treesit-font-lock-level 3)
-  (treesit-install-language-grammar 'cpp)
-  (treesit-install-language-grammar 'c)
   (global-tree-sitter-mode))
 
 (defun init-cc-mode ()
