@@ -8,13 +8,13 @@
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
 
 (require 'init-env)
-(require 'init-desktop)
 (require 'init-appearance)
 (require 'init-editing)
 (require 'init-programming)
 (require 'init-remote)
 (require 'init-terminal)
 (require 'init-misc)
+(require 'init-desktop)
 
 ;; Load local customizations.
 (setq custom-file "~/.cache/custom.el")
