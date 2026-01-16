@@ -251,6 +251,9 @@
   :ensure nil
   :hook (c-mode-common . spock-set-c-style))
 
+(use-package rust-ts-mode
+  :ensure nil)
+
 (use-package go-mode
   :preface
   (defun init-go-mode ()
