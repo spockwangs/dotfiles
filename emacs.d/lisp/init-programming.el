@@ -233,7 +233,8 @@
               ("C-c C-b" . util/compile-project))
   :hook (c++-ts-mode . init-cc-mode)
   :config
-  (require 'clang-format))
+  (require 'clang-format)
+  (require 'spock-c-style))
 
 (use-package cc-mode
   :preface
