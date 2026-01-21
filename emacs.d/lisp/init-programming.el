@@ -145,7 +145,8 @@
   (eglot-report-progress nil)
   (eglot-ignored-server-capabilities '(:documentHighlightProvider
                                        :documentFormattingProvider
-                                       :documentRangeFormattingProvider))
+                                       :documentRangeFormattingProvider
+                                       :documentOnTypeFormattingProvider))
   :config
   (add-to-list 'eglot-server-programs
                '((c-mode c++-mode c-ts-mode c++-ts-mode) .
