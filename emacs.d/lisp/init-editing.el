@@ -206,6 +206,10 @@
   :bind (("C-'" . avy-goto-char)
          ("C-\"" . avy-goto-char-2)))
 
+;; Goto flymake next error.
+(bind-keys ("C-c n" . flymake-goto-next-error)
+           ("C-c p" . flymake-goto-prev-error))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Search
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -413,7 +417,7 @@
               (use-package math-preview
                 :demand t)
               (math-preview-all)
-              (add-hook 'after-save-hook #'math-preview-all))))
+              (add-hook 'after-save-hook #'math-preview-all nil t))))
 
 (provide 'init-editing)
 ;;; init-editing.el ends here
