@@ -73,9 +73,6 @@
              ("s-<right>" . tab-bar-switch-to-next-tab))
   (custom-set-variables '(tab-bar-select-tab-modifiers '(super))))
 
-;; Show line numbers in some modes.
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
-
 ;; Configure mode line.
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)

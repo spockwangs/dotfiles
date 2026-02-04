@@ -402,6 +402,14 @@
   ("README\\.md\\'" . gfm-mode)
   ("\\.md\\'" . markdown-mode)
   ("\\.markdown\\'" . markdown-mode)
+  :preface
+  (defun init-markdown-mode ()
+    (display-line-numbers-mode)
+    (use-package math-preview
+      :demand t)
+    (math-preview-all)
+    (add-hook 'after-save-hook #'math-preview-all nil t))
+  :hook (markdown-mode . init-markdown-mode)
   :custom
   (markdown-header-scaling t)
   (markdown-hide-urls t)
@@ -409,15 +417,7 @@
   :bind (:map markdown-mode-map
               ("C-c v" . markdown-view-mode)
               :map markdown-view-mode-map
-              ("e" . markdown-mode))
-  :config
-  ;; Render the latex fragments when opening and saving a markdown buffer.
-  (add-hook 'markdown-mode-hook
-            (lambda ()
-              (use-package math-preview
-                :demand t)
-              (math-preview-all)
-              (add-hook 'after-save-hook #'math-preview-all nil t))))
+              ("e" . markdown-mode)))
 
 (provide 'init-editing)
 ;;; init-editing.el ends here
