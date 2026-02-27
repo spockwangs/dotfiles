@@ -92,20 +92,21 @@
 
 (setq uniquify-buffer-name-style 'forward)
 
+;; Set default fill column.
+(setq-default fill-column 120)
+
 ;; Set default major mode to text-mode.
 (setq-default major-mode 'text-mode)
 (use-package text-mode
   :ensure nil
-  :hook ((text-mode . (lambda ()
-                        (subword-mode 1)
-                        (turn-on-auto-fill)
-                        (setq tab-width 4)))))
-
-;; Set default fill column.
-(setq-default fill-column 100)
-(add-hook
- 'fundamental-mode-hook
- 'turn-on-auto-fill)
+  :preface
+  (defun init-text-mode ()
+    (subword-mode 1)
+    (turn-on-auto-fill)
+    (setq tab-width 4)
+    (display-line-numbers-mode))
+  :hook
+  (text-mode . init-text-mode))
 
 ;; Use space instead of tabs.
 (setq-default indent-tabs-mode nil)
