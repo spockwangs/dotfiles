@@ -433,5 +433,8 @@
         ("C-M-\\" . bazel-buildifier)
         ("C-c C-b" . compile-for-bazel)))
 
+(use-package yaml-ts-mode
+  :mode ("\\.yaml\\'" . yaml-ts-mode))
+
 (provide 'init-programming)
 ;;; init-programing.el ends here
