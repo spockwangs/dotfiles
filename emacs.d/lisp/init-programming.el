@@ -213,6 +213,8 @@
   (setopt treesit-font-lock-level 3)
   (global-tree-sitter-mode))
 
+(use-package google-c-style)
+
 (defun init-cc-mode ()
   (subword-mode 1)
   (turn-on-auto-fill)
@@ -235,8 +237,7 @@
               ("C-c C-b" . util/compile-project))
   :hook (c++-ts-mode . init-cc-mode)
   :config
-  (require 'clang-format)
-  (require 'spock-c-style))
+  (require 'clang-format))
 
 (use-package cc-mode
   :preface
@@ -247,12 +248,7 @@
               ("C-c C-b" . util/compile-project))
   :hook ((c-mode-common . init-cc-mode))
   :config
-  (require 'clang-format)
-  (require 'spock-c-style))
-
-(use-package spock-c-style
-  :ensure nil
-  :hook (c-mode-common . spock-set-c-style))
+  (require 'clang-format))
 
 (use-package rust-ts-mode
   :ensure nil)
