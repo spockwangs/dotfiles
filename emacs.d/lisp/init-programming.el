@@ -366,9 +366,7 @@
     (interactive)
     (if (use-region-p)
         (json-pretty-print (region-beginning) (region-end))
-      (json-pretty-print (point-min) (point-max))))
-  :config
-  (setq json-encoding-default-indentation "    "))
+      (json-pretty-print (point-min) (point-max)))))
 
 (use-package yafolding)
 

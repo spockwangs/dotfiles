@@ -133,6 +133,6 @@ Works with: arglist-intro, arglist-cont, arglist-cont-nonempt.
   "Set the current buffer's c-style to Spock C/C++ Programming
 Style. Meant to be added to `c-mode-common-hook'."
   (interactive)
-  (c-add-style "Spock" spock-c-style t))
+  (c-ts-mode-set-style spock-c-style))
 
 (provide 'spock-c-style)

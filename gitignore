@@ -2,3 +2,4 @@
 *~
 *.o
 emacs.d/tree-sitter
+.claude/settings.local.json
