@@ -3,7 +3,8 @@
 # Read by interactive non-login bash.
 
 # User specific environment variables
-export EDITOR=emacs
+export EDITOR=vim
+export VISUAL=vim
 export SVN_EDITOR=vim
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:"$HOME/bin"
@@ -39,7 +40,7 @@ elif [ $TERM = dumb -o $TERM = emacs ]; then
     export PS1="\u@\h:\w[$?]\n\$ "
 else
     # The terminator emulator
-    export PS1='\[\e]0;\u@\h:\w\007\]\[\e[32m\]\u:\w [$?]\n\$\[\e[0m\] '
+    export PS1='\[\e]0;\u@\h:\w\007\]\[\e[32m\]\u:\w $(git_branch)[$?]\n\$\[\e[0m\] '
 fi
 
 export LANG=en_US.UTF-8
