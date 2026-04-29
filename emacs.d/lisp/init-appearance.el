@@ -188,12 +188,13 @@
   (setq calendar-latitude 22.53
         calendar-longitude 113.93))
 
-(use-package circadian
-  :hook (after-init . circadian-setup)
-  :demand
-  :config
-  (setq circadian-themes '((:sunrise . (modus-operandi))
-                           (:sunset  . (modus-vivendi)))))
+;; (use-package circadian
+;;   :hook (after-init . circadian-setup)
+;;   :demand
+;;   :config
+;;   (setq circadian-themes '((:sunrise . (modus-operandi))
+;;                            (:sunset  . (modus-vivendi)))))
+(load-theme 'modus-vivendi)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Icons
