@@ -1,9 +1,19 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+if [ -d "/data/mm64/spockwang/.local/share/bash-completion/completions" ]; then
+  for f in "/data/mm64/spockwang/.local/share/bash-completion/completions"/*; do
+    [ -f "$f" ] && . "$f"
+  done
+fi
+# OPENSPEC:END
+
 # -*- mode: shell-script; -*-
 # ~/.bashrc
 # Read by interactive non-login bash.
 
 # User specific environment variables
-export EDITOR=emacs
+export EDITOR=vim
+export VISUAL=vim
 export SVN_EDITOR=vim
 if [ -d "$HOME/bin" ]; then
     export PATH=$PATH:"$HOME/bin"
@@ -82,3 +92,26 @@ fi
 if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
 fi
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/data/mm64/spockwang/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/data/mm64/spockwang/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/data/mm64/spockwang/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/data/mm64/spockwang/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+
+. "$HOME/.local/bin/env"
+
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+	export PATH="$HOME/.local/bin:$PATH"
+fi
+export PATH="$PATH:$HOME/.ft"
