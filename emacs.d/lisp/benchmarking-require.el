@@ -19,4 +19,4 @@ LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
                                                     require-start-time))
                      t)))))
 
-(provide 'init-benchmarking)
+(provide 'benchmarking-require)

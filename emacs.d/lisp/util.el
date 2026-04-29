@@ -164,9 +164,25 @@ negative"
         (unwind-protect
             (progn
               (write-region start end temp-file)
+              (when delete
+                (delete-region start end))
               (apply #'process-file program temp-file buffer display args))
           (when temp-file (delete-file temp-file))))
     (apply #'call-process-region start end program delete buffer display args)))
+
+(defun util/format-region (name begin end format-program format-args)
+  "Define a general format function with NAME to format a region of current
+buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
+  (let ((error-output-file (make-temp-file name)))
+    (unwind-protect
+        (let ((status (apply #'util/process-region begin end format-program t (list t error-output-file) nil format-args))
+              (stderr (with-temp-buffer
+                        (insert-file-contents error-output-file)
+                        (buffer-substring-no-properties (point-min) (point-max)))))
+          (when (not (zerop status))
+            (error "%s failed with code %d: %s" name status stderr))
+          (message "%s succeeds" name))
+      (delete-file error-output-file))))
 
 (defun util/add-exec-path (path &optional append)
   "Emacs does set `exec-path' from the value of `PATH' on startup,
@@ -181,6 +197,11 @@ negative"
     (if append
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
+
+(defun util/refresh-exec-path ()
+  "Refresh `exec-path` from the value of "PATH"."
+  (interactive)
+  (setq exec-path (split-string (getenv "PATH") path-separator)))
 
 (defun util/get-dpi (&optional frame)
   "Get the DPI of FRAME (or current if nil)."
@@ -203,10 +224,10 @@ negative"
 (defmacro util/customize-variable-if-unset (var)
   "Prompt to customize VAR if it is nil."
   `(unless ,var
-    (customize-save-variable
-     ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
+     (customize-save-variable
+      ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
 
-(defcustom code-search-url nil
+(defcustom util/code-search-url nil
   "The URL of code search.")
 
 (defun util/code-search (thing type)
@@ -225,8 +246,8 @@ negative"
                               thing
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
-    (util/customize-variable-if-unset code-search-url)
-    (browse-url (concat code-search-url path))))
+    (util/customize-variable-if-unset util/code-search-url)
+    (browse-url (concat util/code-search-url path))))
 
 (defun util/code-search-path (path)
   "Open code search to search for a path."
@@ -260,7 +281,7 @@ negative"
                          (read-from-minibuffer "Code search for references of symbol: ")))))
   (util/code-search symbol 'ref))
 
-(defcustom log-search-url nil
+(defcustom util/log-search-url nil
   "The URL to access log search.")
 
 (defun util/log-search (env module keywords)
@@ -286,8 +307,8 @@ negative"
                                             (excludeKeywordObj . ((,(intern "0") . "")
                                                                   (,(intern "1") . "")))
                                             (_type . "share")))))))
-    (util/customize-variable-if-unset log-search-url)
-    (browse-url (concat log-search-url url))))
+    (util/customize-variable-if-unset util/log-search-url)
+    (browse-url (concat util/log-search-url url))))
 
 (defun util/log-search-at-point (keyword module env)
   "Open xlog to search for the symbol at point."
@@ -296,7 +317,7 @@ negative"
                        (let ((thing (thing-at-point 'symbol)))
                          (or thing (read-from-minibuffer "Search xlog for: "))))
                      (read-from-minibuffer "Module: ")
-                     (completing-read "Env: " '("test" "idc") nil t '("idc" . 0))))
+                     (completing-read "Env (default `idc'): " '("test" "idc") nil t nil nil "idc")))
   (util/log-search env module keyword))
 
 (defun util--read-directory ()
@@ -314,5 +335,22 @@ negative"
     ;; Copy from the buffer-local value, which may be set in per-directory settings.
     (setq-default compilation-search-path compilation-search-path)
     (call-interactively 'compile)))
+
+(defun util/hex-encode-region (begin end)
+  "Replace the string in the region (BEGIN END) with hexified string."
+  (interactive "r")
+  (let* ((text (buffer-substring begin end))
+         (hex (mapconcat (lambda (c) (format "%02X" c)) text)))
+    (delete-region begin end)
+    (insert hex)))
+
+(defun util/hex-decode-region (begin end)
+  "Replace the hex string in the region (BEGIN END) with unhexified string."
+  (interactive "r")
+  (let* ((hex (buffer-substring begin end))
+         (decoded-text (apply #'string (cl-loop for i from 0 below (length hex) by 2
+                                                collect (string-to-number (substring hex i (+ i 2)) 16)))))
+    (delete-region begin end)
+    (insert decoded-text)))
 
 (provide 'util)
