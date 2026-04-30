@@ -35,3 +35,6 @@ for %%G in (bash_profile, bashrc, dir_colors, fonts.conf, gitignore, indent.pro,
        exit /b %errorlevel%
     )
 )
+
+rem Configure git hooks
+git config core.hooksPath .githooks
