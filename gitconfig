@@ -1,0 +1,28 @@
+[core]
+editor = vim
+excludesfile = ~/.gitignore
+autocrlf = false
+filemode = false
+fscache = true
+preloadindex = true
+
+[color]
+ui = auto
+
+[alias]
+st = status
+co = checkout
+ci = commit
+br = branch
+
+[pull]
+rebase = false
+
+[push]
+default = tracking
+
+[include]
+path = .gitconfig.local
+
+[credential]
+helper = store
