@@ -202,7 +202,12 @@
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
 (use-package tree-sitter
-  :demand)
+  :demand
+  :config
+  (setq treesit-language-source-alist
+        '((cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.23.4")
+          (c "https://github.com/tree-sitter/tree-sitter-c" "v0.23.4")))
+  (setq treesit-extra-load-path '("~/.cache/tree-sitter/")))
 
 (use-package tree-sitter-langs
   :demand
