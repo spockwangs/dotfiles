@@ -201,29 +201,32 @@
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
-(use-package tree-sitter
-  :demand
-  :config
-  (setq treesit-language-source-alist
-        '((cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.23.4")
-          (c "https://github.com/tree-sitter/tree-sitter-c" "v0.23.4")))
-  (setq treesit-extra-load-path '("~/.cache/tree-sitter/")))
+;; (use-package tree-sitter
+;;   :demand
+;;   :config
+;;   (setq treesit-language-source-alist
+;;         '((cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.23.4")
+;;           (c "https://github.com/tree-sitter/tree-sitter-c" "v0.23.4")))
+;;   (setq treesit-extra-load-path '("~/.cache/tree-sitter/")))
+
+(setq treesit-extra-load-path '("~/.cache/tree-sitter/"))
 
 (use-package treesit-auto
+  :demand
   :custom
   (treesit-auto-install 'prompt)
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(use-package tree-sitter-langs
-  :demand
-  :config
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
-  (setopt treesit-font-lock-level 3)
-  (global-tree-sitter-mode))
+;; (use-package tree-sitter-langs
+;;   :demand
+;;   :config
+;;   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+;;   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+;;   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
+;;   (setopt treesit-font-lock-level 3)
+;;   (global-tree-sitter-mode))
 
 (use-package google-c-style)
 
@@ -340,20 +343,23 @@
   :custom
   (pylint-options '("--reports=n" "--output-format=parseable" "--errors-only")))
 
-(use-package sqlformat
-  :custom
-  (sqlformat-command 'sqlformat)
-  (sqlformat-args '("-k" "upper" "-i" "lower" "-r" "-s" "--indent_columns" "--indent_width" "4" "--wrap_after=1"))
-  :config
-  (setenv "PYTHONIOENCODING" "utf-8"))
-
 (use-package sql
   :mode (("\\.sql\\'" . sql-mode))
   :config
   (add-hook 'sql-mode-hook #'turn-on-auto-fill)
   :bind (:map sql-mode-map
-              ("C-c C-c" . comment-region)
-              ("C-M-\\" . sqlformat)))
+              ("C-c C-c" . comment-region)))
+
+;; You should install python package `sqlfluff'.
+(use-package sqlformat
+  :after sql
+  :custom
+  (sqlformat-command 'sqlfluff)
+  (sqlformat-args '("--dialect" "hive"))
+  (:map sql-mode-map
+        ("C-M-\\" . sqlformat))
+  :config
+  (setenv "PYTHONIOENCODING" "utf-8"))
 
 (use-package elisp-mode
   :ensure nil
