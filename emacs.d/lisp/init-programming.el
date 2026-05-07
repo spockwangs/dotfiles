@@ -249,7 +249,7 @@
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . util/compile-project))
+              ("C-c C-b" . util-compile-project))
   :hook (c++-ts-mode . init-cc-mode)
   :config
   (require 'clang-format))
@@ -260,7 +260,7 @@
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . util/compile-project))
+              ("C-c C-b" . util-compile-project))
   :hook ((c-mode-common . init-cc-mode))
   :config
   (require 'clang-format))
@@ -410,7 +410,7 @@
     (let ((tidy-args '("-m" "-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
           (begin (if (use-region-p) (region-beginning) (point-min)))
           (end (if (use-region-p) (region-end) (point-max))))
-      (util/format-region "html-format" begin end "tidy" tidy-args)))
+      (util-format-region "html-format" begin end "tidy" tidy-args)))
   :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
   (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))
@@ -440,7 +440,7 @@
   (interactive)
   ;; Set this variable in per-directory setting if bazel is not used for building.
   (if (bound-and-true-p compilation-do-not-use-bazel)
-      (call-interactively 'util/compile-project)
+      (call-interactively 'util-compile-project)
     (call-interactively 'bazel-build)))
 
 (use-package bazel

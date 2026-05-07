@@ -114,7 +114,7 @@
   (when window-system
     (require 'cl-lib)
     (require 'util)
-    (let* ((chinese-font-name (util/choose-available-font my-chinese-font-list))
+    (let* ((chinese-font-name (util-choose-available-font my-chinese-font-list))
            (atts (frame-monitor-attributes nil))
            (width-pixel (cl-fourth (assoc 'geometry atts)))
            (font-size (cond ((< width-pixel 1500) 18.0)
@@ -125,11 +125,11 @@
         (set-fontset-font "fontset-default" charset (font-spec :family chinese-font-name)))
 
       ;; Set standard faces.
-      (set-face-font 'default (font-spec :family (util/choose-available-font my-default-font-list)
+      (set-face-font 'default (font-spec :family (util-choose-available-font my-default-font-list)
                                          :slant 'normal
                                          :size font-size))
-      (set-face-attribute 'fixed-pitch nil :family (util/choose-available-font my-fixed-pitch-font-list))
-      (set-face-attribute 'variable-pitch nil :family (util/choose-available-font my-variable-pitch-font-list)))))
+      (set-face-attribute 'fixed-pitch nil :family (util-choose-available-font my-fixed-pitch-font-list))
+      (set-face-attribute 'variable-pitch nil :family (util-choose-available-font my-variable-pitch-font-list)))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)

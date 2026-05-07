@@ -66,7 +66,7 @@
 (use-package helm-xref)
 
 ;; Delete current buffer and file.
-(bind-key "C-x C-k" #'util/delete-file-and-buffer)
+(bind-key "C-x C-k" #'util-delete-file-and-buffer)
 
 ;; Rename current visited file.
 (bind-key "C-c r" #'rename-visited-file)
@@ -142,12 +142,12 @@
            ("S-<f9>" . goto-char))
 
 ;; Copy.
-(bind-keys ("C-c y" . util/copy-line)
-           ("C-c w" . util/copy-symbol)
-           ("C-c f" . util/copy-filename-at-point)
-           ("C-c M-f" . util/copy-current-file-name)
-           ("C-c M-d" . util/copy-current-directory)
-           ("C-c M-p" . util/copy-current-path))
+(bind-keys ("C-c y" . util-copy-line)
+           ("C-c w" . util-copy-symbol)
+           ("C-c f" . util-copy-filename-at-point)
+           ("C-c M-f" . util-copy-current-file-name)
+           ("C-c M-d" . util-copy-current-directory)
+           ("C-c M-p" . util-copy-current-path))
 
 ;; Clean old buffers periodically.
 (midnight-mode)
@@ -200,8 +200,8 @@
 
 ;; Scroll regions.
 (require 'util)
-(bind-keys ("C-<" . util/shift-left)
-           ("C->" . util/shift-right))
+(bind-keys ("C-<" . util-shift-left)
+           ("C->" . util-shift-right))
 
 (use-package avy
   :bind (("C-'" . avy-goto-char)
@@ -218,11 +218,11 @@
 (bind-keys :map search-map
            ("O" . multi-occur-in-matching-buffers)
            ("g" . rgrep)
-           ("cm" . util/code-search-message)
-           ("cp" . util/code-search-path)
-           ("cd" . util/code-search-def)
-           ("cr" . util/code-search-ref)
-           ("l" . util/log-search-at-point)
+           ("cm" . util-code-search-message)
+           ("cp" . util-code-search-path)
+           ("cd" . util-code-search-def)
+           ("cr" . util-code-search-ref)
+           ("l" . util-log-search-at-point)
            ("f" . find-name-dired))
 
 (use-package ace-isearch
