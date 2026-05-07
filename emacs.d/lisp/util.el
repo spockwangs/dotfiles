@@ -324,7 +324,7 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (let* ((package-directory (progn (require 'bazel)
                                    (bazel--package-directory
                                     (buffer-file-name)
-                                    (bazel--workspace-root (buffer-file-name)))))
+                                    (bazel--repository-root (buffer-file-name)))))
          (init-dir (or package-directory default-directory)))
     (read-from-minibuffer "Directory: " init-dir)))
 
