@@ -167,14 +167,14 @@
 
 (use-package gtags-mode)
 
-(use-package alert
-  :config
-  (when (eq window-system 'w32)
-    (setq alert-default-style 'toast)))
+(use-package alert)
 
 (when (eq window-system 'w32)
   (use-package alert-toast
-    :after alert))
+    :after alert
+    :demand
+    :config
+    (setq alert-default-style 'toast)))
 
 (defun my-notify (title message)
   (pcase window-system
@@ -254,14 +254,14 @@
   :config
   (require 'clang-format))
 
-(use-package cc-mode
-  :preface
-  :bind (:map c-mode-base-map
+(use-package c-ts-mode
+  :ensure nil
+  :bind (:map c-ts-mode-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
               ("C-c C-b" . util-compile-project))
-  :hook ((c-mode-common . init-cc-mode))
+  :hook (c-ts-mode . init-cc-mode)
   :config
   (require 'clang-format))
 
@@ -345,17 +345,18 @@
 
 (use-package sql
   :mode (("\\.sql\\'" . sql-mode))
-  :config
-  (add-hook 'sql-mode-hook #'turn-on-auto-fill)
+  :hook (sql-mode . turn-on-auto-fill)
   :bind (:map sql-mode-map
               ("C-c C-c" . comment-region)))
 
 ;; You should install python package `sqlfluff'.
 (use-package sqlformat
   :after sql
+  :demand
   :custom
   (sqlformat-command 'sqlfluff)
-  (sqlformat-args '("--dialect" "hive"))
+  (sqlformat-args '("--dialect" "sparksql"))
+  :bind
   (:map sql-mode-map
         ("C-M-\\" . sqlformat))
   :config
@@ -375,30 +376,27 @@
   :config
   (turn-on-auto-fill))
 
+(use-package json-ts-mode
+  :preface
+  (defun init-json-mode ()
+    (subword-mode 1))
+  :hook ((json-ts-mode . init-json-mode)))
 
 (use-package json
-  :commands (json-pretty-print)
+  :after json-ts-mode
+  :demand
   :preface
   (defun json-format ()
     "Format the region if any, or the buffer as JSON."
     (interactive)
     (if (use-region-p)
         (json-pretty-print (region-beginning) (region-end))
-      (json-pretty-print (point-min) (point-max)))))
+      (json-pretty-print (point-min) (point-max))))
+  :bind (:map json-ts-mode-map
+              ("C-M-\\" . json-format)))
 
-(use-package yafolding)
-
-(use-package js
-  :ensure nil
-  :mode (("\\.json\\'" . js-json-mode))
-  :hook ((js-json-mode . (lambda () (yafolding-mode)))
-         (js-mode . (lambda ()
-                      (subword-mode 1)
-                      (turn-on-auto-fill))))
-  :bind (:map js-json-mode-map
-              ("C-M-\\" . json-format)
-              :map js-mode-map
-              ([(return)] . newline-and-indent)))
+(use-package yafolding
+  :hook ((json-ts-mode . yafolding-mode)))
 
 (use-package web-mode
   :mode ("\\.html?\\'" . web-mode)
@@ -436,14 +434,14 @@
     (vc-dir dir))
   :bind ("C-x v d" . my-vc-dir))
 
-(defun compile-for-bazel ()
-  (interactive)
-  ;; Set this variable in per-directory setting if bazel is not used for building.
-  (if (bound-and-true-p compilation-do-not-use-bazel)
-      (call-interactively 'util-compile-project)
-    (call-interactively 'bazel-build)))
-
 (use-package bazel
+  :preface
+  (defun compile-for-bazel ()
+    (interactive)
+    ;; Set this variable in per-directory setting if bazel is not used for building.
+    (if (bound-and-true-p compilation-do-not-use-bazel)
+        (call-interactively 'util-compile-project)
+      (call-interactively 'bazel-build)))
   :bind
   (:map bazel-mode-map
         ("C-M-\\" . bazel-buildifier)
