@@ -147,7 +147,8 @@
   (eglot-ignored-server-capabilities '(:documentHighlightProvider
                                        :documentFormattingProvider
                                        :documentRangeFormattingProvider
-                                       :documentOnTypeFormattingProvider))
+                                       :documentOnTypeFormattingProvider
+                                       :semanticTokensProvider))
   :config
   (add-to-list 'eglot-server-programs
                '((c-mode c++-mode c-ts-mode c++-ts-mode) .
@@ -214,6 +215,10 @@
 
 (use-package google-c-style)
 
+(use-package clang-format
+  :ensure nil
+  :commands (clang-format))
+
 (defun init-cc-mode ()
   (subword-mode 1)
   (turn-on-auto-fill)
@@ -234,9 +239,7 @@
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
               ("C-c C-b" . util-compile-project))
-  :hook (c++-ts-mode . init-cc-mode)
-  :config
-  (require 'clang-format))
+  :hook (c++-ts-mode . init-cc-mode))
 
 (use-package c-ts-mode
   :ensure nil
@@ -245,9 +248,7 @@
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
               ("C-c C-b" . util-compile-project))
-  :hook (c-ts-mode . init-cc-mode)
-  :config
-  (require 'clang-format))
+  :hook (c-ts-mode . init-cc-mode))
 
 (use-package rust-ts-mode
   :ensure nil)
