@@ -35,6 +35,7 @@
                 (car (alist-get 'tramp-login-args
                                 (cdr (assoc "ssh" tramp-methods))))
                 :test #'equal))
+  ;; Enable connection reuse.
   (customize-set-variable
    'tramp-ssh-controlmaster-options
    "-o ControlPath=~/.ssh/sockets/%%r@%%h:%%p -o ControlMaster=auto -o ControlPersist=yes")
