@@ -201,14 +201,6 @@
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
   (setq compilation-buffer-name-function #'my-compilation-buffer-name))
 
-;; (use-package tree-sitter
-;;   :demand
-;;   :config
-;;   (setq treesit-language-source-alist
-;;         '((cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.23.4")
-;;           (c "https://github.com/tree-sitter/tree-sitter-c" "v0.23.4")))
-;;   (setq treesit-extra-load-path '("~/.cache/tree-sitter/")))
-
 (setq treesit-extra-load-path '("~/.cache/tree-sitter/"))
 
 (use-package treesit-auto
@@ -216,17 +208,9 @@
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
+  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml))
+  (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml))
   (global-treesit-auto-mode))
-
-;; (use-package tree-sitter-langs
-;;   :demand
-;;   :config
-;;   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-;;   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-;;   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
-;;   (setopt treesit-font-lock-level 3)
-;;   (global-tree-sitter-mode))
 
 (use-package google-c-style)
 
