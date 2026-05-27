@@ -35,6 +35,9 @@
                 (car (alist-get 'tramp-login-args
                                 (cdr (assoc "ssh" tramp-methods))))
                 :test #'equal))
+  (customize-set-variable
+   'tramp-ssh-controlmaster-options
+   "-o ControlPath=~/.ssh/sockets/%%r@%%h:%%p -o ControlMaster=auto -o ControlPersist=yes")
   ;; Make the PATH setting in "~/.bashrc" available to the remote shell.
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;; Enable per-directory local variables over tramp.
