@@ -74,7 +74,6 @@
   "Set the current buffer's tree-sitter C/C++ style to Google-like rules."
   (interactive)
   (setq-local c-ts-mode-indent-offset 2)
-  (setq-local indent-tabs-mode nil)
   (setq-local comment-column 40)
   (c-ts-mode-set-style #'google-c-ts-mode-style))
 

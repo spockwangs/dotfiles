@@ -414,7 +414,6 @@
   :hook (protobuf-mode . protobuf-init)
   :init
   (defun protobuf-init ()
-    (setq indent-tabs-mode nil)
     (setq tab-width 2)
     (setq c-basic-offset 2)
     (setf (alist-get 'arglist-intro c-offsets-alist) '+)))
