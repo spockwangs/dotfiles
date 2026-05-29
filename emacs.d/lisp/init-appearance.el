@@ -203,8 +203,6 @@
   :demand t)
 
 (use-package nerd-icons-dired
-  :after nerd-icons
-  :demand t
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package treemacs-nerd-icons

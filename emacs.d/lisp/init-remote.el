@@ -44,9 +44,10 @@
   ;; Enable per-directory local variables over tramp.
   (setq enable-remote-dir-locals t)
   ;; Make remote shell recognize alias settings.
-  (connection-local-update-profile-variables 'tramp-connection-local-default-shell-profile
-                                             '((shell-file-name . "/bin/bash")
-                                               (shell-command-switch . "-ic"))))
+  (connection-local-update-profile-variables
+   'tramp-connection-local-default-shell-profile
+   '((shell-file-name . "/bin/bash")
+     (shell-command-switch . "-c"))))
 
 (provide 'init-remote)
 ;;; init-remote.el ends here

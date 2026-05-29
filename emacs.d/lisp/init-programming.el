@@ -217,6 +217,17 @@
   :ensure nil
   :commands (clang-format))
 
+(defun my-eglot-ensure-idle ()
+  "Start Eglot for the current buffer after Emacs is idle."
+  (let ((buf (current-buffer)))
+    (run-with-idle-timer
+     1 nil
+     (lambda ()
+       (when (buffer-live-p buf)
+         (with-current-buffer buf
+           (require 'eglot)
+           (eglot-ensure)))))))
+
 (defun init-cc-mode ()
   (subword-mode 1)
   (turn-on-auto-fill)
@@ -229,8 +240,7 @@
   (cond ((locate-dominating-file default-directory "GTAGS")
          (gtags-mode))
         ((locate-dominating-file default-directory "compile_commands.json")
-         (require 'eglot)
-         (eglot-ensure))))
+         (my-eglot-ensure-idle))))
 
 (use-package c++-ts-mode
   :ensure nil
@@ -301,8 +311,7 @@
     (subword-mode 1)
     ;; You should install pyright (Microsoft's Python language server).
     ;;   $ pip install pyright
-    (require 'eglot)
-    (eglot-ensure))
+    (my-eglot-ensure-idle))
   :custom
   (python-indent-offset 4)
   :bind (:map python-mode-map

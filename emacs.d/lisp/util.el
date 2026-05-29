@@ -332,9 +332,13 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   "Prompt to run a command under specified directory of a project."
   (interactive (list (util--read-directory)))
   (let ((default-directory directory))
-    ;; Copy from the buffer-local value, which may be set in per-directory settings.
+    (require 'compile)
     (setq-default compilation-search-path compilation-search-path)
-    (call-interactively 'compile)))
+    (let* ((command (compilation-read-command compile-command))
+           (command (if (file-remote-p default-directory)
+                        (format "bash -ic %s" (shell-quote-argument command))
+                      command)))
+      (compile command))))
 
 (defun util-hex-encode-region (begin end)
   "Replace the string in the region (BEGIN END) with hexified string."
