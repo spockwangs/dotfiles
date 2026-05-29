@@ -213,8 +213,6 @@
   (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml))
   (global-treesit-auto-mode))
 
-(use-package google-c-style)
-
 (use-package clang-format
   :ensure nil
   :commands (clang-format))
@@ -222,7 +220,9 @@
 (defun init-cc-mode ()
   (subword-mode 1)
   (turn-on-auto-fill)
-  (c-toggle-auto-newline -1)
+  (when (derived-mode-p 'c-ts-mode 'c++-ts-mode)
+    (require 'google-c-style)
+    (google-set-c-ts-style))
   (setq clang-format-fallback-style "Google")
   (when (fboundp 'company-complete)
     (add-hook 'completion-at-point-functions #'company-complete nil 'local))

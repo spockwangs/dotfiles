@@ -310,33 +310,33 @@
   (treemacs-set-width (* 0.3 (frame-width)))
   (treemacs-follow-mode -1))
 
-(defun my-switch-to-buffer-and-tab (buffer &rest _)
-  "Switch buffer and its associated tab at the same time."
-  (require 'treemacs)
-  (let (tab-name)
-    (with-current-buffer buffer
-      (let* ((file-or-dir (or (buffer-file-name) default-directory))
-             (workspace (treemacs-find-workspace-by-path file-or-dir)))
-        (setq tab-name
-              (cond (workspace (treemacs-workspace->name workspace))
-                    ((memq major-mode '(org-agenda-mode))
-                     "Agenda")
-                    ((memq major-mode '(emacs-lisp-mode))
-                     "Emacs")))))
-    (when tab-name
-      (tab-bar-switch-to-tab tab-name))))
+;; (defun my-switch-to-buffer-and-tab (buffer &rest _)
+;;   "Switch buffer and its associated tab at the same time."
+;;   (require 'treemacs)
+;;   (let (tab-name)
+;;     (with-current-buffer buffer
+;;       (let* ((file-or-dir (or (buffer-file-name) default-directory))
+;;              (workspace (treemacs-find-workspace-by-path file-or-dir)))
+;;         (setq tab-name
+;;               (cond (workspace (treemacs-workspace->name workspace))
+;;                     ((memq major-mode '(org-agenda-mode))
+;;                      "Agenda")
+;;                     ((memq major-mode '(emacs-lisp-mode))
+;;                      "Emacs")))))
+;;     (when tab-name
+;;       (tab-bar-switch-to-tab tab-name))))
 
-(with-eval-after-load 'ido
-  (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab))
+;; (with-eval-after-load 'ido
+;;   (advice-add 'ido-visit-buffer :before #'my-switch-to-buffer-and-tab))
 
-(use-package my-treemacs-tab-bar
-  :ensure nil
-  :after (treemacs tab-bar)
-  :demand
-  :config
-  (treemacs-set-scope-type 'Tabs)
-  ;; Create a default tab.
-  (tab-rename "Emacs"))
+;; (use-package my-treemacs-tab-bar
+;;   :ensure nil
+;;   :after (treemacs tab-bar)
+;;   :demand
+;;   :config
+;;   (treemacs-set-scope-type 'Tabs)
+;;   ;; Create a default tab.
+;;   (tab-rename "Emacs"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bookmarks
