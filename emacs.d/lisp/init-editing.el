@@ -90,7 +90,7 @@
   (when (and buffer-file-name
              (let ((attrs (file-attributes buffer-file-name)))
                (and attrs
-                    (> (file-attribute-size attrs) 1024*1024))))
+                    (< (file-attribute-size attrs) (* 1024 1024)))))
     (display-line-numbers-mode 1)))
 
 (add-hook 'after-change-major-mode-hook #'turn-on-display-line-numbers)

@@ -59,7 +59,7 @@
   (custom-set-variables '(temporary-file-directory "c:/tmp")))
 
 (use-package exec-path-from-shell
-  :demand t
+  :demand
   :config
   ;; Copy environment variables seen by shell to emacs on UNIX-like systems.
   (when (memq window-system '(mac ns x))
