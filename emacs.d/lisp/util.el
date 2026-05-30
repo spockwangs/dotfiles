@@ -203,6 +203,24 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (interactive)
   (setq exec-path (split-string (getenv "PATH") path-separator)))
 
+(defcustom util-large-file-size (* 1024 1024)
+  "File size above which expensive editing helpers are disabled."
+  :type 'integer)
+
+(defun util-large-file-p ()
+  "Return non-nil if the current buffer visits a large local file."
+  (and buffer-file-name
+       (not (file-remote-p buffer-file-name))
+       (let ((attrs (file-attributes buffer-file-name)))
+         (and attrs
+              (> (file-attribute-size attrs) util-large-file-size)))))
+
+(defun util-display-line-numbers-mode ()
+  "Enable line numbers unless the current buffer is remote or large."
+  (unless (or (file-remote-p default-directory)
+              (util-large-file-p))
+    (display-line-numbers-mode)))
+
 (defvar util-locate-dominating-file-cache (make-hash-table :test #'equal)
   "Cache for `util-locate-dominating-file' results.")
 

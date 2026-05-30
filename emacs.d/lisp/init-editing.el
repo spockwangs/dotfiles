@@ -104,7 +104,7 @@
     (subword-mode 1)
     (turn-on-auto-fill)
     (setq tab-width 4)
-    (display-line-numbers-mode))
+    (util-display-line-numbers-mode))
   :hook
   (text-mode . init-text-mode))
 
@@ -393,7 +393,7 @@
                    (math-preview-all))))))))
 
   (defun init-markdown-mode ()
-    (my-display-line-numbers-mode)
+    (util-display-line-numbers-mode)
     (use-package math-preview
       :demand t)
     (my-math-preview-all-idle)
