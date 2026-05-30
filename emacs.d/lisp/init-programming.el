@@ -205,7 +205,7 @@
 (setq treesit-extra-load-path '("~/.cache/tree-sitter/"))
 
 (use-package treesit-auto
-  :demand
+  :defer 2
   :custom
   (treesit-auto-install 'prompt)
   :config
@@ -237,9 +237,9 @@
   (setq clang-format-fallback-style "Google")
   (when (fboundp 'company-complete)
     (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-  (cond ((locate-dominating-file default-directory "GTAGS")
+  (cond ((util-locate-dominating-file default-directory "GTAGS")
          (gtags-mode))
-        ((locate-dominating-file default-directory "compile_commands.json")
+        ((util-locate-dominating-file default-directory "compile_commands.json")
          (my-eglot-ensure-idle))))
 
 (use-package c++-ts-mode

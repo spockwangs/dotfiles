@@ -25,9 +25,9 @@
 ;;; Code:
 
 (setq
- use-package-verbose t
+ use-package-verbose (bound-and-true-p init-file-debug)
  use-package-expand-minimally nil
- use-package-compute-statistics t
+ use-package-compute-statistics (bound-and-true-p init-file-debug)
  ;; Set GC threshold as 100MB.
  gc-cons-threshold 100000000
  ;; accept `y' or `n' instead of yes/no

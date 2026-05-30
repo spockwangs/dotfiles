@@ -277,7 +277,7 @@
   "Find the project root which contains DIR."
   (catch 'ret
     (dolist (f project-root-markers)
-      (when-let ((root (locate-dominating-file dir f)))
+      (when-let ((root (util-locate-dominating-file dir f)))
         (throw 'ret (cons 'transient root))))))
 
 (with-eval-after-load 'project
@@ -376,12 +376,28 @@
   ("\\.md\\'" . markdown-mode)
   ("\\.markdown\\'" . markdown-mode)
   :preface
+  (defvar-local my-math-preview-idle-timer nil)
+
+  (defun my-math-preview-all-idle ()
+    "Run `math-preview-all' for the current buffer after Emacs is idle."
+    (when my-math-preview-idle-timer
+      (cancel-timer my-math-preview-idle-timer))
+    (let ((buf (current-buffer)))
+      (setq my-math-preview-idle-timer
+            (run-with-idle-timer
+             1 nil
+             (lambda ()
+               (when (buffer-live-p buf)
+                 (with-current-buffer buf
+                   (setq my-math-preview-idle-timer nil)
+                   (math-preview-all))))))))
+
   (defun init-markdown-mode ()
-    (display-line-numbers-mode)
+    (my-display-line-numbers-mode)
     (use-package math-preview
       :demand t)
-    (math-preview-all)
-    (add-hook 'after-save-hook #'math-preview-all nil t))
+    (my-math-preview-all-idle)
+    (add-hook 'after-save-hook #'my-math-preview-all-idle nil t))
   :hook (markdown-mode . init-markdown-mode)
   :custom
   (markdown-header-scaling t)

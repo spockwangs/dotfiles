@@ -203,6 +203,25 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (interactive)
   (setq exec-path (split-string (getenv "PATH") path-separator)))
 
+(defvar util-locate-dominating-file-cache (make-hash-table :test #'equal)
+  "Cache for `util-locate-dominating-file' results.")
+
+(defun util-locate-dominating-file (dir name)
+  "Find a parent of DIR containing NAME, caching the result."
+  (let* ((dir (file-name-as-directory (expand-file-name dir)))
+         (key (cons dir name))
+         (cached (gethash key util-locate-dominating-file-cache 'missing)))
+    (if (not (eq cached 'missing))
+        cached
+      (puthash key
+               (locate-dominating-file dir name)
+               util-locate-dominating-file-cache))))
+
+(defun util-clear-locate-dominating-file-cache ()
+  "Clear cached `util-locate-dominating-file' results."
+  (interactive)
+  (clrhash util-locate-dominating-file-cache))
+
 (defun util-get-dpi (&optional frame)
   "Get the DPI of FRAME (or current if nil)."
   (cl-flet ((pyth (lambda (w h)

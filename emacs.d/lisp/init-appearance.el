@@ -199,16 +199,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Icons
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package nerd-icons
-  :demand t)
+(use-package nerd-icons)
 
 (use-package nerd-icons-dired
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package treemacs-nerd-icons
-  :after (treemacs nerd-icons)
+  :after (treemacs)
   :demand
   :config
+  (require 'nerd-icons)
   ;; You should download (https://www.nerdfonts.com/font-downloads) and install the font "Symbols
   ;; Nerd Font" first.
   (treemacs-load-theme "nerd-icons"))
