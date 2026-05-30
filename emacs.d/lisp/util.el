@@ -217,8 +217,7 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
 
 (defun util-display-line-numbers-mode ()
   "Enable line numbers unless the current buffer is remote or large."
-  (unless (or (file-remote-p default-directory)
-              (util-large-file-p))
+  (unless (util-large-file-p)
     (display-line-numbers-mode)))
 
 (defvar util-locate-dominating-file-cache (make-hash-table :test #'equal)
