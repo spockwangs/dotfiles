@@ -30,8 +30,7 @@
   :ensure nil
   :preface
   (defun init-prog-mode ()
-    (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t)))
-    (util-display-line-numbers-mode))
+    (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))
   :hook
   (prog-mode . init-prog-mode))
 

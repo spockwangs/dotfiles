@@ -86,6 +86,15 @@
 ;; Use `ibuffer' instead of `list-buffers'.
 (defalias 'list-buffers 'ibuffer)
 
+(defun turn-on-display-line-numbers ()
+  (when (and buffer-file-name
+             (let ((attrs (file-attributes buffer-file-name)))
+               (and attrs
+                    (> (file-attribute-size attrs) 1024*1024))))
+    (display-line-numbers-mode 1)))
+
+(add-hook 'after-change-major-mode-hook #'turn-on-display-line-numbers)
+
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
@@ -103,8 +112,7 @@
   (defun init-text-mode ()
     (subword-mode 1)
     (turn-on-auto-fill)
-    (setq tab-width 4)
-    (util-display-line-numbers-mode))
+    (setq tab-width 4))
   :hook
   (text-mode . init-text-mode))
 
@@ -393,7 +401,6 @@
                    (math-preview-all))))))))
 
   (defun init-markdown-mode ()
-    (util-display-line-numbers-mode)
     (use-package math-preview
       :demand t)
     (my-math-preview-all-idle)
