@@ -52,6 +52,16 @@
  ;; Always defer loading a package unless :demand is specified.
  use-package-always-defer t)
 
+(use-package auto-package-update
+  :custom
+  (auto-package-update-interval 7)
+  (auto-package-update-hide-results t)
+  (auto-package-update-delete-old-versions t)
+  (auto-package-update-prompt-before-update t)
+  :config
+  (auto-package-update-maybe)
+  (auto-package-update-at-time "10:00"))
+
 ;; There is a `~' in the temporary path on Windows which some programs (e.g. latex) can't recognize
 ;; so we change the temporary path for Emacs.
 (when (eq system-type 'windows-nt)
@@ -59,11 +69,10 @@
   (custom-set-variables '(temporary-file-directory "c:/tmp")))
 
 (use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
   :demand
   :config
-  ;; Copy environment variables seen by shell to emacs on UNIX-like systems.
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 (setq user-full-name "spockwang"
       user-mail-address "wbbtiger@gmail.com")

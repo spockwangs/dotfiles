@@ -3,6 +3,9 @@
 ;;     All rights reserved.
 ;;
 
+;; Prefer to load newer files of .el and .elc.
+(setq load-prefer-newer t)
+
 ;; Add load-path. Put my own scripts in `lisp' and third-party scripts in `site-lisp'.
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "site-lisp" user-emacs-directory))
@@ -17,13 +20,14 @@
 (require 'init-desktop)
 
 ;; Load local customizations.
-(setq custom-file "~/.cache/custom.el")
+(setq custom-file "~/.cache/emacs/custom.el")
 (when (file-exists-p custom-file)
   (load custom-file))
 
 ;; Start emacs server after init is done.
-(add-hook 'after-init-hook
-          (lambda ()
-            (require 'server)
-            (unless (server-running-p)
-              (server-start))))
+(unless (daemonp)
+  (add-hook 'after-init-hook
+            (lambda ()
+              (require 'server)
+              (unless (server-running-p)
+                (server-start)))))

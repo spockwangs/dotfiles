@@ -139,6 +139,17 @@
 
 (use-package eglot
   :ensure nil
+  :commands (eglot-ensure)
+  :preface
+  (defun my-eglot-ensure-idle ()
+    "Start Eglot for the current buffer after Emacs is idle."
+    (let ((buf (current-buffer)))
+      (run-with-idle-timer
+       1 nil
+       (lambda ()
+         (when (buffer-live-p buf)
+           (with-current-buffer buf
+             (eglot-ensure)))))))
   :custom
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
@@ -148,6 +159,9 @@
                                        :documentRangeFormattingProvider
                                        :documentOnTypeFormattingProvider
                                        :semanticTokensProvider))
+  (jsonrpc-event-hook nil)
+  (eglot-events-buffer-size 0)
+  (eglot-events-buffer-config '(:size 0 :format short))
   :config
   (add-to-list 'eglot-server-programs
                '((c-mode c++-mode c-ts-mode c++-ts-mode) .
@@ -189,7 +203,9 @@
    ;; Only cares about errors.
    compilation-skip-threshold 2
    ;; Scroll to the first error.
-   compilation-scroll-output 'first-error)
+   compilation-scroll-output 'first-error
+   compilation-always-kill t
+   compilation-max-output-line-length 2048)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
@@ -215,17 +231,6 @@
 (use-package clang-format
   :ensure nil
   :commands (clang-format))
-
-(defun my-eglot-ensure-idle ()
-  "Start Eglot for the current buffer after Emacs is idle."
-  (let ((buf (current-buffer)))
-    (run-with-idle-timer
-     1 nil
-     (lambda ()
-       (when (buffer-live-p buf)
-         (with-current-buffer buf
-           (require 'eglot)
-           (eglot-ensure)))))))
 
 (defun init-cc-mode ()
   (subword-mode 1)

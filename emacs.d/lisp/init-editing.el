@@ -46,6 +46,14 @@
 (with-eval-after-load 'ffap
   (custom-set-variables '(ffap-ftp-regexp nil)))
 
+;; Automatically resolve symlinks to their true paths. This sets the correct
+;; working directory so C-x C-f opens in the right folder and version control
+;; tools recognize the Git repository.
+(setq find-file-visit-truename t
+      ;; Automatically follow a symlink to its source if that source is managed
+      ;; by a version control system, rather than asking for permission.
+      vc-follow-symlinks t)
+
 (use-package helm
   :custom
   (helm-buffers-fuzzy-matching t)
@@ -65,17 +73,39 @@
 
 (use-package helm-xref)
 
+;; Delete by moving to trash in interactive mode
+(setq delete-by-moving-to-trash (not noninteractive))
+(setq remote-file-name-inhibit-delete-by-moving-to-trash t)
+
 ;; Delete current buffer and file.
 (bind-key "C-x C-k" #'util-delete-file-and-buffer)
 
 ;; Rename current visited file.
 (bind-key "C-c r" #'rename-visited-file)
 
+;; Save after 5 seconds if inactivity
+(setq auto-save-visited-interval 5)
+(auto-save-visited-mode 1)
+
+;; Disable automatic backup.
+(setq make-backup-files nil)
+
+(setq create-lockfiles nil)
+
+;; Update time stamp string in the buffer before saving.
+(add-hook 'before-save-hook 'time-stamp)
+
+;; Delete trailing whitespaces before saving.
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Require newline at the end.
+(setq-default require-final-newline t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (ido-mode t)
-(custom-set-variables '(ido-save-directory-list-file "~/.cache/ido.last")
+(custom-set-variables '(ido-save-directory-list-file "~/.cache/emacs/ido.last")
                       '(ido-create-new-buffer 'prompt)
                       '(ido-enable-regexp t)
                       '(ido-enable-flex-matching t)
@@ -86,6 +116,9 @@
 ;; Use `ibuffer' instead of `list-buffers'.
 (defalias 'list-buffers 'ibuffer)
 
+(setq-default display-line-numbers-width 3)
+(setq-default display-line-numbers-widen t)
+
 (defun turn-on-display-line-numbers ()
   (when (and buffer-file-name
              (let ((attrs (file-attributes buffer-file-name)))
@@ -93,6 +126,7 @@
                     (< (file-attribute-size attrs) (* 1024 1024)))))
     (display-line-numbers-mode 1)))
 
+;; Only display line numbers for small files.
 (add-hook 'after-change-major-mode-hook #'turn-on-display-line-numbers)
 
 ;; Reuse the buffer when browsing in dired buffer.
@@ -103,6 +137,8 @@
 
 ;; Set default fill column.
 (setq-default fill-column 120)
+
+(setq-default word-wrap t)
 
 ;; Set default major mode to text-mode.
 (setq-default major-mode 'text-mode)
@@ -123,20 +159,6 @@
 ;; Set transient-mark-mode.
 (setq transient-mark-mode t)
 
-;; Disable automatic backup.
-(setq make-backup-files nil)
-
-(global-auto-revert-mode t)
-
-;; Update time stamp string in the buffer before saving.
-(add-hook 'before-save-hook 'time-stamp)
-
-;; Delete trailing whitespaces before saving.
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Require newline at the end.
-(setq-default require-final-newline t)
-
 ;; Bind functional keys.
 (require 'redo+)
 (bind-keys ("<f2>" . set-mark-command)
@@ -156,6 +178,26 @@
            ("C-c M-f" . util-copy-current-file-name)
            ("C-c M-d" . util-copy-current-directory)
            ("C-c M-p" . util-copy-current-path))
+
+;; Force the mouse to paste text at the active cursor position.
+(setq mouse-yank-at-point t)
+
+(setq custom-buffer-done-kill t)
+
+;; Disable auto-adding a new line at the bottom when scrolling.
+(setq next-line-add-newlines nil)
+
+;; Disable fontification during user input to reduce lag in large buffers.
+;; Also helps marginally with scrolling performance.
+(setq redisplay-skip-fontification-on-input t)
+
+;; Enable multi-line commenting which ensures that `comment-indent-new-line'
+;; properly continues comments onto new lines.
+(setq comment-multi-line t)
+
+;; Ensures that empty lines within the commented region are also commented out.
+;; This prevents unintended visual gaps and maintains a consistent appearance.
+(setq comment-empty-lines t)
 
 ;; Clean old buffers periodically.
 (midnight-mode)
@@ -189,7 +231,7 @@
 (add-hook 'midnight-hook #'my-clean-buffer-never-displayed)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Cursor
+;; Move around
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Move points.
 (bind-keys ("C-M-f" . forward-symbol)
@@ -218,6 +260,13 @@
 ;; Goto flymake next error.
 (bind-keys ("C-c n" . flymake-goto-next-error)
            ("C-c p" . flymake-goto-prev-error))
+
+;; Enables faster scrolling. This may result in brief periods of inaccurate
+;; syntax highlighting, which should quickly self-correct.
+(setq fast-but-imprecise-scrolling t)
+
+;; Move point to top/bottom of buffer before signaling a scrolling error.
+(setq scroll-error-top-bottom t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Search
@@ -263,7 +312,7 @@
 
 ;; Use TAB key to do indent and auto-completion.
 (setq tab-always-indent 'complete
-      tab-first-completion 'eol)
+      tab-first-completion 'word-or-paren-or-punct)
 (bind-key "TAB" #'indent-for-tab-command prog-mode-map)
 
 (use-package which-key
@@ -319,14 +368,75 @@
   (treemacs-follow-mode -1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Bookmarks
+;; History
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq
  ;; Save bookmark automatically.
  bookmark-save-flag 1
- bookmark-default-file "~/.cache/bookmarks"
- recentf-save-file "~/.cache/recentf"
- project-list-file "~/.cache/projects")
+ bookmark-default-file "~/.cache/emacs/bookmarks"
+ project-list-file "~/.cache/emacs/projects")
+
+(use-package autorevert
+  :ensure nil
+  :commands (auto-revert-mode global-auto-revert-mode)
+  :hook
+  (after-init . global-auto-revert-mode)
+  :init
+  (setq auto-revert-interval 3)
+  (setq auto-revert-remote-files nil)
+  (setq auto-revert-use-notify t)
+  (setq auto-revert-avoid-polling nil))
+
+(use-package recentf
+  :ensure nil
+  :commands (recentf-mode recentf-cleanup)
+  :hook
+  (after-init . recentf-mode)
+  :init
+  (setq recentf-save-file "~/.cache/emacs/recentf")
+  (setq recentf-max-saved-items 300)
+  (setq recentf-max-menu-items 15)
+  (setq recentf-auto-cleanup (if (daemonp) 300 'never))
+  (setq recentf-exclude
+        (list "\\.tar$" "\\.tbz2$" "\\.tbz$" "\\.tgz$" "\\.bz2$"
+              "\\.bz$" "\\.gz$" "\\.gzip$" "\\.xz$" "\\.zip$"
+              "\\.7z$" "\\.rar$"
+              "COMMIT_EDITMSG\\'"
+              "\\.\\(?:gz\\|gif\\|svg\\|png\\|jpe?g\\|bmp\\|xpm\\)$"
+              "-autoloads\\.el$" "autoload\\.el$"))
+  :config
+  ;; A cleanup depth of -90 ensures that `recentf-cleanup' runs before
+  ;; `recentf-save-list', allowing stale entries to be removed before the list
+  ;; is saved by `recentf-save-list', which is automatically added to
+  ;; `kill-emacs-hook' by `recentf-mode'.
+  (add-hook 'kill-emacs-hook #'recentf-cleanup -90))
+
+;; savehist is an Emacs feature that preserves the minibuffer history between
+;; sessions. It saves the history of inputs in the minibuffer, such as commands,
+;; search strings, and other prompts, to a file. This allows users to retain
+;; their minibuffer history across Emacs restarts.
+(use-package savehist
+  :ensure nil
+  :commands (savehist-mode savehist-save)
+  :hook
+  (after-init . savehist-mode)
+  :custom
+  (savehist-file "~/.cache/emacs/history")
+  :init
+  (setq history-length 300)
+  (setq savehist-autosave-interval 600))
+
+;; save-place-mode enables Emacs to remember the last location within a file
+;; upon reopening. This feature is particularly beneficial for resuming work at
+;; the precise point where you previously left off.
+(use-package saveplace
+  :ensure nil
+  :commands (save-place-mode save-place-local-mode)
+  :hook
+  (after-init . save-place-mode)
+  :init
+  (setq save-place-file "~/.cache/emacs/saveplace")
+  (setq save-place-limit 600))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Org and markdown files
@@ -410,10 +520,11 @@
   (markdown-header-scaling t)
   (markdown-hide-urls t)
   (markdown-fontify-code-blocks-natively t)
-  :bind (:map markdown-mode-map
-              ("C-c v" . markdown-view-mode)
-              :map markdown-view-mode-map
-              ("e" . markdown-mode)))
+  :bind
+  (:map markdown-mode-map
+        ("C-c v" . markdown-view-mode)
+        :map markdown-view-mode-map
+        ("e" . markdown-mode)))
 
 (provide 'init-editing)
 ;;; init-editing.el ends here

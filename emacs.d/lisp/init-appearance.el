@@ -32,8 +32,9 @@
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 
-;; Get a visual, instead of audio, feedback of an exception.
+;; No beeping or blinking.
 (setq visible-bell nil)
+(setq ring-bell-function #'ignore)
 
 ;; Configure frame title bar.
 (setq frame-title-format
