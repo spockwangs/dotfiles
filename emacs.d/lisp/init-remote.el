@@ -36,9 +36,10 @@
                                 (cdr (assoc "ssh" tramp-methods))))
                 :test #'equal))
   ;; Enable connection reuse.
+  (customize-set-variable 'tramp-use-connection-share t)
   (customize-set-variable
    'tramp-ssh-controlmaster-options
-   "-o ControlPath=~/.ssh/sockets/%%r@%%h:%%p -o ControlMaster=auto -o ControlPersist=yes")
+   "-o ControlPath=tramp.%%r@%%h:%%p -o ControlMaster=auto -o ControlPersist=yes")
   ;; Make the PATH setting in "~/.bashrc" available to the remote shell.
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;; Enable per-directory local variables over tramp.
