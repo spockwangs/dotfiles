@@ -25,44 +25,10 @@
 ;;; Code:
 
 (setq
- use-package-verbose (bound-and-true-p init-file-debug)
- use-package-expand-minimally nil
- use-package-compute-statistics (bound-and-true-p init-file-debug)
- ;; Set GC threshold as 100MB.
- gc-cons-threshold 100000000
  ;; accept `y' or `n' instead of yes/no
  use-short-answers t
  enable-local-variables :all
- read-process-output-max (* 4 1024 1024)
- process-adaptive-read-buffering nil
- epg-pinentry-mode 'loopback
- initial-major-mode 'fundamental-mode
- initial-scratch-message nil)
-
-(require 'benchmarking-require)
-(require 'package)
-(setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
-                         ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-(package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(require 'use-package-ensure)
-(setq
- ;; Make sure the package is installed.
- use-package-always-ensure t
- ;; Always defer loading a package unless :demand is specified.
- use-package-always-defer t)
-
-(use-package auto-package-update
-  :custom
-  (auto-package-update-interval 7)
-  (auto-package-update-hide-results t)
-  (auto-package-update-delete-old-versions t)
-  (auto-package-update-prompt-before-update t)
-  :config
-  (auto-package-update-maybe)
-  (auto-package-update-at-time "10:00"))
+ epg-pinentry-mode 'loopback)
 
 ;; There is a `~' in the temporary path on Windows which some programs (e.g. latex) can't recognize
 ;; so we change the temporary path for Emacs.
@@ -72,7 +38,7 @@
 
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns x))
-  :demand
+  :defer 1
   :config
   (exec-path-from-shell-initialize))
 
