@@ -34,53 +34,74 @@
   :hook
   (prog-mode . init-prog-mode))
 
-(defun merge-request-to-gongfeng ()
-  "请求工蜂合并代码。"
-  (interactive)
-  (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
-                      "/-/merge_requests/new?ADTAG=git-cli&"
-                      (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
+(use-package git-modes
+  :commands (gitattributes-mode
+             gitconfig-mode
+             gitignore-mode)
+  :mode (("/\\.gitignore\\'" . gitignore-mode)
+         ("/info/exclude\\'" . gitignore-mode)
+         ("/git/ignore\\'" . gitignore-mode)
+         ("/.gitignore_global\\'" . gitignore-mode)  ; jc-dotfiles
 
-(defun my-list-merged-branches ()
-  "List all branches which have merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
-    (if (null merged-branches)
-        (message "No merged branches.")
-      (message (concat "Merged branches to `" dest-branch "':\n"
-                       (mapconcat 'identity merged-branches "\n"))))))
+         ("/\\.gitconfig\\'" . gitconfig-mode)
+         ("/\\.git/config\\'" . gitconfig-mode)
+         ("/modules/.*/config\\'" . gitconfig-mode)
+         ("/git/config\\'" . gitconfig-mode)
+         ("/\\.gitmodules\\'" . gitconfig-mode)
+         ("/etc/gitconfig\\'" . gitconfig-mode)
 
-(defun my-list-unmerged-branches ()
-  "List all branches which have not merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (unmerged-branches (magit-list-unmerged-branches dest-branch)))
-    (message (concat "Un-merged branches to `" dest-branch "':\n"
-                     (mapconcat 'identity unmerged-branches "\n")))))
+         ("/\\.gitattributes\\'" . gitattributes-mode)
+         ("/info/attributes\\'" . gitattributes-mode)
+         ("/git/attributes\\'" . gitattributes-mode)))
 
-(defun my-delete-merged-branches ()
-  "Iterate to delete all branches which have merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (merged-branches (magit-list-merged-branches dest-branch))
-         (branches-to-delete (remove dest-branch (remove "master" merged-branches)))
-         (total-num (length branches-to-delete))
-         (processed-count 0))
-    (if branches-to-delete
-        (dolist (br branches-to-delete)
-          (setq processed-count (1+ processed-count))
-          (if (yes-or-no-p (format "Delete branch `%s'? (%d/%d)" br processed-count total-num))
-              (magit-branch-delete (list br))
-            (message "Nothing to delete"))))))
 
 (use-package magit
+  :preface
+  (defun merge-request-to-gongfeng ()
+    "请求工蜂合并代码。"
+    (interactive)
+    (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
+                        "/-/merge_requests/new?ADTAG=git-cli&"
+                        (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
+
+  (defun my-list-merged-branches ()
+    "List all branches which have merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
+      (if (null merged-branches)
+          (message "No merged branches.")
+        (message (concat "Merged branches to `" dest-branch "':\n"
+                         (mapconcat 'identity merged-branches "\n"))))))
+
+  (defun my-list-unmerged-branches ()
+    "List all branches which have not merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (unmerged-branches (magit-list-unmerged-branches dest-branch)))
+      (message (concat "Un-merged branches to `" dest-branch "':\n"
+                       (mapconcat 'identity unmerged-branches "\n")))))
+
+  (defun my-delete-merged-branches ()
+    "Iterate to delete all branches which have merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (merged-branches (magit-list-merged-branches dest-branch))
+           (branches-to-delete (remove dest-branch (remove "master" merged-branches)))
+           (total-num (length branches-to-delete))
+           (processed-count 0))
+      (if branches-to-delete
+          (dolist (br branches-to-delete)
+            (setq processed-count (1+ processed-count))
+            (if (yes-or-no-p (format "Delete branch `%s'? (%d/%d)" br processed-count total-num))
+                (magit-branch-delete (list br))
+              (message "Nothing to delete"))))))
   :custom
   (auto-revert-buffer-list-filter
    (lambda (buf) (not (file-remote-p (buffer-file-name buf))))
@@ -265,7 +286,10 @@
   :hook (c-ts-mode . init-cc-mode))
 
 (use-package rust-ts-mode
-  :ensure nil)
+  :ensure nil
+  :mode ("\\.rs\\'" . rust-mode)
+  :custom
+  (rust-indent-offset 2))
 
 (use-package go-mode
   :preface
@@ -446,6 +470,17 @@
 
 (use-package yaml-ts-mode
   :mode ("\\.yaml\\'" . yaml-ts-mode))
+
+(use-package csv-mode
+  :commands (csv-mode
+             csv-align-mode
+             csv-guess-set-separator)
+  :mode ("\\.csv\\'" . csv-mode)
+  :hook ((csv-mode . csv-align-mode)
+         (csv-mode . csv-guess-set-separator))
+  :custom
+  (csv-align-max-width 100)
+  (csv-separators '("," ";" " " "|" "\t")))
 
 (provide 'init-programming)
 ;;; init-programing.el ends here

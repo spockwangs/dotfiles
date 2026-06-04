@@ -178,16 +178,12 @@
     (modus-themes-org-agenda '((event . (varied))
                                (scheduled . rainbow)))))
 
-(use-package doom-themes)
-(use-package solarized-theme)
-(use-package spacemacs-theme)
-
 (use-package solar
   :ensure nil
   :demand
-  :config
-  (setq calendar-latitude 22.53
-        calendar-longitude 113.93))
+  :custom
+  (calendar-latitude 22.53)
+  (calendar-longitude 113.93))
 
 ;; (use-package circadian
 ;;   :hook (after-init . circadian-setup)

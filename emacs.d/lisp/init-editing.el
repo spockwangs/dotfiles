@@ -129,6 +129,10 @@
 ;; Only display line numbers for small files.
 (add-hook 'after-change-major-mode-hook #'turn-on-display-line-numbers)
 
+;; Disable fontification during user input to reduce lag in large buffers.
+;; Also helps marginally with scrolling performance.
+(setq redisplay-skip-fontification-on-input t)
+
 ;; Reuse the buffer when browsing in dired buffer.
 (setq dired-kill-when-opening-new-dired-buffer t)
 (put 'dired-find-alternate-file 'disabled nil) ; Disables the warning.
@@ -525,6 +529,31 @@
         ("C-c v" . markdown-view-mode)
         :map markdown-view-mode-map
         ("e" . markdown-mode)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Spell checking
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package flyspell
+  :ensure nil
+  :commands flyspell-mode
+  :hook
+  ((prog-mode . flyspell-prog-mode)
+   (text-mode . (lambda()
+                  (if (or (derived-mode-p 'yaml-mode)
+                          (derived-mode-p 'yaml-ts-mode)
+                          (derived-mode-p 'ansible-mode))
+                      (flyspell-prog-mode 1)
+                    (flyspell-mode 1)))))
+  :bind
+  (:map flyspell-mode-map
+        ("C-c ," . flyspell-goto-next-error)))
+
+(use-package flyspell-correct
+  :after flyspell
+  :demand
+  :bind
+  (:map flyspell-mode-map
+        ("C-c ;" . flyspell-correct-wrapper)))
 
 (provide 'init-editing)
 ;;; init-editing.el ends here

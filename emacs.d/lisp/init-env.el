@@ -35,7 +35,9 @@
  enable-local-variables :all
  read-process-output-max (* 4 1024 1024)
  process-adaptive-read-buffering nil
- epg-pinentry-mode 'loopback)
+ epg-pinentry-mode 'loopback
+ initial-major-mode 'fundamental-mode
+ initial-scratch-message nil)
 
 (require 'benchmarking-require)
 (require 'package)
@@ -93,7 +95,7 @@
  '(:application tramp :protocol "ssh" :machine "devcloud2")
  'remote-bash)
 
-;; Where so save secrets.
+;; Where to save secrets.
 (add-to-list 'auth-sources "~/.emacs.d/authinfo.gpg")
 
 (provide 'init-env)
