@@ -119,7 +119,7 @@
            (atts (frame-monitor-attributes nil))
            (width-pixel (cl-fourth (assoc 'geometry atts)))
            (font-size (cond ((< width-pixel 1500) 18.0)
-                            ((< width-pixel 2000) 15.0)
+                            ((< width-pixel 2000) 17.0)
                             (t 14.0))))
       ;; Set fonts for Chinese characters.
       (dolist (charset '(kana han symbol cjk-misc bopomofo))

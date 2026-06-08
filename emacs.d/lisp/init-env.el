@@ -30,6 +30,11 @@
  enable-local-variables :all
  epg-pinentry-mode 'loopback)
 
+;; Use the Command button as Meta key.
+(when (eq system-type'darwin)
+  (setq ns-command-modifier 'meta)
+  (setq ns-option-modifier 'none))
+
 ;; There is a `~' in the temporary path on Windows which some programs (e.g. latex) can't recognize
 ;; so we change the temporary path for Emacs.
 (when (eq system-type 'windows-nt)
