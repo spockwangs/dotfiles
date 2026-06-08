@@ -30,6 +30,7 @@
  enable-local-variables :all
  epg-pinentry-mode 'loopback)
 
+
 ;; Use the Command button as Meta key.
 (when (eq system-type'darwin)
   (setq ns-command-modifier 'meta)
