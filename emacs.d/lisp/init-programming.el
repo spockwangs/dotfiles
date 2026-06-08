@@ -439,9 +439,10 @@
   :hook ((makefile-mode . (lambda () (subword-mode 1)))))
 
 (use-package protobuf-mode
-  :hook (protobuf-mode . protobuf-init)
-  :init
-  (defun protobuf-init ()
+  :hook (protobuf-mode . init-protobuf)
+  :preface
+  (defun init-protobuf ()
+    (subword-mode)
     (setq tab-width 2)
     (setq c-basic-offset 2)
     (setf (alist-get 'arglist-intro c-offsets-alist) '+)))
