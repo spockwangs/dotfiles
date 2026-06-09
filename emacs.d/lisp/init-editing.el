@@ -95,7 +95,7 @@
 ;; Update time stamp string in the buffer before saving.
 (add-hook 'before-save-hook 'time-stamp)
 
-;; Delete trailing whitespaces before saving.
+;; Delete trailing whitespace before saving.
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 ;; Require newline at the end.
@@ -164,11 +164,13 @@
 (setq transient-mark-mode t)
 
 ;; Bind functional keys.
-(require 'redo+)
+(use-package undo-fu
+  :bind
+  (("<f5>" . undo-fu-only-undo)
+   ("S-<f5>" . undo-fu-only-redo)))
+
 (bind-keys ("<f2>" . set-mark-command)
            ("<f3>" . revert-buffer)
-           ("<f5>" . undo)
-           ("S-<f5>" . redo)
            ("<f6>" . pop-to-mark-command)
            ("S-<f6>" . (lambda () (interactive) (push-mark)))
            ("<f7>" . ispell)
