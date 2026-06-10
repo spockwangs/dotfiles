@@ -340,7 +340,7 @@
   "Find the project root which contains DIR."
   (catch 'ret
     (dolist (f project-root-markers)
-      (when-let ((root (util-locate-dominating-file dir f)))
+      (when-let ((root (locate-dominating-file dir f)))
         (throw 'ret (cons 'transient root))))))
 
 (with-eval-after-load 'project

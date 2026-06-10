@@ -166,7 +166,7 @@
     "Start Eglot for the current buffer after Emacs is idle."
     (let ((buf (current-buffer)))
       (run-with-idle-timer
-       1 nil
+       3 nil
        (lambda ()
          (when (buffer-live-p buf)
            (with-current-buffer buf
@@ -262,9 +262,9 @@
   (setq clang-format-fallback-style "Google")
   (when (fboundp 'company-complete)
     (add-hook 'completion-at-point-functions #'company-complete nil 'local))
-  (cond ((util-locate-dominating-file default-directory "GTAGS")
+  (cond ((locate-dominating-file default-directory "GTAGS")
          (gtags-mode))
-        ((util-locate-dominating-file default-directory "compile_commands.json")
+        ((locate-dominating-file default-directory "compile_commands.json")
          (my-eglot-ensure-idle))))
 
 (use-package c++-ts-mode
