@@ -483,5 +483,10 @@
   (csv-align-max-width 100)
   (csv-separators '("," ";" " " "|" "\t")))
 
+(use-package sh-mode
+  :ensure nil
+  :mode (("zshrc\\'" . sh-mode)
+         ("bashrc\\'" . sh-mode)))
+
 (provide 'init-programming)
 ;;; init-programing.el ends here

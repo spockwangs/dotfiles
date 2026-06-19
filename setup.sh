@@ -10,7 +10,7 @@ for name in bin/*; do
     ln -snf "${CWD}/${name}" "${HOME}/${name}"
 done
 
-for name in bash_profile bashrc dir_colors emacs.d fonts.conf gitconfig gitignore gnomerc indent.pro inputrc screenrc tmux.conf; do
+for name in bash_profile bashrc dir_colors emacs.d fonts.conf gitconfig gitignore gnomerc indent.pro inputrc screenrc tmux.conf zshrc; do
     ln -snf "${CWD}/$name" "${HOME}/.${name}"
 done
 
