@@ -351,10 +351,7 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (let ((default-directory directory))
     (require 'compile)
     (setq-default compilation-search-path compilation-search-path)
-    (let* ((command (compilation-read-command compile-command))
-           (command (if (file-remote-p default-directory)
-                        (format "bash -ic %s" (shell-quote-argument command))
-                      command)))
+    (let ((command (compilation-read-command compile-command)))
       (compile command))))
 
 (defun util-hex-encode-region (begin end)

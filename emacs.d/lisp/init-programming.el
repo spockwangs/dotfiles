@@ -166,7 +166,7 @@
     "Start Eglot for the current buffer after Emacs is idle."
     (let ((buf (current-buffer)))
       (run-with-idle-timer
-       3 nil
+       1 nil
        (lambda ()
          (when (buffer-live-p buf)
            (with-current-buffer buf
@@ -236,7 +236,18 @@
   ;; compiliation commands concurrently.
   (defun my-compilation-buffer-name (mode-name)
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
-  (setq compilation-buffer-name-function #'my-compilation-buffer-name))
+  (setq compilation-buffer-name-function #'my-compilation-buffer-name)
+
+  ;; Wrap compile command in "bash -ic" when running in remote directory (Tramp),
+  ;; so that the remote shell sources .bashrc/.bash_profile for proper environment setup.
+  (advice-add 'compile :around
+              (lambda (orig-fun command &optional comint)
+                (funcall orig-fun
+                         (if (and (not (string-match-p "\\`bash -ic " command))
+                                  (file-remote-p default-directory))
+                             (format "bash -ic %s" (shell-quote-argument command))
+                           command)
+                         comint))))
 
 (setq treesit-extra-load-path '("~/.cache/tree-sitter/"))
 
