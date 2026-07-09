@@ -191,7 +191,7 @@
                   "--query-driver=**/clang++,**/clang"
                   "--background-index"
                   "--completion-style=detailed"
-                  "--pch-storage=memory"
+                  "--pch-storage=disk"
                   "--header-insertion=iwyu"
                   "--header-insertion-decorators"
                   "--clang-tidy"
