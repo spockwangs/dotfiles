@@ -26,10 +26,10 @@
   (auto-package-update-interval 7)
   (auto-package-update-hide-results t)
   (auto-package-update-delete-old-versions t)
-  (auto-package-update-prompt-before-update t)
+  (auto-package-update-prompt-before-update nil)
   :config
   (auto-package-update-maybe)
-  (auto-package-update-at-time "10:00"))
+  (auto-package-update-at-time "09:00"))
 
 (require 'init-env)
 (require 'init-appearance)
