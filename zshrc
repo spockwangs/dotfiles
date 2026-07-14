@@ -1,3 +1,58 @@
+# User specific environment variables
+export EDITOR=vim
+export SVN_EDITOR=vim
+if [ -d "$HOME/bin" ]; then
+    export PATH=$PATH:"$HOME/bin"
+fi
+export CLASSPATH=".:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar"
+
+# set colors for `man'
+export LESS_TERMCAP_mb=$'\E[1;37m'
+export LESS_TERMCAP_md=$'\E[1;37m'
+export LESS_TERMCAP_me=$'\E[0m'
+export LESS_TERMCAP_se=$'\E[0m'
+export LESS_TERMCAP_so=$'\E[0;30m\E[47m'
+export LESS_TERMCAP_ue=$'\E[0m'
+export LESS_TERMCAP_us=$'\E[0;32m'
+
+# User specific aliases
+alias rm='rm -i'
+alias cp='cp -i -v'
+alias mv='mv -i -v'
+if [[ "$TERM" == "dumb" ]]; then
+    alias ls='ls --classify'
+elif [[ "$(uname)" == "Darwin" ]]; then
+    alias ls='ls -G -F'
+else
+    alias ls='ls --color=always --classify'
+fi
+alias ll='ls -lh'
+alias less='less -R'
+alias grep='grep --color=auto'
+# Use the right emacsclient binary on MacOS.
+alias em='emacsclient -n -a ""'
+
+# allow core dump
+ulimit -c unlimited
+
+# You may need to manually set your language environment
+export LANG=en_US.UTF-8
+
+# Install z.sh.
+if [ -f ~/bin/z.sh ]; then
+    source ~/bin/z.sh
+fi
+
+if [ -f ~/.bashrc.local ]; then
+    source ~/.bashrc.local
+fi
+
+if [[ "$TERM" == dumb ]]; then
+    unsetopt zle
+    PS1='$ '
+    return
+fi
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -15,7 +70,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -80,57 +135,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# User specific environment variables
-export EDITOR=vim
-export SVN_EDITOR=vim
-if [ -d "$HOME/bin" ]; then
-    export PATH=$PATH:"$HOME/bin"
-fi
-export CLASSPATH=".:$JAVA_HOME/lib:$JAVA_HOME/lib/tools.jar"
-
-# set colors for `man'
-export LESS_TERMCAP_mb=$'\E[1;37m'
-export LESS_TERMCAP_md=$'\E[1;37m'
-export LESS_TERMCAP_me=$'\E[0m'
-export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_so=$'\E[0;30m\E[47m'
-export LESS_TERMCAP_ue=$'\E[0m'
-export LESS_TERMCAP_us=$'\E[0;32m'
-
-# User specific aliases
-alias rm='rm -i'
-alias cp='cp -i -v'
-alias mv='mv -i -v'
-if [[ "$TERM" == "dumb" ]]; then
-    alias ls='ls --classify'
-elif [[ "$(uname)" == "Darwin" ]]; then
-    alias ls='ls -G -F'
-else
-    alias ls='ls --color=always --classify'
-fi
-alias ll='ls -lh'
-alias less='less -R'
-alias grep='grep --color=auto'
-# Use the right emacsclient binary on MacOS.
-alias em='emacsclient -n -a ""'
-
-# allow core dump
-ulimit -c unlimited
-
-# You may need to manually set your language environment
-export LANG=en_US.UTF-8
-
-# Install z.sh.
-if [ -f ~/bin/z.sh ]; then
-    source ~/bin/z.sh
-fi
-
-if [ -f ~/.bashrc.local ]; then
-    source ~/.bashrc.local
-fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
