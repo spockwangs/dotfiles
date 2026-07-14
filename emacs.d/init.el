@@ -29,7 +29,7 @@
   (auto-package-update-prompt-before-update nil)
   :config
   (auto-package-update-maybe)
-  (auto-package-update-at-time "10:00"))
+  (auto-package-update-at-time "09:00"))
 
 (require 'init-env)
 (require 'init-appearance)
