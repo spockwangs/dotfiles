@@ -35,7 +35,6 @@ alias em='emacsclient -n -a ""'
 # allow core dump
 ulimit -c unlimited
 
-# You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
 # Install z.sh.
@@ -136,5 +135,4 @@ plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

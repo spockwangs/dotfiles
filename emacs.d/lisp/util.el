@@ -4,7 +4,7 @@
 ;;
 ;; util.el -- Common utility functions
 
-(defun util/choose-available-font (list)
+(defun util-choose-available-font (list)
   "Return a available font name from the LIST, or nil if all of
  them are not available on this computer. LIST is a list of font
  names or (FONT-NAME . SCALE) pairs."
@@ -16,12 +16,12 @@
               (progn
                 (add-to-list 'face-font-rescale-alist elem)
                 (car elem))
-            (util/choose-available-font (cdr list)))
+            (util-choose-available-font (cdr list)))
         (if (member elem (font-family-list))
             elem
-          (util/choose-available-font (cdr list)))))))
+          (util-choose-available-font (cdr list)))))))
 
-(defun util/shift-region (distance)
+(defun util-shift-region (distance)
   "Shift the selected region right if distance is postive, left if
 negative"
   (let ((mark (mark)))
@@ -32,17 +32,17 @@ negative"
       ;; for transient mark mode
       (setq deactivate-mark nil))))
 
-(defun util/shift-left ()
+(defun util-shift-left ()
   "Shift the region left by tab-width."
   (interactive)
-  (util/shift-region (- tab-width)))
+  (util-shift-region (- tab-width)))
 
-(defun util/shift-right ()
+(defun util-shift-right ()
   "Shift the region right by tab-width."
   (interactive)
-  (util/shift-region tab-width))
+  (util-shift-region tab-width))
 
-(defun util/copy-line (&optional arg)
+(defun util-copy-line (&optional arg)
   "Copy current line to kill-ring without marking the line."
   (interactive "P")
   (let ((beg (line-beginning-position))
@@ -50,7 +50,7 @@ negative"
     (copy-region-as-kill beg end))
   (message "Copied a line."))
 
-(defun util/copy-symbol ()
+(defun util-copy-symbol ()
   "Copy a symbol under current cursor."
   (interactive)
   (let ((str (thing-at-point 'symbol :no-properties)))
@@ -58,7 +58,7 @@ negative"
         (progn (kill-new str) (message "Copied `%s'." str))
       (message "No symbols under current cursor."))))
 
-(defun util/copy-filename-at-point ()
+(defun util-copy-filename-at-point ()
   "Copy a filename at the point."
   (interactive)
   (let ((str (thing-at-point 'filename :no-properties)))
@@ -67,38 +67,38 @@ negative"
                (message "Copied `%s'." str))
       (message "No filename at the point."))))
 
-(defun util/insert-current-date ()
+(defun util-insert-current-date ()
   "Insert current date at current point."
   (interactive)
   (insert (format-time-string "%Y-%m-%d")))
 
-(defun util/insert-current-time ()
+(defun util-insert-current-time ()
   "Insert current time at current point."
   (interactive)
   (insert (format-time-string "%Y-%m-%d %H:%M:%S")))
 
-(defun util/kill-current-word ()
+(defun util-kill-current-word ()
   "Kill current word."
   (interactive)
   (backward-word)
   (kill-word 1))
 
-(defun util/next-buffer ()
+(defun util-next-buffer ()
   "Switch to previous buffer in current window."
   (interactive)
   (switch-to-buffer (car (reverse (buffer-list)))))
 
-(defun util/other-buffer ()
+(defun util-other-buffer ()
   "Switch to the other buffer (2nd in list-buffer) in current window."
   (interactive)
   (switch-to-buffer (other-buffer)))
 
-(defun util/kill-current-buffer ()
+(defun util-kill-current-buffer ()
   "Kill current buffer."
   (interactive)
   (kill-buffer (current-buffer)))
 
-(defun util/copy-current-path ()
+(defun util-copy-current-path ()
   "Copy current file path to kill-ring. If the path is remote, only copy the local components."
   (interactive)
   (let ((filename (tramp-file-local-name (if (equal major-mode 'dired-mode)
@@ -109,7 +109,7 @@ negative"
                (message "Copied path '%s'." filename))
       (message "No path associated with current buffer."))))
 
-(defun util/copy-current-file-name ()
+(defun util-copy-current-file-name ()
   "Copy current filename."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode)
@@ -120,7 +120,7 @@ negative"
                (message "Copied filename '%s'." filename))
       (message "No filename associated with current buffer."))))
 
-(defun util/copy-current-directory ()
+(defun util-copy-current-directory ()
   "Copy current directory to kill-ring. If the directory is remote, only copy the local name components."
   (interactive)
   (let* ((filename (tramp-file-local-name (if (equal major-mode 'dired-mode)
@@ -132,19 +132,19 @@ negative"
                (message "Copied directory `%s'." dir))
       (message "No directory associated with current buffer."))))
 
-(defun util/search-all-buffers (regexp)
+(defun util-search-all-buffers (regexp)
   "Search all lines matching REGEXP in all open buffers."
   (interactive (list (read-regexp "List lines matching regexp: ")))
   (multi-occur-in-matching-buffers ".*" regexp t))
 
-(defun util/fill ()
+(defun util-fill ()
   "If area is selected call 'fill-region' otherwise call 'fill-paragraph'."
   (interactive)
   (if (region-active-p)
       (fill-region (region-beginning) (region-end))
     (fill-paragraph nil)))
 
-(defun util/delete-file-and-buffer ()
+(defun util-delete-file-and-buffer ()
   "Kill the current buffer and deletes the file it is visiting."
   (interactive)
   (let ((filename (buffer-file-name)))
@@ -156,7 +156,7 @@ negative"
               (kill-buffer)))
       (message "No visited file!"))))
 
-(defun util/process-region (start end program &optional delete buffer display &rest args)
+(defun util-process-region (start end program &optional delete buffer display &rest args)
   "Similar to `call-process-region', but supports running remote
  commands if current directory is remote."
   (if (file-remote-p default-directory)
@@ -170,12 +170,12 @@ negative"
           (when temp-file (delete-file temp-file))))
     (apply #'call-process-region start end program delete buffer display args)))
 
-(defun util/format-region (name begin end format-program format-args)
+(defun util-format-region (name begin end format-program format-args)
   "Define a general format function with NAME to format a region of current
 buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (let ((error-output-file (make-temp-file name)))
     (unwind-protect
-        (let ((status (apply #'util/process-region begin end format-program t (list t error-output-file) nil format-args))
+        (let ((status (apply #'util-process-region begin end format-program t (list t error-output-file) nil format-args))
               (stderr (with-temp-buffer
                         (insert-file-contents error-output-file)
                         (buffer-substring-no-properties (point-min) (point-max)))))
@@ -184,7 +184,7 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
           (message "%s succeeds" name))
       (delete-file error-output-file))))
 
-(defun util/add-exec-path (path &optional append)
+(defun util-add-exec-path (path &optional append)
   "Emacs does set `exec-path' from the value of `PATH' on startup,
  but will not look at it again later. But if you run a command,
  it will inherit `PATH', not `exec-path', so subprocesses can
@@ -198,12 +198,29 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
         (setenv "PATH" (concat (getenv "PATH") sep path))
       (setenv "PATH" (concat path sep (getenv "PATH"))))))
 
-(defun util/refresh-exec-path ()
-  "Refresh `exec-path` from the value of "PATH"."
+(defun util-refresh-exec-path ()
+  "Refresh `exec-path' from the value of PATH."
   (interactive)
   (setq exec-path (split-string (getenv "PATH") path-separator)))
 
-(defun util/get-dpi (&optional frame)
+(defcustom util-large-file-size (* 1024 1024)
+  "File size above which expensive editing helpers are disabled."
+  :type 'integer)
+
+(defun util-large-file-p ()
+  "Return non-nil if the current buffer visits a large local file."
+  (and buffer-file-name
+       (not (file-remote-p buffer-file-name))
+       (let ((attrs (file-attributes buffer-file-name)))
+         (and attrs
+              (> (file-attribute-size attrs) util-large-file-size)))))
+
+(defun util-display-line-numbers-mode ()
+  "Enable line numbers unless the current buffer is remote or large."
+  (unless (util-large-file-p)
+    (display-line-numbers-mode)))
+
+(defun util-get-dpi (&optional frame)
   "Get the DPI of FRAME (or current if nil)."
   (cl-flet ((pyth (lambda (w h)
                     (sqrt (+ (* w w)
@@ -221,16 +238,16 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
         (message "d: %d" (mm2in mm-d))
         (/ pix-d (mm2in mm-d))))))
 
-(defmacro util/customize-variable-if-unset (var)
+(defmacro util-customize-variable-if-unset (var)
   "Prompt to customize VAR if it is nil."
   `(unless ,var
      (customize-save-variable
       ',var (completing-read (concat "Customize `" (symbol-name ',var) "': ") nil))))
 
-(defcustom util/code-search-url nil
+(defcustom util-code-search-url nil
   "The URL of code search.")
 
-(defun util/code-search (thing type)
+(defun util-code-search (thing type)
   "Browse code search to find the THING with type TYPE."
   (let ((path (pcase type
                 ('proto (concat "/codesearch/search?full=&defs="
@@ -246,45 +263,45 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
                               thing
                               "&path=&hist=&type=&xrd=&nn=134&searchall=true"))
                 (_ (message "Invalid type: %s" type)))))
-    (util/customize-variable-if-unset util/code-search-url)
-    (browse-url (concat util/code-search-url path))))
+    (util-customize-variable-if-unset util-code-search-url)
+    (browse-url (concat util-code-search-url path))))
 
-(defun util/code-search-path (path)
+(defun util-code-search-path (path)
   "Open code search to search for a path."
   (interactive (list (let ((thing (thing-at-point 'filename)))
                        (if thing
                            thing
                          (read-from-minibuffer "Code search for path: ")))))
-  (util/code-search path 'path))
+  (util-code-search path 'path))
 
-(defun util/code-search-message (msg)
+(defun util-code-search-message (msg)
   "Open code search to search for a protobuf message."
   (interactive (list (let ((thing (thing-at-point 'symbol)))
                        (if thing
                            thing
                          (read-from-minibuffer "Code search for protobuf message: ")))))
-  (util/code-search msg 'proto))
+  (util-code-search msg 'proto))
 
-(defun util/code-search-def (symbol)
+(defun util-code-search-def (symbol)
   "Open code search to search for a protobuf message."
   (interactive (list (let ((thing (thing-at-point 'symbol)))
                        (if thing
                            thing
                          (read-from-minibuffer "Code search for definition of symbol: ")))))
-  (util/code-search symbol 'def))
+  (util-code-search symbol 'def))
 
-(defun util/code-search-ref (symbol)
+(defun util-code-search-ref (symbol)
   "Open code search to search for a protobuf message."
   (interactive (list (let ((thing (thing-at-point 'symbol)))
                        (if thing
                            thing
                          (read-from-minibuffer "Code search for references of symbol: ")))))
-  (util/code-search symbol 'ref))
+  (util-code-search symbol 'ref))
 
-(defcustom util/log-search-url nil
+(defcustom util-log-search-url nil
   "The URL to access log search.")
 
-(defun util/log-search (env module keywords)
+(defun util-log-search (env module keywords)
   "Open xlog to search the log of MODULE for KEYWORDS under ENV."
   (let* ((calendar-time (decode-time))
          (year (nth 5 calendar-time))
@@ -307,10 +324,10 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
                                             (excludeKeywordObj . ((,(intern "0") . "")
                                                                   (,(intern "1") . "")))
                                             (_type . "share")))))))
-    (util/customize-variable-if-unset util/log-search-url)
-    (browse-url (concat util/log-search-url url))))
+    (util-customize-variable-if-unset util-log-search-url)
+    (browse-url (concat util-log-search-url url))))
 
-(defun util/log-search-at-point (keyword module env)
+(defun util-log-search-at-point (keyword module env)
   "Open xlog to search for the symbol at point."
   (interactive (list (if (use-region-p)
                          (buffer-substring (region-beginning) (region-end))
@@ -318,25 +335,26 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
                          (or thing (read-from-minibuffer "Search xlog for: "))))
                      (read-from-minibuffer "Module: ")
                      (completing-read "Env (default `idc'): " '("test" "idc") nil t nil nil "idc")))
-  (util/log-search env module keyword))
+  (util-log-search env module keyword))
 
 (defun util--read-directory ()
   (let* ((package-directory (progn (require 'bazel)
                                    (bazel--package-directory
                                     (buffer-file-name)
-                                    (bazel--workspace-root (buffer-file-name)))))
+                                    (bazel--repository-root (buffer-file-name)))))
          (init-dir (or package-directory default-directory)))
     (read-from-minibuffer "Directory: " init-dir)))
 
-(defun util/compile-project (directory)
+(defun util-compile-project (directory)
   "Prompt to run a command under specified directory of a project."
   (interactive (list (util--read-directory)))
   (let ((default-directory directory))
-    ;; Copy from the buffer-local value, which may be set in per-directory settings.
+    (require 'compile)
     (setq-default compilation-search-path compilation-search-path)
-    (call-interactively 'compile)))
+    (let ((command (compilation-read-command compile-command)))
+      (compile command))))
 
-(defun util/hex-encode-region (begin end)
+(defun util-hex-encode-region (begin end)
   "Replace the string in the region (BEGIN END) with hexified string."
   (interactive "r")
   (let* ((text (buffer-substring begin end))
@@ -344,7 +362,7 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
     (delete-region begin end)
     (insert hex)))
 
-(defun util/hex-decode-region (begin end)
+(defun util-hex-decode-region (begin end)
   "Replace the hex string in the region (BEGIN END) with unhexified string."
   (interactive "r")
   (let* ((hex (buffer-substring begin end))

@@ -30,58 +30,78 @@
   :ensure nil
   :preface
   (defun init-prog-mode ()
-    (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t)))
-    (display-line-numbers-mode))
+    (font-lock-add-keywords nil '(("\\<\\(TODO\\|FIXME\\|XXX\\)\\>" 1 font-lock-warning-face t))))
   :hook
   (prog-mode . init-prog-mode))
 
-(defun merge-request-to-gongfeng ()
-  "请求工蜂合并代码。"
-  (interactive)
-  (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
-                      "/-/merge_requests/new?ADTAG=git-cli&"
-                      (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
+(use-package git-modes
+  :commands (gitattributes-mode
+             gitconfig-mode
+             gitignore-mode)
+  :mode (("/\\.gitignore\\'" . gitignore-mode)
+         ("/info/exclude\\'" . gitignore-mode)
+         ("/git/ignore\\'" . gitignore-mode)
+         ("/.gitignore_global\\'" . gitignore-mode)  ; jc-dotfiles
 
-(defun my-list-merged-branches ()
-  "List all branches which have merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
-    (if (null merged-branches)
-        (message "No merged branches.")
-      (message (concat "Merged branches to `" dest-branch "':\n"
-                       (mapconcat 'identity merged-branches "\n"))))))
+         ("/\\.gitconfig\\'" . gitconfig-mode)
+         ("/\\.git/config\\'" . gitconfig-mode)
+         ("/modules/.*/config\\'" . gitconfig-mode)
+         ("/git/config\\'" . gitconfig-mode)
+         ("/\\.gitmodules\\'" . gitconfig-mode)
+         ("/etc/gitconfig\\'" . gitconfig-mode)
 
-(defun my-list-unmerged-branches ()
-  "List all branches which have not merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (unmerged-branches (magit-list-unmerged-branches dest-branch)))
-    (message (concat "Un-merged branches to `" dest-branch "':\n"
-                     (mapconcat 'identity unmerged-branches "\n")))))
+         ("/\\.gitattributes\\'" . gitattributes-mode)
+         ("/info/attributes\\'" . gitattributes-mode)
+         ("/git/attributes\\'" . gitattributes-mode)))
 
-(defun my-delete-merged-branches ()
-  "Iterate to delete all branches which have merged into the specified branch."
-  (interactive)
-  (let* ((default-branch "origin/master")
-         (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
-                                       (magit-list-branch-names) nil :require-match nil nil default-branch))
-         (merged-branches (magit-list-merged-branches dest-branch))
-         (branches-to-delete (remove dest-branch (remove "master" merged-branches)))
-         (total-num (length branches-to-delete))
-         (processed-count 0))
-    (if branches-to-delete
-        (dolist (br branches-to-delete)
-          (setq processed-count (1+ processed-count))
-          (if (yes-or-no-p (format "Delete branch `%s'? (%d/%d)" br processed-count total-num))
-              (magit-branch-delete (list br))
-            (message "Nothing to delete"))))))
 
 (use-package magit
+  :preface
+  (defun merge-request-to-gongfeng ()
+    "请求工蜂合并代码。"
+    (interactive)
+    (browse-url (concat (replace-regexp-in-string ".git$" "" (magit-get "remote.origin.url"))
+                        "/-/merge_requests/new?ADTAG=git-cli&"
+                        (url-hexify-string (format "merge_request[source_branch]=%s" (magit-get-current-branch))))))
+
+  (defun my-list-merged-branches ()
+    "List all branches which have merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (merged-branches (remove dest-branch (magit-list-merged-branches dest-branch))))
+      (if (null merged-branches)
+          (message "No merged branches.")
+        (message (concat "Merged branches to `" dest-branch "':\n"
+                         (mapconcat 'identity merged-branches "\n"))))))
+
+  (defun my-list-unmerged-branches ()
+    "List all branches which have not merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (unmerged-branches (magit-list-unmerged-branches dest-branch)))
+      (message (concat "Un-merged branches to `" dest-branch "':\n"
+                       (mapconcat 'identity unmerged-branches "\n")))))
+
+  (defun my-delete-merged-branches ()
+    "Iterate to delete all branches which have merged into the specified branch."
+    (interactive)
+    (let* ((default-branch "origin/master")
+           (dest-branch (completing-read (format "Branches merged to (default: %s): " default-branch)
+                                         (magit-list-branch-names) nil :require-match nil nil default-branch))
+           (merged-branches (magit-list-merged-branches dest-branch))
+           (branches-to-delete (remove dest-branch (remove "master" merged-branches)))
+           (total-num (length branches-to-delete))
+           (processed-count 0))
+      (if branches-to-delete
+          (dolist (br branches-to-delete)
+            (setq processed-count (1+ processed-count))
+            (if (yes-or-no-p (format "Delete branch `%s'? (%d/%d)" br processed-count total-num))
+                (magit-branch-delete (list br))
+              (message "Nothing to delete"))))))
   :custom
   (auto-revert-buffer-list-filter
    (lambda (buf) (not (file-remote-p (buffer-file-name buf))))
@@ -140,6 +160,17 @@
 
 (use-package eglot
   :ensure nil
+  :commands (eglot-ensure)
+  :preface
+  (defun my-eglot-ensure-idle ()
+    "Start Eglot for the current buffer after Emacs is idle."
+    (let ((buf (current-buffer)))
+      (run-with-idle-timer
+       1 nil
+       (lambda ()
+         (when (buffer-live-p buf)
+           (with-current-buffer buf
+             (eglot-ensure)))))))
   :custom
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
@@ -147,7 +178,11 @@
   (eglot-ignored-server-capabilities '(:documentHighlightProvider
                                        :documentFormattingProvider
                                        :documentRangeFormattingProvider
-                                       :documentOnTypeFormattingProvider))
+                                       :documentOnTypeFormattingProvider
+                                       :semanticTokensProvider))
+  (jsonrpc-event-hook nil)
+  (eglot-events-buffer-size 0)
+  (eglot-events-buffer-config '(:size 0 :format short))
   :config
   (add-to-list 'eglot-server-programs
                '((c-mode c++-mode c-ts-mode c++-ts-mode) .
@@ -156,7 +191,7 @@
                   "--query-driver=**/clang++,**/clang"
                   "--background-index"
                   "--completion-style=detailed"
-                  "--pch-storage=memory"
+                  "--pch-storage=disk"
                   "--header-insertion=iwyu"
                   "--header-insertion-decorators"
                   "--clang-tidy"
@@ -167,14 +202,14 @@
 
 (use-package gtags-mode)
 
-(use-package alert
-  :config
-  (when (eq window-system 'w32)
-    (setq alert-default-style 'toast)))
+(use-package alert)
 
 (when (eq window-system 'w32)
   (use-package alert-toast
-    :after alert))
+    :after alert
+    :demand
+    :config
+    (setq alert-default-style 'toast)))
 
 (defun my-notify (title message)
   (pcase window-system
@@ -189,7 +224,9 @@
    ;; Only cares about errors.
    compilation-skip-threshold 2
    ;; Scroll to the first error.
-   compilation-scroll-output 'first-error)
+   compilation-scroll-output 'first-error
+   compilation-always-kill t
+   compilation-max-output-line-length 2048)
   ;; Make compile output buffer interpret color escape sequence.
   (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)
   (add-hook 'compilation-mode-hook 'visual-line-mode)
@@ -199,49 +236,47 @@
   ;; compiliation commands concurrently.
   (defun my-compilation-buffer-name (mode-name)
     (concat "*" (downcase mode-name) ": " compilation-directory "*"))
-  (setq compilation-buffer-name-function #'my-compilation-buffer-name))
+  (setq compilation-buffer-name-function #'my-compilation-buffer-name)
 
-;; (use-package tree-sitter
-;;   :demand
-;;   :config
-;;   (setq treesit-language-source-alist
-;;         '((cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.23.4")
-;;           (c "https://github.com/tree-sitter/tree-sitter-c" "v0.23.4")))
-;;   (setq treesit-extra-load-path '("~/.cache/tree-sitter/")))
+  ;; Wrap compile command in "bash -ic" when running in remote directory (Tramp),
+  ;; so that the remote shell sources .bashrc/.bash_profile for proper environment setup.
+  (advice-add 'compile :around
+              (lambda (orig-fun command &optional comint)
+                (funcall orig-fun
+                         (if (and (not (string-match-p "\\`bash -ic " command))
+                                  (file-remote-p default-directory))
+                             (format "bash -ic %s" (shell-quote-argument command))
+                           command)
+                         comint))))
 
 (setq treesit-extra-load-path '("~/.cache/tree-sitter/"))
 
 (use-package treesit-auto
-  :demand
+  :defer 2
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (treesit-auto-add-to-auto-mode-alist 'all)
+  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml))
+  (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml))
   (global-treesit-auto-mode))
 
-;; (use-package tree-sitter-langs
-;;   :demand
-;;   :config
-;;   (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-;;   (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-;;   (add-to-list 'major-mode-remap-alist '(c-or-c++-mode . c-or-c++-ts-mode))
-;;   (setopt treesit-font-lock-level 3)
-;;   (global-tree-sitter-mode))
-
-(use-package google-c-style)
+(use-package clang-format
+  :ensure nil
+  :commands (clang-format))
 
 (defun init-cc-mode ()
   (subword-mode 1)
   (turn-on-auto-fill)
-  (c-toggle-auto-newline -1)
+  (when (derived-mode-p 'c-ts-mode 'c++-ts-mode)
+    (require 'google-c-style)
+    (google-set-c-ts-style))
   (setq clang-format-fallback-style "Google")
   (when (fboundp 'company-complete)
     (add-hook 'completion-at-point-functions #'company-complete nil 'local))
   (cond ((locate-dominating-file default-directory "GTAGS")
          (gtags-mode))
         ((locate-dominating-file default-directory "compile_commands.json")
-         (require 'eglot)
-         (eglot-ensure))))
+         (my-eglot-ensure-idle))))
 
 (use-package c++-ts-mode
   :ensure nil
@@ -249,24 +284,23 @@
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . util/compile-project))
-  :hook (c++-ts-mode . init-cc-mode)
-  :config
-  (require 'clang-format))
+              ("C-c C-b" . util-compile-project))
+  :hook (c++-ts-mode . init-cc-mode))
 
-(use-package cc-mode
-  :preface
-  :bind (:map c-mode-base-map
+(use-package c-ts-mode
+  :ensure nil
+  :bind (:map c-ts-mode-map
               ("<return>" . newline-and-indent)
               ("M-q" . c-fill-paragraph)
               ("C-M-\\" . clang-format)
-              ("C-c C-b" . util/compile-project))
-  :hook ((c-mode-common . init-cc-mode))
-  :config
-  (require 'clang-format))
+              ("C-c C-b" . util-compile-project))
+  :hook (c-ts-mode . init-cc-mode))
 
 (use-package rust-ts-mode
-  :ensure nil)
+  :ensure nil
+  :mode ("\\.rs\\'" . rust-mode)
+  :custom
+  (rust-indent-offset 2))
 
 (use-package go-mode
   :preface
@@ -316,8 +350,7 @@
     (subword-mode 1)
     ;; You should install pyright (Microsoft's Python language server).
     ;;   $ pip install pyright
-    (require 'eglot)
-    (eglot-ensure))
+    (my-eglot-ensure-idle))
   :custom
   (python-indent-offset 4)
   :bind (:map python-mode-map
@@ -345,17 +378,18 @@
 
 (use-package sql
   :mode (("\\.sql\\'" . sql-mode))
-  :config
-  (add-hook 'sql-mode-hook #'turn-on-auto-fill)
+  :hook (sql-mode . turn-on-auto-fill)
   :bind (:map sql-mode-map
               ("C-c C-c" . comment-region)))
 
 ;; You should install python package `sqlfluff'.
 (use-package sqlformat
   :after sql
+  :demand
   :custom
   (sqlformat-command 'sqlfluff)
-  (sqlformat-args '("--dialect" "hive"))
+  (sqlformat-args '("--dialect" "sparksql"))
+  :bind
   (:map sql-mode-map
         ("C-M-\\" . sqlformat))
   :config
@@ -375,30 +409,27 @@
   :config
   (turn-on-auto-fill))
 
+(use-package json-ts-mode
+  :preface
+  (defun init-json-mode ()
+    (subword-mode 1))
+  :hook ((json-ts-mode . init-json-mode)))
 
 (use-package json
-  :commands (json-pretty-print)
+  :after json-ts-mode
+  :demand
   :preface
   (defun json-format ()
     "Format the region if any, or the buffer as JSON."
     (interactive)
     (if (use-region-p)
         (json-pretty-print (region-beginning) (region-end))
-      (json-pretty-print (point-min) (point-max)))))
+      (json-pretty-print (point-min) (point-max))))
+  :bind (:map json-ts-mode-map
+              ("C-M-\\" . json-format)))
 
-(use-package yafolding)
-
-(use-package js
-  :ensure nil
-  :mode (("\\.json\\'" . js-json-mode))
-  :hook ((js-json-mode . (lambda () (yafolding-mode)))
-         (js-mode . (lambda ()
-                      (subword-mode 1)
-                      (turn-on-auto-fill))))
-  :bind (:map js-json-mode-map
-              ("C-M-\\" . json-format)
-              :map js-mode-map
-              ([(return)] . newline-and-indent)))
+(use-package yafolding
+  :hook ((json-ts-mode . yafolding-mode)))
 
 (use-package web-mode
   :mode ("\\.html?\\'" . web-mode)
@@ -410,7 +441,7 @@
     (let ((tidy-args '("-m" "-indent" "-wrap" "0" "-quiet" "--tidy-mark" "no"))
           (begin (if (use-region-p) (region-beginning) (point-min)))
           (end (if (use-region-p) (region-end) (point-max))))
-      (util/format-region "html-format" begin end "tidy" tidy-args)))
+      (util-format-region "html-format" begin end "tidy" tidy-args)))
   :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
   (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))
@@ -419,10 +450,10 @@
   :hook ((makefile-mode . (lambda () (subword-mode 1)))))
 
 (use-package protobuf-mode
-  :hook (protobuf-mode . protobuf-init)
-  :init
-  (defun protobuf-init ()
-    (setq indent-tabs-mode nil)
+  :hook (protobuf-mode . init-protobuf)
+  :preface
+  (defun init-protobuf ()
+    (subword-mode)
     (setq tab-width 2)
     (setq c-basic-offset 2)
     (setf (alist-get 'arglist-intro c-offsets-alist) '+)))
@@ -436,14 +467,14 @@
     (vc-dir dir))
   :bind ("C-x v d" . my-vc-dir))
 
-(defun compile-for-bazel ()
-  (interactive)
-  ;; Set this variable in per-directory setting if bazel is not used for building.
-  (if (bound-and-true-p compilation-do-not-use-bazel)
-      (call-interactively 'util/compile-project)
-    (call-interactively 'bazel-build)))
-
 (use-package bazel
+  :preface
+  (defun compile-for-bazel ()
+    (interactive)
+    ;; Set this variable in per-directory setting if bazel is not used for building.
+    (if (bound-and-true-p compilation-do-not-use-bazel)
+        (call-interactively 'util-compile-project)
+      (call-interactively 'bazel-build)))
   :bind
   (:map bazel-mode-map
         ("C-M-\\" . bazel-buildifier)
@@ -451,6 +482,22 @@
 
 (use-package yaml-ts-mode
   :mode ("\\.yaml\\'" . yaml-ts-mode))
+
+(use-package csv-mode
+  :commands (csv-mode
+             csv-align-mode
+             csv-guess-set-separator)
+  :mode ("\\.csv\\'" . csv-mode)
+  :hook ((csv-mode . csv-align-mode)
+         (csv-mode . csv-guess-set-separator))
+  :custom
+  (csv-align-max-width 100)
+  (csv-separators '("," ";" " " "|" "\t")))
+
+(use-package sh-mode
+  :ensure nil
+  :mode (("zshrc\\'" . sh-mode)
+         ("bashrc\\'" . sh-mode)))
 
 (provide 'init-programming)
 ;;; init-programing.el ends here

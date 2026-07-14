@@ -32,8 +32,9 @@
 ;; Do not show startup message.
 (setq inhibit-startup-message t)
 
-;; Get a visual, instead of audio, feedback of an exception.
+;; No beeping or blinking.
 (setq visible-bell nil)
+(setq ring-bell-function #'ignore)
 
 ;; Configure frame title bar.
 (setq frame-title-format
@@ -114,22 +115,22 @@
   (when window-system
     (require 'cl-lib)
     (require 'util)
-    (let* ((chinese-font-name (util/choose-available-font my-chinese-font-list))
+    (let* ((chinese-font-name (util-choose-available-font my-chinese-font-list))
            (atts (frame-monitor-attributes nil))
            (width-pixel (cl-fourth (assoc 'geometry atts)))
            (font-size (cond ((< width-pixel 1500) 18.0)
-                            ((< width-pixel 2000) 15.0)
+                            ((< width-pixel 2000) 17.0)
                             (t 14.0))))
       ;; Set fonts for Chinese characters.
       (dolist (charset '(kana han symbol cjk-misc bopomofo))
         (set-fontset-font "fontset-default" charset (font-spec :family chinese-font-name)))
 
       ;; Set standard faces.
-      (set-face-font 'default (font-spec :family (util/choose-available-font my-default-font-list)
+      (set-face-font 'default (font-spec :family (util-choose-available-font my-default-font-list)
                                          :slant 'normal
                                          :size font-size))
-      (set-face-attribute 'fixed-pitch nil :family (util/choose-available-font my-fixed-pitch-font-list))
-      (set-face-attribute 'variable-pitch nil :family (util/choose-available-font my-variable-pitch-font-list)))))
+      (set-face-attribute 'fixed-pitch nil :family (util-choose-available-font my-fixed-pitch-font-list))
+      (set-face-attribute 'variable-pitch nil :family (util-choose-available-font my-variable-pitch-font-list)))))
 
 (if (daemonp)
     (add-hook 'server-after-make-frame-hook #'set-font)
@@ -177,16 +178,12 @@
     (modus-themes-org-agenda '((event . (varied))
                                (scheduled . rainbow)))))
 
-(use-package doom-themes)
-(use-package solarized-theme)
-(use-package spacemacs-theme)
-
 (use-package solar
   :ensure nil
   :demand
-  :config
-  (setq calendar-latitude 22.53
-        calendar-longitude 113.93))
+  :custom
+  (calendar-latitude 22.53)
+  (calendar-longitude 113.93))
 
 ;; (use-package circadian
 ;;   :hook (after-init . circadian-setup)
@@ -199,18 +196,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Icons
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package nerd-icons
-  :demand t)
+(use-package nerd-icons)
 
 (use-package nerd-icons-dired
-  :after nerd-icons
-  :demand t
   :hook (dired-mode . nerd-icons-dired-mode))
 
 (use-package treemacs-nerd-icons
-  :after (treemacs nerd-icons)
+  :after (treemacs)
   :demand
   :config
+  (require 'nerd-icons)
   ;; You should download (https://www.nerdfonts.com/font-downloads) and install the font "Symbols
   ;; Nerd Font" first.
   (treemacs-load-theme "nerd-icons"))

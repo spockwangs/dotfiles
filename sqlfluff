@@ -1,0 +1,14 @@
+[sqlfluff]
+dialect = hive
+templater = placeholder
+max_line_length = 120
+
+[sqlfluff:templater:placeholder]
+param_regex = \${(?P<param_name>[A-Za-z_][A-Za-z0-9_]*)}
+
+check_batch_id = 1
+YYYYMMDDHH = 2026070912
+
+[sqlfluff:indentation]
+indented_joins = false
+indented_using_on = true

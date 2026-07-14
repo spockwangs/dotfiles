@@ -25,31 +25,12 @@
 ;;; Code:
 
 (setq
- use-package-verbose t
- use-package-expand-minimally nil
- use-package-compute-statistics t
- ;; Set GC threshold as 100MB.
- gc-cons-threshold 100000000
  ;; accept `y' or `n' instead of yes/no
  use-short-answers t
  enable-local-variables :all
- read-process-output-max (* 4 1024 1024)
- process-adaptive-read-buffering nil
- epg-pinentry-mode 'loopback)
-
-(require 'benchmarking-require)
-(require 'package)
-(setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
-                         ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-(package-initialize)
-(package-refresh-contents)
-
-(require 'use-package-ensure)
-(setq
- ;; Make sure the package is installed.
- use-package-always-ensure t
- ;; Always defer loading a package unless :demand is specified.
- use-package-always-defer t)
+ epg-pinentry-mode 'loopback
+ ns-command-modifier 'super
+ ns-option-modifier 'meta)
 
 ;; There is a `~' in the temporary path on Windows which some programs (e.g. latex) can't recognize
 ;; so we change the temporary path for Emacs.
@@ -58,11 +39,10 @@
   (custom-set-variables '(temporary-file-directory "c:/tmp")))
 
 (use-package exec-path-from-shell
-  :demand t
+  :if (memq window-system '(mac ns x))
+  :defer 1
   :config
-  ;; Copy environment variables seen by shell to emacs on UNIX-like systems.
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (exec-path-from-shell-initialize))
 
 (setq user-full-name "spockwang"
       user-mail-address "wbbtiger@gmail.com")
@@ -83,7 +63,7 @@
  '(:application tramp :protocol "ssh" :machine "devcloud2")
  'remote-bash)
 
-;; Where so save secrets.
+;; Where to save secrets.
 (add-to-list 'auth-sources "~/.emacs.d/authinfo.gpg")
 
 (provide 'init-env)
