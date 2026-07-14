@@ -16,3 +16,4 @@ emacs.d/custom.el
 emacs.d/url/
 emacs.d/bookmarks
 emacs.d/tree-sitter
+emacs.d/elfeed/
