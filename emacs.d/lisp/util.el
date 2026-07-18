@@ -371,4 +371,82 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
     (delete-region begin end)
     (insert decoded-text)))
 
+(defun util-convert-time--format-p (str)
+  "Return non-nil if STR looks like a Unix timestamp (digits, optional dot)."
+  (string-match-p "\\`[0-9]+\\(\\.[0-9]+\\)?\\'" str))
+
+(defun util-convert-time--convert (str)
+  "Convert STR between Unix timestamp and \"YYYY-MM-DD HH:MM:SS\"."
+  (if (util-convert-time--format-p str)
+      (format-time-string "%Y-%m-%d %H:%M:%S"
+                          (seconds-to-time (string-to-number str)))
+    (let ((normalized (util-convert-time--normalize-date str)))
+      (if normalized
+          (number-to-string (round (float-time (date-to-time normalized))))
+        (number-to-string (round (float-time (date-to-time str))))))))
+
+(require 'thingatpt)
+
+(defconst util-convert-time--date-re
+  "\\([0-9]\\{4\\}\\)-\\([0-9]\\{1,2\\}\\)-\\([0-9]\\{1,2\\}\\)\\(?:[ T]\\([0-9]\\{1,2\\}\\):\\([0-9]\\{1,2\\}\\):\\([0-9]\\{1,2\\}\\)\\)?"
+  "Regexp matching \"YYYY-M-D\" or \"YYYY-M-D H:M:S\" with capture groups.")
+
+(defun util-convert-time--normalize-date (str)
+  "Zero-pad the fields of date STR so `date-to-time' can parse it.
+Returns \"YYYY-MM-DD\" or \"YYYY-MM-DD HH:MM:SS\", or nil if STR is not a date."
+  (when (string-match util-convert-time--date-re str)
+    (let ((y  (string-to-number (match-string 1 str)))
+          (mo (string-to-number (match-string 2 str)))
+          (d  (string-to-number (match-string 3 str)))
+          (h  (match-string 4 str)))
+      (if h
+          (format "%04d-%02d-%02d %02d:%02d:%02d"
+                  y mo d
+                  (string-to-number h)
+                  (string-to-number (match-string 5 str))
+                  (string-to-number (match-string 6 str)))
+        (format "%04d-%02d-%02d" y mo d)))))
+
+(defun util-convert-time--at-point ()
+  "Return a Unix timestamp or date string at point, or nil.
+A string matching \"YYYY-MM-DD\" or \"YYYY-MM-DD HH:MM:SS\" is treated
+as a date; otherwise a pure number is treated as a Unix timestamp."
+  (or (when (thing-at-point-looking-at util-convert-time--date-re)
+        (match-string-no-properties 0))
+      (let ((num (thing-at-point 'number :no-properties)))
+        (when num
+          (setq num (format "%s" num)))
+        (and (util-convert-time--format-p num) num))))
+
+(defun util-convert-time (&optional arg)
+  "Convert between Unix timestamp and \"YYYY-MM-DD HH:MM:SS\".
+Source priority: active region > number/thing at point > prompt
+(defaulting to current time).  A pure number is treated as a Unix
+timestamp in seconds; any other input is parsed as a date string.
+
+With no prefix ARG the result is copied to the kill-ring and shown in
+the echo area.  With a non-nil prefix ARG (e.g. \\[universal-argument]) the
+result is inserted at point instead.  When a region is active it is
+always replaced in place regardless of ARG."
+  (interactive "P")
+  (let* ((region (when (use-region-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))))
+         (input (or region
+                   (util-convert-time--at-point)
+                   (read-string
+                    (format "Unix seconds or date (e.g. %s): "
+                            (format-time-string "%Y-%m-%d %H:%M:%S")))))
+         (result (util-convert-time--convert input)))
+    (cond
+     (region
+      (delete-region (region-beginning) (region-end))
+      (insert result))
+     (arg
+      (insert result))
+     (t
+      (kill-new result)))
+    (message "%s -> %s" input result)
+    result))
+
 (provide 'util)
