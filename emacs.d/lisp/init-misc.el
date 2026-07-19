@@ -30,6 +30,7 @@
 (use-package hydra
   :bind ("C-c m" . hydra-menu/body)
   :config
+  (require 'util)
   (defcustom wemonitor-domain nil
     "调用关系监控的域名。")
 
@@ -69,17 +70,55 @@ to `custom-file'; not stored in version control.")
     (or (thing-at-point 'symbol :no-properties)
         (read-string prompt)))
 
+  (defcustom log-search-domain nil
+    "Base URL of log search (xlog).
+Prompted on first use via `util-customize-variable-if-unset' and saved
+to `custom-file'; not stored in version control.")
+
+  (defun log-search ()
+    "Open xlog to search MODULE's log for KEYWORDS under ENV."
+    (interactive)
+    (util-customize-variable-if-unset log-search-domain)
+    (let* ((keywords (or (thing-at-point 'symbol :no-properties)
+                         (read-string "keywords: ")))
+           (module (read-string "Module: "))
+           (env (completing-read "Env (default idc): " '("test" "idc") nil t nil nil "idc"))
+           (time (decode-time))
+           (year (nth 5 time))
+           (month (nth 4 time))
+           (day (nth 3 time))
+           (begin-time (format "%d-%d-%d 00:00:00" year month day))
+           (end-time (format "%d-%d-%d 23:59:59" year month day))
+           (param (json-serialize
+                   `((env . ,env)
+                     ,(if (string-empty-p module)
+                          `(type . "all")
+                        `(type . "appoint"))
+                     (module . ,module)
+                     (beginTime . ,begin-time)
+                     (endTime . ,end-time)
+                     (keywordObj . ((,(intern "0") . ,keywords)
+                                    (,(intern "1") . "")
+                                    (,(intern "2") . "")))
+                     (excludeKeywordObj . ((,(intern "0") . "")
+                                           (,(intern "1") . "")))
+                     (_type . "share")))))
+      (browse-url (concat log-search-domain
+                          "/#/search/basic?param="
+                          (url-hexify-string param)))))
+
   (defhydra hydra-menu (:hint nil)
     "
 ^监控^                      ^代码搜索^
 ---------------------------------------------------------------------------
 _w_: 模块调用监控          _p_: 按路径搜索
 _i_: IDKEY监控             _m_: 按proto message搜索
-^ ^                        _d_: 按定义搜索
+_l_: 日志搜索              _d_: 按定义搜索
 ^ ^                        _r_: 按引用搜索
 "
     ("w" open-wemonitor :color blue)
     ("i" open-idkey :color blue)
+    ("l" log-search :color blue)
     ("p" (lambda () (interactive) (code-search 'path  (code-search-read "path: "))) :color blue)
     ("m" (lambda () (interactive) (code-search 'proto (code-search-read "proto message: "))) :color blue)
     ("d" (lambda () (interactive) (code-search 'def   (code-search-read "def: "))) :color blue)

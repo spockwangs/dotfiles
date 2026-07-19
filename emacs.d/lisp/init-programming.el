@@ -166,7 +166,7 @@
     "Start Eglot for the current buffer after Emacs is idle."
     (let ((buf (current-buffer)))
       (run-with-idle-timer
-       1 nil
+       0.5 nil
        (lambda ()
          (when (buffer-live-p buf)
            (with-current-buffer buf
