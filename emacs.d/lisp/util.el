@@ -416,27 +416,32 @@ as a date; otherwise a pure number is treated as a Unix timestamp."
       (let ((num (thing-at-point 'number :no-properties)))
         (when num
           (setq num (format "%s" num)))
-        (and (util-convert-time--format-p num) num))))
+        (and num (util-convert-time--format-p num) num))))
 
 (defun util-convert-time (&optional arg)
   "Convert between Unix timestamp and \"YYYY-MM-DD HH:MM:SS\".
-Source priority: active region > number/thing at point > prompt
-(defaulting to current time).  A pure number is treated as a Unix
-timestamp in seconds; any other input is parsed as a date string.
+Always prompts; the initial input is the active region, the number/date
+at point, or the current time if neither is available.  A pure number is
+treated as a Unix timestamp in seconds; any other input is parsed as a
+date string (e.g. \"2026-7-17 10:10:10\").
 
 With no prefix ARG the result is copied to the kill-ring and shown in
 the echo area.  With a non-nil prefix ARG (e.g. \\[universal-argument]) the
 result is inserted at point instead.  When a region is active it is
-always replaced in place regardless of ARG."
+replaced in place regardless of ARG."
   (interactive "P")
   (let* ((region (when (use-region-p)
                    (buffer-substring-no-properties
                     (region-beginning) (region-end))))
-         (input (or region
-                   (util-convert-time--at-point)
-                   (read-string
-                    (format "Unix seconds or date (e.g. %s): "
-                            (format-time-string "%Y-%m-%d %H:%M:%S")))))
+         (detected (or region (util-convert-time--at-point)))
+         (input (if region
+                    region
+                  (let ((s (read-string (format "Unix seconds or date (e.g. %s): "
+                                                (format-time-string "%Y-%m-%d %H:%M:%S"))
+                                        detected)))
+                    (if (string-empty-p s)
+                        (format-time-string "%Y-%m-%d %H:%M:%S")
+                      s))))
          (result (util-convert-time--convert input)))
     (cond
      (region
