@@ -276,7 +276,7 @@
   (cond ((locate-dominating-file default-directory "GTAGS")
          (gtags-mode))
         ((locate-dominating-file default-directory "compile_commands.json")
-         (my-eglot-ensure-idle))))
+         (eglot-ensure))))
 
 (use-package c++-ts-mode
   :ensure nil
