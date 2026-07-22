@@ -75,13 +75,21 @@ to `custom-file'; not stored in version control.")
 Prompted on first use via `util-customize-variable-if-unset' and saved
 to `custom-file'; not stored in version control.")
 
+  (defun log-search--split (str)
+    "Split STR on whitespace into a list of non-empty strings."
+    (split-string str))
+
   (defun log-search ()
-    "Open xlog to search MODULE's log for KEYWORDS under ENV."
+    "Open xlog to search MODULES' log for KEYWORDS under ENV.
+KEYWORDS and MODULES are whitespace-separated; multiple values are sent
+as arrays to the backend."
     (interactive)
     (util-customize-variable-if-unset log-search-domain)
-    (let* ((keywords (or (thing-at-point 'symbol :no-properties)
-                         (read-string "keywords: ")))
-           (module (read-string "Module: "))
+    (let* ((keywords-raw (or (thing-at-point 'symbol :no-properties)
+                             (read-string "keywords (space-separated): ")))
+           (keywords (log-search--split keywords-raw))
+           (module-raw (read-string "Modules (space-separated, empty for all): "))
+           (modules (log-search--split module-raw))
            (env (completing-read "Env (default idc): " '("test" "idc") nil t nil nil "idc"))
            (time (decode-time))
            (year (nth 5 time))
@@ -91,20 +99,19 @@ to `custom-file'; not stored in version control.")
            (end-time (format "%d-%d-%d 23:59:59" year month day))
            (param (json-serialize
                    `((env . ,env)
-                     ,(if (string-empty-p module)
-                          `(type . "all")
-                        `(type . "appoint"))
-                     (module . ,module)
+                     ,(if modules
+                          `(type . "appoint")
+                        `(type . "all"))
+                     (module . ,(vconcat modules))
                      (beginTime . ,begin-time)
                      (endTime . ,end-time)
-                     (keywordObj . ((,(intern "0") . ,keywords)
-                                    (,(intern "1") . "")
-                                    (,(intern "2") . "")))
-                     (excludeKeywordObj . ((,(intern "0") . "")
-                                           (,(intern "1") . "")))
-                     (_type . "share")))))
+                     (keywords . ,(vconcat keywords))
+                     (excludeKeywords . ,(vector))
+                     (limit . 100)
+                     (enableRelatedQuery . :false)
+                     (immediateSearch . t)))))
       (browse-url (concat log-search-domain
-                          "/#/search/basic?param="
+                          "/xdc/log#/search/basic?param="
                           (url-hexify-string param)))))
 
   (defcustom mock-data-dict-domain nil

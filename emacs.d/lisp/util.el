@@ -371,6 +371,15 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
     (delete-region begin end)
     (insert decoded-text)))
 
+(defun util-url-decode-region (begin end)
+  "Replace URL escape sequences in the region (BEGIN END) with decoded text."
+  (interactive "r")
+  (require 'url-util)
+  (let* ((text (buffer-substring begin end))
+         (decoded (url-unhex-string text)))
+    (delete-region begin end)
+    (insert decoded)))
+
 (defun util-convert-time--format-p (str)
   "Return non-nil if STR looks like a Unix timestamp (digits, optional dot)."
   (string-match-p "\\`[0-9]+\\(\\.[0-9]+\\)?\\'" str))
