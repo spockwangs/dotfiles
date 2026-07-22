@@ -38,7 +38,7 @@
     "Open the wemonitor of module MODULE-NAME."
     (interactive (list (read-string "模块名：")))
     (util-customize-variable-if-unset wemonitor-domain)
-    (browse-url (concat wemonitor-domain "/wego/wemodulechainweb/page?tpl=call&str=" module-name)))
+    (browse-url (concat wemonitor-domain "/wego/wemodulechainweb/page?tpl=call&detailType=3&str=" module-name)))
 
   (defcustom idkey-domain nil
     "IDKEY监控域名。")
@@ -107,14 +107,28 @@ to `custom-file'; not stored in version control.")
                           "/#/search/basic?param="
                           (url-hexify-string param)))))
 
+  (defcustom mock-data-dict-domain nil
+    "mock数据字典平台的域名。")
+
+  (defun open-mock-data-dict (tb-name)
+    "Open kunpeng mock data dict list filtered by TB-NAME."
+    (interactive (list (read-string "表名："
+                                    (thing-at-point 'symbol :no-properties))))
+    (util-customize-variable-if-unset mock-data-dict-domain)
+    (browse-url (concat mock-data-dict-domain
+                        "/kunpeng/index2.php/cxdata_platform/index"
+                        "#/mock-system/mock-data-dict/list?tb_name="
+                        (url-hexify-string tb-name)
+                        "&page_size=40&page_num=1")))
+
   (defhydra hydra-menu (:hint nil)
     "
-^监控^                      ^代码搜索^
+^监控^                ^代码搜索^                ^其它^
 ---------------------------------------------------------------------------
-_w_: 模块调用监控          _p_: 按路径搜索
-_i_: IDKEY监控             _m_: 按proto message搜索
-_l_: 日志搜索              _d_: 按定义搜索
-^ ^                        _r_: 按引用搜索
+_w_: 模块调用监控    _p_: 按路径搜索           _k_: mock数据字典
+_i_: IDKEY监控        _m_: 按proto message搜索
+_l_: 日志搜索         _d_: 按定义搜索
+^ ^                    _r_: 按引用搜索
 "
     ("w" open-wemonitor :color blue)
     ("i" open-idkey :color blue)
@@ -123,6 +137,7 @@ _l_: 日志搜索              _d_: 按定义搜索
     ("m" (lambda () (interactive) (code-search 'proto (code-search-read "proto message: "))) :color blue)
     ("d" (lambda () (interactive) (code-search 'def   (code-search-read "def: "))) :color blue)
     ("r" (lambda () (interactive) (code-search 'ref   (code-search-read "ref: "))) :color blue)
+    ("k" open-mock-data-dict :color blue)
     ("q" nil "quit" :color blue)))
 
 (use-package google-translate
