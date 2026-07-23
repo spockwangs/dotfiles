@@ -95,8 +95,8 @@ as arrays to the backend."
            (year (nth 5 time))
            (month (nth 4 time))
            (day (nth 3 time))
-           (begin-time (format "%d-%d-%d 00:00:00" year month day))
-           (end-time (format "%d-%d-%d 23:59:59" year month day))
+           (begin-time (format "%d-%02d-%02d 00:00:00" year month day))
+           (end-time (format "%d-%02d-%02d 23:59:59" year month day))
            (param (json-serialize
                    `((env . ,env)
                      ,(if modules
