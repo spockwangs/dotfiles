@@ -44,8 +44,10 @@
     "IDKEY监控域名。")
 
   (defun open-idkey (id)
-    "Open the IDKEY of ID"
-    (interactive (list (read-string "ID：")))
+    "Open the IDKEY of ID."
+    (interactive
+     (list (let ((n (thing-at-point 'number :no-properties)))
+             (read-string "ID：" (when n (number-to-string n))))))
     (util-customize-variable-if-unset idkey-domain)
     (browse-url (concat idkey-domain "/wego/weidkeyviewweb/type/server/id/" id)))
 
