@@ -345,6 +345,7 @@
 
 (use-package python
   :hook ((python-mode . init-python-mode))
+  :mode ("\\.pysql\\'" . python-mode)
   :preface
   (defun init-python-mode ()
     (subword-mode 1)
@@ -388,7 +389,7 @@
   :demand
   :custom
   (sqlformat-command 'sqlfluff)
-  (sqlformat-args '("--dialect" "sparksql"))
+  (sqlformat-args '())
   :bind
   (:map sql-mode-map
         ("C-M-\\" . sqlformat))
