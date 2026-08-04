@@ -325,9 +325,10 @@
 
 (use-package nxml-mode
   :ensure nil
-  :hook (xml-mode . (lambda ()
-                      (turn-off-auto-fill)))
-  :bind (:map xml-mode-map
+  :mode ("\\.xml\\'" . nxml-mode)
+  :hook (nxml-mode . (lambda ()
+                       (turn-off-auto-fill)))
+  :bind (:map nxml-mode-map
               ([(return)] . newline-and-indent)))
 
 (use-package css-mode
