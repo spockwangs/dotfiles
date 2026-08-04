@@ -12,3 +12,6 @@ YYYYMMDDHH = 2026070912
 [sqlfluff:indentation]
 indented_joins = false
 indented_using_on = true
+
+[sqlfluff:layout:type:join_on_condition]
+keyword_line_position = leading

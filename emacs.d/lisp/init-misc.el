@@ -38,14 +38,16 @@
     "Open the wemonitor of module MODULE-NAME."
     (interactive (list (read-string "模块名：")))
     (util-customize-variable-if-unset wemonitor-domain)
-    (browse-url (concat wemonitor-domain "/wego/wemodulechainweb/page?tpl=call&str=" module-name)))
+    (browse-url (concat wemonitor-domain "/wego/wemodulechainweb/page?tpl=call&detailType=3&str=" module-name)))
 
   (defcustom idkey-domain nil
     "IDKEY监控域名。")
 
   (defun open-idkey (id)
-    "Open the IDKEY of ID"
-    (interactive (list (read-string "ID：")))
+    "Open the IDKEY of ID."
+    (interactive
+     (list (let ((n (thing-at-point 'number :no-properties)))
+             (read-string "ID：" (when n (number-to-string n))))))
     (util-customize-variable-if-unset idkey-domain)
     (browse-url (concat idkey-domain "/wego/weidkeyviewweb/type/server/id/" id)))
 
@@ -75,46 +77,67 @@ to `custom-file'; not stored in version control.")
 Prompted on first use via `util-customize-variable-if-unset' and saved
 to `custom-file'; not stored in version control.")
 
+  (defun log-search--split (str)
+    "Split STR on whitespace into a list of non-empty strings."
+    (split-string str))
+
   (defun log-search ()
-    "Open xlog to search MODULE's log for KEYWORDS under ENV."
+    "Open xlog to search MODULES' log for KEYWORDS under ENV.
+KEYWORDS and MODULES are whitespace-separated; multiple values are sent
+as arrays to the backend."
     (interactive)
     (util-customize-variable-if-unset log-search-domain)
-    (let* ((keywords (or (thing-at-point 'symbol :no-properties)
-                         (read-string "keywords: ")))
-           (module (read-string "Module: "))
+    (let* ((keywords-raw (or (thing-at-point 'symbol :no-properties)
+                             (read-string "keywords (space-separated): ")))
+           (keywords (log-search--split keywords-raw))
+           (module-raw (read-string "Modules (space-separated, empty for all): "))
+           (modules (log-search--split module-raw))
            (env (completing-read "Env (default idc): " '("test" "idc") nil t nil nil "idc"))
            (time (decode-time))
            (year (nth 5 time))
            (month (nth 4 time))
            (day (nth 3 time))
-           (begin-time (format "%d-%d-%d 00:00:00" year month day))
-           (end-time (format "%d-%d-%d 23:59:59" year month day))
+           (begin-time (format "%d-%02d-%02d 00:00:00" year month day))
+           (end-time (format "%d-%02d-%02d 23:59:59" year month day))
            (param (json-serialize
                    `((env . ,env)
-                     ,(if (string-empty-p module)
-                          `(type . "all")
-                        `(type . "appoint"))
-                     (module . ,module)
+                     ,(if modules
+                          `(type . "appoint")
+                        `(type . "all"))
+                     (module . ,(vconcat modules))
                      (beginTime . ,begin-time)
                      (endTime . ,end-time)
-                     (keywordObj . ((,(intern "0") . ,keywords)
-                                    (,(intern "1") . "")
-                                    (,(intern "2") . "")))
-                     (excludeKeywordObj . ((,(intern "0") . "")
-                                           (,(intern "1") . "")))
-                     (_type . "share")))))
+                     (keywords . ,(vconcat keywords))
+                     (excludeKeywords . ,(vector))
+                     (limit . 100)
+                     (enableRelatedQuery . :false)
+                     (immediateSearch . t)))))
       (browse-url (concat log-search-domain
-                          "/#/search/basic?param="
+                          "/xdc/log#/search/basic?param="
                           (url-hexify-string param)))))
+
+  (defcustom mock-data-dict-domain nil
+    "mock数据字典平台的域名。")
+
+  (defun open-mock-data-dict (tb-name)
+    "Open kunpeng mock data dict list filtered by TB-NAME."
+    (interactive (list (read-string "表名："
+                                    (thing-at-point 'symbol :no-properties))))
+    (util-customize-variable-if-unset mock-data-dict-domain)
+    (browse-url (concat mock-data-dict-domain
+                        "/kunpeng/index2.php/cxdata_platform/index"
+                        "#/mock-system/mock-data-dict/list?tb_name="
+                        (url-hexify-string tb-name)
+                        "&page_size=40&page_num=1")))
 
   (defhydra hydra-menu (:hint nil)
     "
-^监控^                      ^代码搜索^
+^监控^                ^代码搜索^                ^其它^
 ---------------------------------------------------------------------------
-_w_: 模块调用监控          _p_: 按路径搜索
-_i_: IDKEY监控             _m_: 按proto message搜索
-_l_: 日志搜索              _d_: 按定义搜索
-^ ^                        _r_: 按引用搜索
+_w_: 模块调用监控    _p_: 按路径搜索           _k_: mock数据字典
+_i_: IDKEY监控        _m_: 按proto message搜索
+_l_: 日志搜索         _d_: 按定义搜索
+^ ^                    _r_: 按引用搜索
 "
     ("w" open-wemonitor :color blue)
     ("i" open-idkey :color blue)
@@ -123,6 +146,7 @@ _l_: 日志搜索              _d_: 按定义搜索
     ("m" (lambda () (interactive) (code-search 'proto (code-search-read "proto message: "))) :color blue)
     ("d" (lambda () (interactive) (code-search 'def   (code-search-read "def: "))) :color blue)
     ("r" (lambda () (interactive) (code-search 'ref   (code-search-read "ref: "))) :color blue)
+    ("k" open-mock-data-dict :color blue)
     ("q" nil "quit" :color blue)))
 
 (use-package google-translate
