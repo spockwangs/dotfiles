@@ -148,9 +148,9 @@ as arrays to the backend."
 ^监控^                ^代码搜索^                ^其它^
 ---------------------------------------------------------------------------
 _w_: 模块调用监控    _p_: 按路径搜索           _k_: mock数据字典
-_i_: IDKEY监控        _m_: 按proto message搜索   _M_: mmdata协议
-_l_: 日志搜索         _d_: 按定义搜索
-^ ^                    _r_: 按引用搜索
+_i_: IDKEY监控        _m_: 按proto message搜索  _M_: mmdata协议
+_l_: 日志搜索        _d_: 按定义搜索
+^ ^                   _r_: 按引用搜索
 "
     ("w" open-wemonitor :color blue)
     ("i" open-idkey :color blue)
