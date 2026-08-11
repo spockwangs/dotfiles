@@ -143,13 +143,26 @@ as arrays to the backend."
                         "/#/mmdata/protocol/detail?log_id="
                         (url-hexify-string log-id))))
 
+  (defcustom errorcode-domain nil
+    "错误码查询平台（xcontract）的域名。")
+
+  (defun open-errorcode (code)
+    "Open xcontract error code search for CODE."
+    (interactive
+     (list (let ((n (thing-at-point 'number :no-properties)))
+             (read-string "错误码：" (when n (number-to-string n))))))
+    (util-customize-variable-if-unset errorcode-domain)
+    (browse-url (concat errorcode-domain
+                        "/#/contract/errorcode/ErrorCode?search-query="
+                        (url-hexify-string code))))
+
   (defhydra hydra-menu (:hint nil)
     "
 ^监控^                ^代码搜索^                ^其它^
 ---------------------------------------------------------------------------
 _w_: 模块调用监控    _p_: 按路径搜索           _k_: mock数据字典
 _i_: IDKEY监控        _m_: 按proto message搜索  _M_: mmdata协议
-_l_: 日志搜索        _d_: 按定义搜索
+_l_: 日志搜索        _d_: 按定义搜索           _e_: 错误码
 ^ ^                   _r_: 按引用搜索
 "
     ("w" open-wemonitor :color blue)
@@ -161,6 +174,7 @@ _l_: 日志搜索        _d_: 按定义搜索
     ("r" (lambda () (interactive) (code-search 'ref   (code-search-read "ref: "))) :color blue)
     ("k" open-mock-data-dict :color blue)
     ("M" open-mmdata-protocol :color blue)
+    ("e" open-errorcode :color blue)
     ("q" nil "quit" :color blue)))
 
 (use-package google-translate
