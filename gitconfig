@@ -5,6 +5,8 @@ autocrlf = false
 filemode = false
 fscache = true
 preloadindex = true
+	hooksPath = ~/.git-hooks
+	quotepath = false
 
 [color]
 ui = auto

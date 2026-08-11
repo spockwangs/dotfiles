@@ -87,8 +87,8 @@ KEYWORDS and MODULES are whitespace-separated; multiple values are sent
 as arrays to the backend."
     (interactive)
     (util-customize-variable-if-unset log-search-domain)
-    (let* ((keywords-raw (or (thing-at-point 'symbol :no-properties)
-                             (read-string "keywords (space-separated): ")))
+    (let* ((keywords-raw (read-string "keywords (space-separated): "
+                                      (or (thing-at-point 'symbol :no-properties) "")))
            (keywords (log-search--split keywords-raw))
            (module-raw (read-string "Modules (space-separated, empty for all): "))
            (modules (log-search--split module-raw))
