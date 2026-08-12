@@ -26,7 +26,7 @@ for %%G in (emacs.d) DO (
 )
 
 rem Link files.
-for %%G in (bash_profile, bashrc, dir_colors, fonts.conf, gitignore, indent.pro, vimrc,
+for %%G in (bash_profile, bashrc, clang-tidy, dir_colors, fonts.conf, gitignore, indent.pro, vimrc,
             gitconfig, screenrc, inputrc) DO (
     del /Q "%HOME%\.%%G" 2> nul
     mklink "%HOME%\.%%G" "%DOTFILES_DIR%%%G"

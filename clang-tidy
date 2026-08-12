@@ -1,0 +1,16 @@
+Checks: >
+   cppcoreguidelines-*,
+   -cppcoreguidelines-pro-type-vararg,
+   -cppcoreguidelines-avoid-do-while,
+   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+   -cppcoreguidelines-avoid-c-arrays,
+   bugprone-*,
+   -bugprone-easily-swappable-parameters,
+   abseil-*,
+   misc-*,
+   modernize-*,
+   -modernize-use-trailing-return-type,
+   -modernize-avoid-c-arrays,
+   -modernize-use-nodiscard,
+   performance-*,
+   clang-analyzer-deadcode.DeadStores
