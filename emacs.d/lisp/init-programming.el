@@ -211,14 +211,29 @@
     :config
     (setq alert-default-style 'toast)))
 
+(defun my-truncate-middle (str max-len)
+  "Truncate STR to MAX-LEN chars, replacing the middle with \"...\"."
+  (if (<= (length str) max-len)
+      str
+    (let* ((ellipsis "...")
+           (keep (- max-len (length ellipsis)))
+           (prefix-len (/ keep 2))
+           (suffix-len (- keep prefix-len)))
+      (concat (substring str 0 prefix-len)
+              ellipsis
+              (substring str (- (length str) suffix-len))))))
+
 (defun my-notify (title message)
-  (pcase window-system
-    ('w32 (alert-toast-notify `(:title ,title :message ,message :data (:long t))))
-    ('ns (do-applescript (format "display notification \"%s\" with title \"%s\"" message title)))))
+  ;; OS notifications often truncate the end; keep both ends visible.
+  (let ((title (my-truncate-middle title 80))
+        (message (my-truncate-middle message 120)))
+    (pcase window-system
+      ('w32 (alert-toast-notify `(:title ,title :message ,message :data (:long t))))
+      ('ns (do-applescript (format "display notification \"%s\" with title \"%s\"" message title))))))
 
 (with-eval-after-load 'compile
   (defun notify-compilation-result (buffer status)
-    (my-notify (format "From %s" (buffer-name buffer)) status))
+    (my-notify (format "Compilation: %s" status) (format "From %s" (buffer-name buffer))))
   (require 'ansi-color)
   (setq
    ;; Only cares about errors.

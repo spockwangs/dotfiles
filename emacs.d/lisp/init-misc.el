@@ -156,6 +156,33 @@ as arrays to the backend."
                         "/#/contract/errorcode/ErrorCode?search-query="
                         (url-hexify-string code))))
 
+  (defcustom wedata-domain nil
+    "WeData 数据地图的域名。")
+
+  (defun open-wedata-table (input)
+    "Open WeData for table INPUT.
+INPUT is a table name, or db.table / db::table."
+    (interactive (list (read-string "表名（可带库名）："
+                                    (thing-at-point 'symbol :no-properties))))
+    (util-customize-variable-if-unset wedata-domain)
+    (let* ((s (string-trim input))
+           (url
+            (cond
+             ((string-match "\\`\\([^.:[:space:]]+\\)\\(?:\\.\\|::\\)\\([^.:[:space:]]+\\)\\'" s)
+              (concat wedata-domain
+                      "/do/data-map/sheet/detail?ClusterName=tl"
+                      "&DatabaseName=" (url-hexify-string (match-string 1 s))
+                      "&TableName=" (url-hexify-string (match-string 2 s))
+                      "&DatabaseEngine=THIVE&TableEngine=THIVE"))
+             ((string-match "\\`[^.:[:space:]]+\\'" s)
+              (concat wedata-domain
+                      "/do?kw="
+                      (url-hexify-string s)
+                      "&bg=WXG"))
+             (t
+              (user-error "请输入表名，或 db.table / db::table")))))
+      (browse-url url)))
+
   (defhydra hydra-menu (:hint nil)
     "
 ^监控^                ^代码搜索^                ^其它^
@@ -163,7 +190,7 @@ as arrays to the backend."
 _w_: 模块调用监控    _p_: 按路径搜索           _k_: mock数据字典
 _i_: IDKEY监控        _m_: 按proto message搜索  _M_: mmdata协议
 _l_: 日志搜索        _d_: 按定义搜索           _e_: 错误码
-^ ^                   _r_: 按引用搜索
+^ ^                   _r_: 按引用搜索           _t_: WeData表
 "
     ("w" open-wemonitor :color blue)
     ("i" open-idkey :color blue)
@@ -175,6 +202,7 @@ _l_: 日志搜索        _d_: 按定义搜索           _e_: 错误码
     ("k" open-mock-data-dict :color blue)
     ("M" open-mmdata-protocol :color blue)
     ("e" open-errorcode :color blue)
+    ("t" open-wedata-table :color blue)
     ("q" nil "quit" :color blue)))
 
 (use-package google-translate
