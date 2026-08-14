@@ -9,6 +9,9 @@ param_regex = \${(?P<param_name>[A-Za-z_][A-Za-z0-9_]*)}
 check_batch_id = 1
 YYYYMMDDHH = 2026070912
 
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = upper
+
 [sqlfluff:indentation]
 indented_joins = false
 indented_using_on = true
