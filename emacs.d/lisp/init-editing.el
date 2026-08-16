@@ -281,11 +281,6 @@
 (bind-keys :map search-map
            ("O" . multi-occur-in-matching-buffers)
            ("g" . rgrep)
-           ("cm" . util-code-search-message)
-           ("cp" . util-code-search-path)
-           ("cd" . util-code-search-def)
-           ("cr" . util-code-search-ref)
-           ("l" . util-log-search-at-point)
            ("f" . find-name-dired))
 
 (use-package ace-isearch

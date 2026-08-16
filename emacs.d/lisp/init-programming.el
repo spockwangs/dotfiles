@@ -271,8 +271,8 @@
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml))
-  (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml))
+  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml typescript tsx))
+  (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml typescript tsx))
   (global-treesit-auto-mode))
 
 (use-package clang-format
@@ -499,6 +499,30 @@
 
 (use-package yaml-ts-mode
   :mode ("\\.yaml\\'" . yaml-ts-mode))
+
+;; TypeScript. You should install `typescript-language-server' and `typescript':
+;;   $ npm install -g typescript typescript-language-server
+(use-package typescript-ts-mode
+  :ensure nil
+  :mode (("\\.ts\\'" . typescript-ts-mode)
+         ("\\.mts\\'" . typescript-ts-mode)
+         ("\\.cts\\'" . typescript-ts-mode))
+  :preface
+  (defun init-typescript-mode ()
+    (subword-mode 1)
+    (setq-local typescript-indent-offset 2)
+    ;; Eglot has built-in support: typescript-ts-mode -> typescript-language-server.
+    (my-eglot-ensure-idle))
+  :hook ((typescript-ts-mode . init-typescript-mode))
+  :bind (:map typescript-ts-mode-map
+              ("<return>" . newline-and-indent)))
+
+(use-package tsx-ts-mode
+  :ensure nil
+  :mode (("\\.tsx\\'" . tsx-ts-mode))
+  :hook ((tsx-ts-mode . init-typescript-mode))
+  :bind (:map tsx-ts-mode-map
+              ("<return>" . newline-and-indent)))
 
 (use-package csv-mode
   :commands (csv-mode
