@@ -539,8 +539,8 @@
                   (if (or (derived-mode-p 'yaml-mode)
                           (derived-mode-p 'yaml-ts-mode)
                           (derived-mode-p 'ansible-mode))
-                      (flyspell-prog-mode 1)
-                    (flyspell-mode 1)))))
+                      (flyspell-prog-mode)
+                    (flyspell-mode)))))
   :bind
   (:map flyspell-mode-map
         ("C-c ," . flyspell-goto-next-error)))
