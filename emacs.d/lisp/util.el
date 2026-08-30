@@ -1,8 +1,16 @@
-;; -*- coding: utf-8-unix -*-
+;; -*- coding: utf-8-unix; lexical-binding: t; -*-
 ;; Copyright 2010. wbb
 ;;     All rights reserved.
 ;;
 ;; util.el -- Common utility functions
+
+;; The following libraries are only loaded on demand at runtime, so declare the
+;; functions we use from them to keep the byte-compiler (and native compiler)
+;; quiet without paying the load cost at startup.
+(declare-function tramp-file-local-name "tramp" (name))
+(declare-function compilation-read-command "compile" (command))
+(declare-function bazel--package-directory "bazel" (file-name repository-root))
+(declare-function bazel--repository-root "bazel" (file-name))
 
 (defun util-choose-available-font (list)
   "Return a available font name from the LIST, or nil if all of
