@@ -271,7 +271,7 @@
   :custom
   (treesit-auto-install 'prompt)
   :config
-  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml typescript tsx))
+  (setq treesit-auto-langs '(c cpp python json markdown go java html sql yaml typescript tsx bash))
   (treesit-auto-add-to-auto-mode-alist '(c cpp python json markdown go java html sql yaml typescript tsx))
   (global-treesit-auto-mode))
 
@@ -524,6 +524,18 @@
   :bind (:map tsx-ts-mode-map
               ("<return>" . newline-and-indent)))
 
+(use-package bash-ts-mode
+  :ensure nil
+  :mode (("\\.sh\\'" . bash-ts-mode)
+         ("\\.bashrc\\'" . bash-ts-mode))
+  :preface
+  (defun init-bash-ts-mode ()
+    (subword-mode 1)
+    (turn-on-auto-fill))
+  :hook (bash-ts-mode . init-bash-ts-mode)
+  :bind (:map bash-ts-mode-map
+              ("<return>" . newline-and-indent)))
+
 (use-package csv-mode
   :commands (csv-mode
              csv-align-mode
@@ -534,11 +546,6 @@
   :custom
   (csv-align-max-width 100)
   (csv-separators '("," ";" " " "|" "\t")))
-
-(use-package sh-mode
-  :ensure nil
-  :mode (("zshrc\\'" . sh-mode)
-         ("bashrc\\'" . sh-mode)))
 
 (provide 'init-programming)
 ;;; init-programing.el ends here
