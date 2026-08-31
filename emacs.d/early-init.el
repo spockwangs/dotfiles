@@ -66,4 +66,11 @@
 (setq package-archives '(("gnu" . "https://mirrors.sjtug.sjtu.edu.cn/emacs-elpa/gnu/")
                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 
+;; Silence noisy native-compiler warnings about functions that live in
+;; optional/other packages (e.g. `consult-line', `helm-multi-occur-1',
+;; `lsp-rename', `eglot-rename') not being known at async compilation time.
+;; These are harmless: the functions are resolved at runtime via autoloads.
+;; Keep reporting real compilation errors.
+(setq native-comp-async-report-warnings-errors 'silent)
+
 ;;; early-init.el ends here

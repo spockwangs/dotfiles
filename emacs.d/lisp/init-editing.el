@@ -511,11 +511,37 @@
                    (setq my-math-preview-idle-timer nil)
                    (math-preview-all))))))))
 
+  (defvar my-math-preview-warned nil
+    "Non-nil means we already warned that the `math-preview' program is missing.")
+
+  (defun my-math-preview-program ()
+    "Return the path of the external `math-preview' program, or nil if absent."
+    (let ((cmd (if (listp math-preview-command)
+                   (car math-preview-command)
+                 math-preview-command)))
+      (and cmd (executable-find cmd))))
+
   (defun init-markdown-mode ()
     (use-package math-preview
       :demand t)
-    (my-math-preview-all-idle)
-    (add-hook 'after-save-hook #'my-math-preview-all-idle nil t))
+    (if (my-math-preview-program)
+        (progn
+          (my-math-preview-all-idle)
+          (add-hook 'after-save-hook #'my-math-preview-all-idle nil t))
+      ;; Missing external program: tell the user how to install it (once per
+      ;; session) instead of silently skipping or raising an error.
+      (unless my-math-preview-warned
+        (setq my-math-preview-warned t)
+        (lwarn '(math-preview) :warning
+               "Math preview disabled: program `%s' was not found in PATH.
+Install it (a Node.js program) with:
+
+    npm install -g git+https://gitlab.com/matsievskiysv/math-preview
+
+Then restart Emacs."
+               (if (listp math-preview-command)
+                   (car math-preview-command)
+                 math-preview-command)))))
   :hook (markdown-mode . init-markdown-mode)
   :custom
   (markdown-header-scaling t)

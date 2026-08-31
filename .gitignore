@@ -17,3 +17,4 @@ emacs.d/url/
 emacs.d/bookmarks
 emacs.d/tree-sitter
 emacs.d/elfeed/
+/emacs.d/eln-cache/
