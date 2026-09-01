@@ -46,6 +46,9 @@ if [ -f ~/.bashrc.local ]; then
     source ~/.bashrc.local
 fi
 
+# Export environment variables from `~/.env'.
+[ -f ~/.env ] && set -a && . ~/.env && set +a
+
 if [[ "$TERM" == dumb ]]; then
     unsetopt zle
     PS1='$ '
