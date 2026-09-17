@@ -449,7 +449,7 @@
   :hook ((json-ts-mode . yafolding-mode)))
 
 (use-package web-mode
-  :mode ("\\.html?\\'" . web-mode)
+  :mode ("\\.html?\\'" "\\.vue\\'")
   :preface
   ;; You should install the program `tidy'.
   (defun html-format ()
@@ -461,7 +461,15 @@
       (util-format-region "html-format" begin end "tidy" tidy-args)))
   :bind (:map web-mode-map ("C-M-\\" . html-format))
   :custom
-  (web-mode-markup-indent-offset 2 "Set HTML offset indentation."))
+  ;; Parse .vue as a Vue single file component: <template>/<script>/<style>
+  ;; parts are handled by their own engine.
+  (web-mode-content-types-alist '(("vue" . "\\.vue\\'")))
+  (web-mode-markup-indent-offset 2 "Set HTML offset indentation.")
+  (web-mode-css-indent-offset 2 "Set CSS offset indentation.")
+  (web-mode-code-indent-offset 2 "Set JS/TS offset indentation.")
+  (web-mode-script-padding 0 "No extra indentation at the top level of <script>.")
+  (web-mode-style-padding 0 "No extra indentation at the top level of <style>.")
+  (web-mode-enable-block-face t "Give each part/block its own background."))
 
 (use-package make-mode
   :hook ((makefile-mode . (lambda () (subword-mode 1)))))
@@ -527,7 +535,8 @@
 (use-package bash-ts-mode
   :ensure nil
   :mode (("\\.sh\\'" . bash-ts-mode)
-         ("\\.bashrc\\'" . bash-ts-mode))
+         ("\\.bashrc\\'" . bash-ts-mode)
+         ("\\.zshrc\\'" . bash-ts-mode))
   :preface
   (defun init-bash-ts-mode ()
     (subword-mode 1)

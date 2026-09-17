@@ -265,7 +265,6 @@ buffer by executing FORMAT-PROGRAM with a list of FORMAT-ARGS."
   (interactive (list (util--read-directory)))
   (let ((default-directory directory))
     (require 'compile)
-    (setq-default compilation-search-path compilation-search-path)
     (let ((command (compilation-read-command compile-command)))
       (compile command))))
 

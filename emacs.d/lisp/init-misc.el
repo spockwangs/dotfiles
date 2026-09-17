@@ -92,7 +92,7 @@ as arrays to the backend."
            (keywords (log-search--split keywords-raw))
            (module-raw (read-string "Modules (space-separated, empty for all): "))
            (modules (log-search--split module-raw))
-           (env (completing-read "Env (default idc): " '("test" "idc") nil t nil nil "idc"))
+           (env (completing-read "Env (default test): " '("test" "idc") nil t nil nil "test"))
            (time (decode-time))
            (year (nth 5 time))
            (month (nth 4 time))
