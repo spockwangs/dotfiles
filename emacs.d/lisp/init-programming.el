@@ -195,7 +195,13 @@
                   "--header-insertion=iwyu"
                   "--header-insertion-decorators"
                   "--clang-tidy"
-                  "--pretty"))))
+                  "--pretty")))
+  ;; TypeScript 7 is the native rewrite and ships its own LSP server, so it no
+  ;; longer provides the `tsserver.js' that `typescript-language-server' wraps.
+  (add-to-list 'eglot-server-programs
+               '(((typescript-ts-mode :language-id "typescript")
+                  (tsx-ts-mode :language-id "typescriptreact")) .
+                 ("tsc" "--lsp" "--stdio"))))
 
 (when (fboundp 'global-eldoc-mode)
   (add-hook 'after-init-hook 'global-eldoc-mode))
@@ -508,8 +514,8 @@
 (use-package yaml-ts-mode
   :mode ("\\.yaml\\'" . yaml-ts-mode))
 
-;; TypeScript. You should install `typescript-language-server' and `typescript':
-;;   $ npm install -g typescript typescript-language-server
+;; TypeScript. You should install `typescript' (version 7 or later):
+;;   $ npm install -g typescript
 (use-package typescript-ts-mode
   :ensure nil
   :mode (("\\.ts\\'" . typescript-ts-mode)
@@ -519,7 +525,6 @@
   (defun init-typescript-mode ()
     (subword-mode 1)
     (setq-local typescript-indent-offset 2)
-    ;; Eglot has built-in support: typescript-ts-mode -> typescript-language-server.
     (my-eglot-ensure-idle))
   :hook ((typescript-ts-mode . init-typescript-mode))
   :bind (:map typescript-ts-mode-map
