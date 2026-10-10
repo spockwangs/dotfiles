@@ -48,11 +48,20 @@
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
   ;; Enable per-directory local variables over tramp.
   (setq enable-remote-dir-locals t)
-  ;; Use non-interactive shell for tramp connection to elimiate lag.
+  ;; Use non-interactive shell for tramp connection to eliminate lag.
   (connection-local-update-profile-variables
    'tramp-connection-local-default-shell-profile
    '((shell-file-name . "/bin/bash")
-     (shell-command-switch . "-c"))))
+     (shell-command-switch . "-c")))
+  ;; Give remote async commands their own ssh process.  Otherwise
+  ;; `find-dired' runs inside the shared shell, that shell exits with
+  ;; `find', and the sentinel runs before the *Find* buffer exists.
+  (connection-local-set-profile-variables
+   'remote-direct-async-process
+   '((tramp-direct-async-process . t)))
+  (connection-local-set-profiles
+   '(:application tramp :protocol "ssh")
+   'remote-direct-async-process))
 
 (provide 'init-remote)
 ;;; init-remote.el ends here
