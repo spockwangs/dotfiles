@@ -380,7 +380,10 @@
     (my-eglot-ensure-idle))
   :custom
   (python-indent-offset 4)
-  :bind (:map python-mode-map
+  ;; Bind in `python-base-mode-map', not `python-mode-map': the latter is a
+  ;; sibling of `python-ts-mode-map', so its keys are invisible in
+  ;; `python-ts-mode' (which is what `.py' actually uses).
+  :bind (:map python-base-mode-map
               ("<return>" . newline-and-indent)))
 
 ;; You should install the python package "black".
@@ -393,13 +396,23 @@
     (if (use-region-p)
         (python-black-region (region-beginning) (region-end))
       (python-black-buffer)))
-  :bind (:map python-mode-map
+  :bind (:map python-base-mode-map
               ("C-M-\\" . python-format)))
 
 (use-package pylint
   :after python
   :demand
-  :hook ((python-mode . pylint-add-key-bindings))
+  ;; `pylint-add-key-bindings' binds into `python-mode-map', but
+  ;; `python-ts-mode-map' is a sibling of `python-mode-map' (both compose
+  ;; `python-base-mode-map'), so those bindings are invisible in
+  ;; `python-ts-mode'. Bind into `python-base-mode-map' instead, which is
+  ;; shared by both. It is a global keymap, so binding once is enough.
+  :config
+  (let ((map python-base-mode-map))
+    (define-key map (kbd "C-c m l") #'pylint)
+    (define-key map (kbd "C-c m p") #'previous-error)
+    (define-key map (kbd "C-c m n") #'next-error)
+    (define-key map (kbd "C-c m i") #'pylint-insert-ignore-comment))
   :custom
   (pylint-options '("--reports=n" "--output-format=parseable" "--errors-only")))
 
