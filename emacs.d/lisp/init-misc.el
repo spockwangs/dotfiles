@@ -93,12 +93,10 @@ as arrays to the backend."
            (module-raw (read-string "Modules (space-separated, empty for all): "))
            (modules (log-search--split module-raw))
            (env (completing-read "Env (default test): " '("test" "idc") nil t nil nil "test"))
-           (time (decode-time))
-           (year (nth 5 time))
-           (month (nth 4 time))
-           (day (nth 3 time))
-           (begin-time (format "%d-%02d-%02d 00:00:00" year month day))
-           (end-time (format "%d-%02d-%02d 23:59:59" year month day))
+           ;; Default window: the last hour up to now.
+           (end-time (format-time-string "%Y-%m-%d %H:%M:%S"))
+           (begin-time (format-time-string "%Y-%m-%d %H:%M:%S"
+                                          (time-subtract nil (seconds-to-time 3600))))
            (param (json-serialize
                    `((env . ,env)
                      ,(if modules
