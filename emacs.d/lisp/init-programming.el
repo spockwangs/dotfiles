@@ -366,13 +366,17 @@
   :mode ("\\.php\\'" . php-mode))
 
 (use-package python
-  :hook ((python-mode . init-python-mode))
+  ;; `python-base-mode' is the parent of both `python-mode' and
+  ;; `python-ts-mode'. Hooking `python-mode' does not work when the buffer
+  ;; ends up in `python-ts-mode' via `major-mode-remap-alist' (treesit-auto),
+  ;; because remapping skips the remapped mode's own hook.
+  :hook ((python-base-mode . init-python-mode))
   :mode ("\\.pysql\\'" . python-mode)
   :preface
   (defun init-python-mode ()
     (subword-mode 1)
-    ;; You should install pyright (Microsoft's Python language server).
-    ;;   $ pip install pyright
+    ;; You should install basedpyright (a fork of Microsoft's pyright):
+    ;;   $ uv tool install basedpyright
     (my-eglot-ensure-idle))
   :custom
   (python-indent-offset 4)
