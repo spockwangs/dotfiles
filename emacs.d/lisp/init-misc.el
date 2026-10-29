@@ -68,9 +68,8 @@ to `custom-file'; not stored in version control.")
       (browse-url (concat code-search-domain "/codesearch/search?" query))))
 
   (defun code-search-read (prompt)
-    "Return the symbol at point, or read a string with PROMPT if none."
-    (or (thing-at-point 'symbol :no-properties)
-        (read-string prompt)))
+    "Read a search term with PROMPT, defaulting to the symbol at point."
+    (read-string prompt nil nil (thing-at-point 'symbol :no-properties)))
 
   (defcustom log-search-domain nil
     "Base URL of log search (xlog).
